@@ -1,0 +1,354 @@
+* {
+    font-family: "JetBrains Mono ExtraBold";
+}
+
+div {
+    padding: 6px;
+}
+
+button {
+    border-radius: 10px;
+}
+
+button:hover {
+    background-color: lightgray;
+}
+
+button:active {
+    background-color: gray;
+}
+
+select {
+    border-radius: 10px;
+}
+
+.slide-container {
+    width: 100%;
+}
+
+.slider {
+    width: 100%;
+    height: 25px;
+}
+
+.start-button:hover {
+    background-color: darkgray;
+}
+
+.start-button:focus {
+    background-color: gray;
+}
+
+.stop-button:hover {
+    background-color: darkgray;
+}
+
+.stop-button:focus {
+    background-color: gray;
+}
+
+output {
+    font-size: 72px;
+}
+
+
+#audio-options {
+    font-size: 24px;
+}
+
+.same-line {
+    display: inline-block;
+}
+
+#audio-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+}
+
+#audio-selection-container {
+    padding: 100px;
+}
+
+#audio-label {
+    order: 2;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#audio-valence-container, #audio-measures-container {
+    margin: 0 auto;
+    width: 90%;
+    height: 500px;
+    overflow: scroll;
+    overflow-wrap: break-word;
+}
+
+.restart-button {
+    background-color: red;
+    border-color: darkred;
+}
+
+.restart-button:hover {
+    background-color: mediumvioletred;
+}
+
+.restart-button:focus {
+    background-color: darkred;
+}
+
+/*#audio-info-container {*/
+/*    display: grid;*/
+/*    grid-template-columns: 1fr 1fr;*/
+/*}*/
+
+#categorical-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+}
+
+#hierarchy-labels {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    text-align: right;
+}
+
+#hierarchy-labels > h2 {
+    vertical-align: middle;
+}
+
+.primary-emotion {
+    height: 100%;
+    width: 100%;
+    transition-duration: 0.2s;
+    font-size: 24px;
+}
+
+.emotion-container {
+    height: 200px;
+    /*display: grid;*/
+    /*grid-template-rows: 2fr 1fr;*/
+}
+
+#anger {
+    background-color: red;
+    border-color: red;
+}
+
+#anger:hover {
+    background-color: white;
+}
+
+#anger:focus {
+    background-color: white;
+}
+
+#anger-container {
+    background-color: lightcoral;
+}
+
+#anger-secondary-buttons > button {
+    background-color: red;
+    border-color: red;
+}
+
+#anger-secondary-buttons > button:hover {
+    background-color: white;
+}
+
+#anger-secondary-buttons > button:focus {
+    background-color: white;
+}
+
+#fear {
+    background-color: rebeccapurple;
+    border-color: rebeccapurple;
+    color: lightgray;
+}
+
+#fear:hover {
+    background-color: white;
+    color: black;
+}
+
+#fear:focus {
+    background-color: white;
+    color: black;
+}
+
+#fear-container {
+    background-color: darkorchid;
+}
+
+#fear-secondary-buttons > button {
+    background-color: rebeccapurple;
+    border-color: rebeccapurple;
+    color: lightgray;
+}
+
+#fear-secondary-buttons > button:hover {
+    background-color: white;
+    color: black
+}
+
+#fear-secondary-buttons > button:focus {
+    background-color: white;
+    color: black
+}
+
+#joy {
+    background-color: yellow;
+    border-color: yellow;
+}
+
+#joy:hover {
+    background-color: white;
+}
+
+#joy:focus {
+    background-color: white;
+}
+
+#joy-container {
+    background-color: lightgoldenrodyellow;
+}
+
+#joy-secondary-buttons > button {
+    background-color: yellow;
+    border-color: yellow;
+}
+
+#joy-secondary-buttons > button:hover {
+    background-color: white;
+}
+
+#joy-secondary-buttons > button:focus {
+    background-color: white;
+}
+
+#love {
+    background-color: hotpink;
+    border-color: hotpink;
+}
+
+#love:hover {
+    background-color: white;
+}
+
+#love:focus {
+    background-color: white;
+}
+
+#love-container {
+    background-color: pink;
+}
+
+#love-secondary-buttons > button {
+    background-color: hotpink;
+    border-color: hotpink;
+}
+
+#love-secondary-buttons > button:hover {
+    background-color: white;
+}
+
+#love-secondary-buttons > button:focus {
+    background-color: white;
+}
+
+#sadness {
+    background-color: blue;
+    border-color: blue;
+    color: lightgray;
+}
+
+#sadness:hover {
+    background-color: white;
+    color: black;
+}
+
+#sadness:focus {
+    background-color: white;
+    color: black;
+}
+
+#sadness-container {
+    background-color: deepskyblue;
+}
+
+#sadness-secondary-buttons > button {
+    background-color: blue;
+    border-color: blue;
+    color: lightgray;
+}
+
+#sadness-secondary-buttons > button:hover {
+    background-color: white;
+    color: black;
+}
+
+#sadness-secondary-buttons > button:focus {
+    background-color: white;
+    color: black;
+}
+
+#surprise {
+    background-color: orangered;
+    border-color: orangered;
+}
+
+#surprise:hover {
+    background-color: white;
+}
+
+#surprise:focus {
+    background-color: white;
+}
+
+#surprise-container {
+    background-color: orange;
+}
+
+#surprise-secondary-buttons > button {
+    background-color: orangered;
+    border-color: orangered;
+}
+
+#surprise-secondary-buttons > button:hover {
+    background-color: white;
+}
+
+#surprise-secondary-buttons > button:focus {
+    background-color: white;
+}
+
+#irony {
+    background-color: gray;
+    border-color: gray;
+}
+
+#irony:hover {
+    background-color: white;
+}
+
+#irony:focus {
+    background-color: white;
+}
+
+#irony-container {
+    background-color: lightgray;
+}
+
+#irony-secondary-buttons > button {
+    background-color: gray;
+    border-color: gray;
+}
+
+#irony-secondary-buttons > button:hover {
+    background-color: white;
+}
+
+#irony-secondary-buttons > button:focus {
+    background-color: white;
+}
