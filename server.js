@@ -4,7 +4,7 @@ const Datastore = require('nedb')
 const app = express()
 
 const portNumber = 8080
-app.listen(portNumber, () => console.log("listening at " + portNumber))
+app.listen("https://music-sentiment-tool.herokuapp.com/", () => console.log("listening at " + portNumber))
 app.use(express.static('public'))
 app.use(express.json({ limit: '1mb' }))
 
