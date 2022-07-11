@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <script src="static/js/home.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Music Sentiment Tool</title>
+</head>
+<body>
+    <!--Slider and output value-->
+<!--    <div id="slide-container">-->
+<!--        <h1>Valence Control Tool</h1>-->
+<!--        <input type="range" min="-100" max="100" value="0" class="slider" id="valence-slider" oninput="this.nextElementSibling.children[1].value = this.value">-->
+<!--        <div id="output-div">-->
+<!--            <h2 class="same-line">Current Value:&nbsp;&nbsp;&nbsp;&nbsp;</h2>-->
+<!--            <output class="same-line">0</output>-->
+<!--        </div>-->
+<!--    </div>-->
+    <!--Audio selection and player controls-->
+    <!-- PUT NEW AUDIO HERE -->
+    <div id="audio-container" onchange="newAudio()">
+        <div id="audio-selection-container">
+            <label for="audio-options" style="font-size: 24px;">Choose a piece:</label>
+            <select name="audio-options" id="audio-options" onchange="newAudio()">
+                <option>op18_no1_mov1.mp3</option>
+                <option>op18_no1_mov2.mp3</option>
+                <option>op18_no1_mov3.mp3</option>
+                <option>op18_no1_mov4.mp3</option>
+                <option>op18_no2_mov1.mp3</option>
+                <option>op18_no2_mov3.mp3</option>
+                <option>op18_no2_mov4.mp3</option>
+                <option>op18_no3_mov1.mp3</option>
+                <option>op18_no3_mov2.mp3</option>
+                <option>op18_no3_mov3.mp3</option>
+                <option>op18_no3_mov4.mp3</option>
+                <option>op18_no4_mov1.mp3</option>
+                <option>op18_no4_mov2.mp3</option>
+                <option>op18_no4_mov3.mp3</option>
+                <option>op18_no4_mov4.mp3</option>
+                <option>op18_no5_mov1.mp3</option>
+                <option>op18_no5_mov2.mp3</option>
+                <option>op18_no5_mov3.mp3</option>
+                <option>op18_no5_mov4.mp3</option>
+                <option>op18_no6_mov1.mp3</option>
+                <option>op18_no6_mov2.mp3</option>
+                <option>op18_no6_mov3.mp3</option>
+                <option>op18_no6_mov4.mp3</option>
+            </select>
+        </div>
+
+        <audio controls id="audio" src="static/media/op18_no1_mov1.mp3"></audio>
+        <audio src="static/media/op18_no1_mov1.mp3"></audio>
+    </div>
+    <div id="categorical-container">
+        <div id="anger-container" class="emotion-container">
+            <button id="anger" class="primary-emotion" onclick="clickEmotion('anger')">Anger<br/>(1)</button>
+        </div>
+        <div id="fear-container" class="emotion-container">
+            <button id="fear" class="primary-emotion" onclick="clickEmotion('fear')">Fear<br/>(2)</button>
+        </div>
+        <div id="sadness-container" class="emotion-container">
+            <button id="sadness" class="primary-emotion" onclick="clickEmotion('sadness')">Sadness<br/>(3)</button>
+        </div>
+        <div id="irony-container" class="emotion-container">
+            <button id="irony" class="primary-emotion" onclick="clickEmotion('irony')">Irony<br/>(7)</button>
+        </div>
+        <div id="love-container" class="emotion-container">
+            <button id="love" class="primary-emotion" onclick="clickEmotion('love')">Love<br/>(8)</button>
+        </div>
+        <div id="joy-container" class="emotion-container">
+            <button id="joy" class="primary-emotion" onclick="clickEmotion('joy')">Joy<br/>(9)</button>
+        </div>
+    </div>
+    <!--Buttons and output for annotation-->
+    <div id="audio-info-container">
+        <div id="audio-valence-buttons">
+            <button class="start-button" id="valence-button-start" onclick="startAnnotate()">start annotation</button>
+            <button class="stop-button" id="valence-button-stop" onclick="stopAnnotate()">stop annotation</button>
+            <button class="restart-button" id="valence-button-restart" onclick="restartAnnotate(valenceInterval)">clear and restart</button>
+        </div>
+        <div id="audio-valence-container">
+            <p id="audio-valence"></p>
+        </div>
+    </div>
+    <div id="finish-container">
+        <button id="finish-annotate" onclick="finishValenceAnnotation()">Complete And Send To Server</button>
+    </div>
+</body>
+</html>
