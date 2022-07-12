@@ -8,7 +8,7 @@
     <title>Music Sentiment Tool</title>
 </head>
 <body>
-    <div id="description-large-container" class="bordered-div">
+    <div id="description-large-container" class="largest-div">
         <div id="description-header-container" onclick="toggleMinimizeInstructions()">
             <h1 id="description-header">+ Instructions for use:</h1>
         </div>
@@ -46,11 +46,11 @@
 <!--    </div>-->
     <!--Audio selection and player controls-->
     <!-- PUT NEW AUDIO HERE -->
-    <div id="annotation-tool" class="bordered-div">
+    <div id="annotation-tool" class="largest-div">
 <!--        <div>-->
 <!--            <h1>Annotation Tool:</h1>-->
 <!--        </div>-->
-        <div id="audio-container" class="bordered-div" onchange="newAudio()">
+        <div id="audio-container" class="medium-div" onchange="newAudio()">
             <div id="audio-selection-container">
                 <label for="audio-options" style="font-size: 28px;">Choose a piece:  </label>
                 <select name="audio-options" id="audio-options" onchange="newAudio()">
@@ -83,7 +83,7 @@
             <audio controls id="audio" src="static/media/op18_no1_mov1.mp3"></audio>
             <audio src="static/media/op18_no1_mov1.mp3"></audio>
         </div>
-        <div id="category-large-container" class="bordered-div">
+        <div id="category-large-container" class="small-div">
             <div id="categorical-container">
                 <button id="anger" class="primary-emotion" onclick="clickEmotion('anger')">Anger<br/>(1)</button>
                 <button id="fear" class="primary-emotion" onclick="clickEmotion('fear')">Fear<br/>(2)</button>
@@ -97,7 +97,7 @@
             </div>
         </div>
         <!--Buttons and output for annotation-->
-        <div id="output-container" class="bordered-div">
+        <div id="output-container" class="medium-div">
             <div id="audio-info-container">
                 <div id="audio-valence-buttons">
                     <button class="start-button" id="valence-button-start" onclick="startAnnotate()">start annotation</button>

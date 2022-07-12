@@ -4,7 +4,9 @@
 }
 
 body {
-    background-color: lightblue;
+    background-image: url("../images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 div {
@@ -18,24 +20,22 @@ button {
     margin: 5px;
 }
 
-button:hover {
-    background-color: lightgray;
-}
-
-button:active {
-    background-color: gray;
-}
-
 select {
     border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 li {
     margin: 10px;
 }
 
+#annotation-tool, #description-large-container  {
+    background-color: rgba(255, 255, 255, 0);
+    margin: 5px;
+}
+
 #description-container {
-    background-color: deepskyblue;
+    background-color: rgba(255, 255, 255, 0);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
@@ -43,11 +43,11 @@ li {
 
 #description-header-container {
     margin-top: 10px;
-    background-color: lightblue;
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 #description-header-container:hover {
-    background-color: skyblue;
+    background-color: rgba(200, 200, 200, 0.4);
 }
 
 .slide-container {
@@ -59,26 +59,9 @@ li {
     height: 25px;
 }
 
-.start-button:hover {
-    background-color: darkgray;
-}
-
-.start-button:focus {
-    background-color: gray;
-}
-
-.stop-button:hover {
-    background-color: darkgray;
-}
-
-.stop-button:focus {
-    background-color: gray;
-}
-
 output {
     font-size: 72px;
 }
-
 
 #audio-options {
     font-size: 24px;
@@ -94,7 +77,7 @@ output {
     justify-content: left;
     flex-direction: row;
     align-items: center;
-    background-color: lightgray;
+    background-color: rgba(255, 255, 255, 0.2);
     margin-bottom: 5px;
 }
 
@@ -115,20 +98,7 @@ output {
     overflow: scroll;
     overflow-wrap: break-word;
     border-radius: 4px;
-    background-color: white;
-}
-
-.restart-button {
-    background-color: red;
-    border-color: darkred;
-}
-
-.restart-button:hover {
-    background-color: mediumvioletred;
-}
-
-.restart-button:focus {
-    background-color: darkred;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 /*#audio-info-container {*/
@@ -161,13 +131,11 @@ output {
 
 .emotion-container {
     height: 200px;
-    /*display: grid;*/
-    /*grid-template-rows: 2fr 1fr;*/
 }
 
 #anger {
-    background-color: red;
-    border-color: red;
+    background-color: #c23a22;
+    border-color: #c23a22;
 }
 
 #anger:hover {
@@ -179,9 +147,9 @@ output {
 }
 
 #fear {
-    background-color: rebeccapurple;
-    border-color: rebeccapurple;
-    color: lightgray;
+    background-color: #7d54ae;
+    border-color: #7d54ae;
+    /*color: lightgray;*/
 }
 
 #fear:hover {
@@ -195,8 +163,8 @@ output {
 }
 
 #joy {
-    background-color: yellow;
-    border-color: yellow;
+    background-color: #f9d476;
+    border-color: #f9d476;
 }
 
 #joy:hover {
@@ -208,8 +176,8 @@ output {
 }
 
 #love {
-    background-color: hotpink;
-    border-color: hotpink;
+    background-color: #ffa0c5;
+    border-color: #ffa0c5;
 }
 
 #love:hover {
@@ -221,9 +189,9 @@ output {
 }
 
 #sadness {
-    background-color: blue;
-    border-color: blue;
-    color: lightgray;
+    background-color: #3e65bf;
+    border-color: #3e65bf;
+    /*color: lightgray;*/
 }
 
 #sadness:hover {
@@ -237,8 +205,8 @@ output {
 }
 
 #irony {
-    background-color: gray;
-    border-color: gray;
+    background-color: #999999;
+    border-color: #999999;
 }
 
 #irony:hover {
@@ -253,27 +221,74 @@ output {
     font-size: 24px;
     padding-left: 10px;
 }
+
 #category-large-container {
-    background-color: lightgray;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 #output-container {
     margin-top: 5px;
-    background-color: lightgray;
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
-#annotation-tool, #description-large-container  {
-    background-color: deepskyblue;
-    margin: 5px;
+#valence-button-start, #valence-button-stop {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
 }
+
+#valence-button-start:hover, #valence-button-stop:hover {
+    background-color: rgba(200, 200, 200, 0.4);
+    border: none;
+}
+
+#valence-button-restart {
+    background-color: rgba(233, 102, 94, 0.4);
+    border: none;
+}
+
+#valence-button-restart:hover {
+    background-color: rgba(183, 52, 44, 0.4);
+    border: none;
+}
+
+#finish-container > button {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
+}
+
+#finish-container > button:hover {
+    background-color: rgba(200, 200, 200, 0.4);
+    border: none;
+}
+
+/*.restart-button {*/
+/*    background-color: red;*/
+/*    border-color: darkred;*/
+/*}*/
+
+/*.restart-button:hover {*/
+/*    background-color: mediumvioletred;*/
+/*}*/
+
+/*.restart-button:focus {*/
+/*    background-color: darkred;*/
+/*}*/
+
 
 #categorical-container > button {
     border-width: 10px;
+    border-style: solid;
     height: 100px;
 }
 
-.bordered-div {
-    border-style: ridge;
-    border-width: 5px;
-    border-color: saddlebrown;
+.largest-div {
+    background-color: rgba(255, 255, 255, 0.6);
+    /*border-style: ridge;*/
+    /*border-width: 5px;*/
+    /*border-color: saddlebrown;*/
 }
+
+.medium-div {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
