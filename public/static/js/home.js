@@ -13,10 +13,10 @@ function toggleMinimizeInstructions() {
     let div = document.getElementById("description-container")
     let header = document.getElementById("description-header")
     if (div.style.maxHeight) {
-        header.innerText = "= Instructions for use:"
+        header.innerText = "+ Instructions for use:"
         div.style.maxHeight = null
     } else {
-        header.innerText = "+ Instructions for use:"
+        header.innerText = "= Instructions for use:"
         div.style.maxHeight = div.scrollHeight + "px";
     }
 }
