@@ -8,6 +8,27 @@
     <title>Music Sentiment Tool</title>
 </head>
 <body>
+    <div id="description-header-container" onclick="toggleMinimizeInstructions()">
+        <h1 id="description-header">= Instructions for use:</h1>
+    </div>
+    <div id="description-container">
+        <ol>
+            <li>Choose a recording from the drop down menu next to "Choose a piece."</li>
+            <li>Listen as much as you like to the recording to prepare for annotation.</li>
+            <li>When ready to annotate, press the "start annotation" button.</li>
+            <ul>
+                <li>Annotations will only be recorded while the recording is playing.</li>
+                <li>Annotation can be halted at any time with the "stop annotation" button.</li>
+                <li>If you wish to restart your annotation, use the "clear and restart" button (annotation must be off).</li>
+            </ul>
+            <li class="important-instruction">
+                Choose from the colored emotion buttons to annotate the recording with the appropriate emotion.<br/>
+                Buttons can be pressed with the mouse, or changed with the numbers in parentheses.<br/>
+                For example, you can switch to "Fear" by pressing 2 on your keyboard or "Joy" by pressing 9.<br/>
+            </li>
+            <li>Once annotation is complete, submit your annotation with the "Complete and send to server" button below.</li>
+        </ol>
+    </div>
     <!--Slider and output value-->
 <!--    <div id="slide-container">-->
 <!--        <h1>Valence Control Tool</h1>-->
@@ -19,9 +40,12 @@
 <!--    </div>-->
     <!--Audio selection and player controls-->
     <!-- PUT NEW AUDIO HERE -->
+    <div>
+        <h1>Annotation Tool:</h1>
+    </div>
     <div id="audio-container" onchange="newAudio()">
         <div id="audio-selection-container">
-            <label for="audio-options" style="font-size: 24px;">Choose a piece:</label>
+            <label for="audio-options" style="font-size: 28px;">Choose a piece:  </label>
             <select name="audio-options" id="audio-options" onchange="newAudio()">
                 <option>op18_no1_mov1.mp3</option>
                 <option>op18_no1_mov2.mp3</option>
@@ -52,24 +76,29 @@
         <audio controls id="audio" src="static/media/op18_no1_mov1.mp3"></audio>
         <audio src="static/media/op18_no1_mov1.mp3"></audio>
     </div>
-    <div id="categorical-container">
-        <div id="anger-container" class="emotion-container">
-            <button id="anger" class="primary-emotion" onclick="clickEmotion('anger')">Anger<br/>(1)</button>
+    <div id="category-large-container">
+        <div id="categorical-container">
+            <div id="anger-container" class="emotion-container">
+                <button id="anger" class="primary-emotion" onclick="clickEmotion('anger')">Anger<br/>(1)</button>
+            </div>
+            <div id="fear-container" class="emotion-container">
+                <button id="fear" class="primary-emotion" onclick="clickEmotion('fear')">Fear<br/>(2)</button>
+            </div>
+            <div id="sadness-container" class="emotion-container">
+                <button id="sadness" class="primary-emotion" onclick="clickEmotion('sadness')">Sadness<br/>(3)</button>
+            </div>
+            <div id="irony-container" class="emotion-container">
+                <button id="irony" class="primary-emotion" onclick="clickEmotion('irony')">Irony<br/>(7)</button>
+            </div>
+            <div id="love-container" class="emotion-container">
+                <button id="love" class="primary-emotion" onclick="clickEmotion('love')">Love<br/>(8)</button>
+            </div>
+            <div id="joy-container" class="emotion-container">
+                <button id="joy" class="primary-emotion" onclick="clickEmotion('joy')">Joy<br/>(9)</button>
+            </div>
         </div>
-        <div id="fear-container" class="emotion-container">
-            <button id="fear" class="primary-emotion" onclick="clickEmotion('fear')">Fear<br/>(2)</button>
-        </div>
-        <div id="sadness-container" class="emotion-container">
-            <button id="sadness" class="primary-emotion" onclick="clickEmotion('sadness')">Sadness<br/>(3)</button>
-        </div>
-        <div id="irony-container" class="emotion-container">
-            <button id="irony" class="primary-emotion" onclick="clickEmotion('irony')">Irony<br/>(7)</button>
-        </div>
-        <div id="love-container" class="emotion-container">
-            <button id="love" class="primary-emotion" onclick="clickEmotion('love')">Love<br/>(8)</button>
-        </div>
-        <div id="joy-container" class="emotion-container">
-            <button id="joy" class="primary-emotion" onclick="clickEmotion('joy')">Joy<br/>(9)</button>
+        <div id="current-category-container">
+            <p id="current-category">Current category: null</p>
         </div>
     </div>
     <!--Buttons and output for annotation-->

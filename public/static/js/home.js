@@ -9,6 +9,18 @@ document.addEventListener('keyup', e => {
   }
 })
 
+function toggleMinimizeInstructions() {
+    let div = document.getElementById("description-container")
+    let header = document.getElementById("description-header")
+    if (div.style.maxHeight) {
+        header.innerText = "= Instructions for use:"
+        div.style.maxHeight = null
+    } else {
+        header.innerText = "+ Instructions for use:"
+        div.style.maxHeight = div.scrollHeight + "px";
+    }
+}
+
 function startAnnotate() {
     // annotates current valence value every 100 ms
     valenceInterval = setInterval(annotate, 100);
@@ -34,6 +46,8 @@ function annotate() {
 }
 
 function clickEmotion(emotion) {
+    let p = document.getElementById("current-category")
+    p.innerText = "Current category: " + emotion[0].toUpperCase() + emotion.slice(1);
     currentEmotion = emotion
 }
 
@@ -53,7 +67,8 @@ function restartAnnotate(interval) {
     e = document.getElementById("audio-options");
     new_file = e.options[e.selectedIndex].text
     $("#audio-options").attr("disabled", false)
-    p.innerHTML = new_file.substring(0, new_file.length - 4) + "_" + tag + " = {"
+    // p.innerHTML = new_file.substring(0, new_file.length - 4) + "_" + tag + " = {"
+    p.innerHTML = ""
 }
 
 function newAudio() {
@@ -66,9 +81,10 @@ function newAudio() {
     audio.load()
 
     p = document.getElementById("audio-valence")
-    p2 = document.getElementById("audio-measures")
-    p.innerHTML = new_file.substring(0, new_file.length - 4) + "_valence = {"
-    p2.innerHTML = new_file.substring(0, new_file.length - 4) + "_measures = {"
+    p.innerHTML = ""
+    // p2 = document.getElementById("audio-measures")
+    // p.innerHTML = new_file.substring(0, new_file.length - 4) + "_valence = {"
+    // p2.innerHTML = new_file.substring(0, new_file.length - 4) + "_measures = {"
 }
 
 // function finishValenceAnnotation() {

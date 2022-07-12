@@ -1,13 +1,18 @@
 * {
-    font-family: "JetBrains Mono ExtraBold", serif;
+    font-family: 'Arial', serif;
+    border-radius: 10px;
 }
 
 div {
-    padding: 6px;
+    padding: 4px;
 }
 
 button {
-    border-radius: 10px;
+
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+    margin: 5px;
 }
 
 button:hover {
@@ -20,6 +25,25 @@ button:active {
 
 select {
     border-radius: 10px;
+}
+
+li {
+    margin: 10px;
+}
+
+#description-container {
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+#description-header-container {
+    background-color: lightgray;
+}
+
+#description-header-container:hover {
+    background-color: gray;
 }
 
 .slide-container {
@@ -54,6 +78,7 @@ output {
 
 #audio-options {
     font-size: 24px;
+    height: 50px;
 }
 
 .same-line {
@@ -65,6 +90,8 @@ output {
     justify-content: left;
     flex-direction: row;
     align-items: center;
+    background-color: lightgray;
+    border-style: solid;
 }
 
 #audio-selection-container {
@@ -79,10 +106,12 @@ output {
 
 #audio-valence-container, #audio-measures-container {
     margin: 0 auto;
-    width: 90%;
-    height: 300px;
+    width: 98%;
+    height: 200px;
     overflow: scroll;
     overflow-wrap: break-word;
+    border-style: solid;
+    border-radius: 4px;
 }
 
 .restart-button {
@@ -106,6 +135,7 @@ output {
 #categorical-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
+    align-items: center;
 }
 
 #hierarchy-labels {
@@ -144,23 +174,6 @@ output {
     background-color: white;
 }
 
-#anger-container {
-    background-color: lightcoral;
-}
-
-#anger-secondary-buttons > button {
-    background-color: red;
-    border-color: red;
-}
-
-#anger-secondary-buttons > button:hover {
-    background-color: white;
-}
-
-#anger-secondary-buttons > button:focus {
-    background-color: white;
-}
-
 #fear {
     background-color: rebeccapurple;
     border-color: rebeccapurple;
@@ -177,26 +190,6 @@ output {
     color: black;
 }
 
-#fear-container {
-    background-color: darkorchid;
-}
-
-#fear-secondary-buttons > button {
-    background-color: rebeccapurple;
-    border-color: rebeccapurple;
-    color: lightgray;
-}
-
-#fear-secondary-buttons > button:hover {
-    background-color: white;
-    color: black
-}
-
-#fear-secondary-buttons > button:focus {
-    background-color: white;
-    color: black
-}
-
 #joy {
     background-color: yellow;
     border-color: yellow;
@@ -210,23 +203,6 @@ output {
     background-color: white;
 }
 
-#joy-container {
-    background-color: lightgoldenrodyellow;
-}
-
-#joy-secondary-buttons > button {
-    background-color: yellow;
-    border-color: yellow;
-}
-
-#joy-secondary-buttons > button:hover {
-    background-color: white;
-}
-
-#joy-secondary-buttons > button:focus {
-    background-color: white;
-}
-
 #love {
     background-color: hotpink;
     border-color: hotpink;
@@ -237,23 +213,6 @@ output {
 }
 
 #love:focus {
-    background-color: white;
-}
-
-#love-container {
-    background-color: pink;
-}
-
-#love-secondary-buttons > button {
-    background-color: hotpink;
-    border-color: hotpink;
-}
-
-#love-secondary-buttons > button:hover {
-    background-color: white;
-}
-
-#love-secondary-buttons > button:focus {
     background-color: white;
 }
 
@@ -273,56 +232,6 @@ output {
     color: black;
 }
 
-#sadness-container {
-    background-color: deepskyblue;
-}
-
-#sadness-secondary-buttons > button {
-    background-color: blue;
-    border-color: blue;
-    color: lightgray;
-}
-
-#sadness-secondary-buttons > button:hover {
-    background-color: white;
-    color: black;
-}
-
-#sadness-secondary-buttons > button:focus {
-    background-color: white;
-    color: black;
-}
-
-#surprise {
-    background-color: orangered;
-    border-color: orangered;
-}
-
-#surprise:hover {
-    background-color: white;
-}
-
-#surprise:focus {
-    background-color: white;
-}
-
-#surprise-container {
-    background-color: orange;
-}
-
-#surprise-secondary-buttons > button {
-    background-color: orangered;
-    border-color: orangered;
-}
-
-#surprise-secondary-buttons > button:hover {
-    background-color: white;
-}
-
-#surprise-secondary-buttons > button:focus {
-    background-color: white;
-}
-
 #irony {
     background-color: gray;
     border-color: gray;
@@ -336,19 +245,15 @@ output {
     background-color: white;
 }
 
-#irony-container {
+#current-category {
+    font-size: 24px;
+    padding-left: 10px;
+}
+#category-large-container {
     background-color: lightgray;
+    border-style: solid;
 }
 
-#irony-secondary-buttons > button {
-    background-color: gray;
-    border-color: gray;
-}
-
-#irony-secondary-buttons > button:hover {
-    background-color: white;
-}
-
-#irony-secondary-buttons > button:focus {
-    background-color: white;
+hr {
+    border: 1px solid black;
 }
