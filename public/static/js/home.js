@@ -127,7 +127,7 @@ function finishValenceAnnotation() {
             },
             body: JSON.stringify(data)
         }
-        fetch('/api', options)
+        fetch('/api/analyses', options)
             .then(response => console.log(response.json()))
             .catch(error => {
                 console.error('Error:', error)

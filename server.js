@@ -1,34 +1,48 @@
 const express = require('express');
-const Datastore = require('nedb');
+// const Datastore = require('nedb');
+// const knex = require('knex');
+// const config = require("knexfile");
+// const db = knex(config.development)
+const sqlite = require('sqlite3');
 const { Client } = require('pg');
+const Analyses = require('./models/dbHelpers')
 
-const app = express()
+const server = express()
+server.use(express.static('public'))
+server.use(express.json({ limit: '1mb' }))
 
-// const portNumber = 8080
-const port = process.env.PORT || 8080
-app.listen(port, () => console.log("listening at " + port))
-app.use(express.static('public'))
-app.use(express.json({ limit: '1mb' }))
+const PORT = process.env.PORT || 8080
+server.listen(PORT, () => console.log(`listening at ${PORT}`))
 
-const database = new Datastore('database.db')
-database.loadDatabase()
+
+// const database = new Datastore('database.db')
+// database.loadDatabase()
 
 // const client = new Client({
 //     connectionString: process.env.DATABASE_URL,
 //     ssl: {
-//         rejectUnauthorized: false
+//         reject Unauthorized: false
 //     }
 // });
-
+//
 // await client.connect();
 
-app.post('/api', (request, response) => {
-    const data = request.body
-    data.analysis = data.analysis.split("\,\n")
-    data.timestamp = Date.now()
+server.get('/api/analyses', (request, response) => {
+    Analyses.find()
+        .then(analyses => {
+            response.status(200).json(analyses)
+        })
+        .catch(error => {
+            response.status(500).json({message: 'unable to find table'})
+        })
+})
 
-    database.insert(data)
-    response.json({
-        status: "success"
-    });
+server.post('/api/analyses', (request, response) => {
+    Analyses.add(request.body)
+        .then(analysis => {
+            response.status(200).json(analysis)
+        })
+        .catch(error => {
+            response.status(500).json({message: "cannot add analysis"})
+        })
 })
