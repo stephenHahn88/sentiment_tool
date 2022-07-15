@@ -1,5 +1,5 @@
 let valenceInterval = null;
-let currentEmotion = null;
+let currentEmotion = "none";
 
 document.addEventListener('keyup', e => {
     let audio = document.getElementById("audio")
@@ -111,13 +111,15 @@ function newAudio() {
 
 function finishValenceAnnotation() {
     if (confirm("Please confirm that you have completed your analysis") === true) {
-        p = document.getElementById("audio-valence")
+        p = document.getElementById("audio-valence");
         e = document.getElementById("audio-options");
+        t = document.getElementById("custom-textarea");
         new_file = e.options[e.selectedIndex].text
 
         const data = {
             "piece": new_file,
-            "analysis": p.innerText
+            "analysis": p.innerText,
+            "comments": t.innerText
         };
 
         const options = {
@@ -144,6 +146,8 @@ document.onkeypress = function(e) {
         $("#fear").click().focus()
     } else if (e.keyCode === 51) { //3
         $("#sadness").click().focus()
+    } else if (e.keyCode === 52) { //4
+        $("#none").click().focus()
     } else if (e.keyCode === 55) { //7
         $("#irony").click().focus()
     } else if (e.keyCode === 56) { //8

@@ -8,6 +8,7 @@ exports.up = function(knex) {
           tbl.increments();
           tbl.text("piece").notNullable()
           tbl.text("analysis").notNullable()
+          tbl.text("comments")
           tbl.timestamp(true, true)
       })
 };

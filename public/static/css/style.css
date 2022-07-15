@@ -108,7 +108,7 @@ output {
 
 #categorical-container {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     align-items: center;
 }
 
@@ -136,20 +136,23 @@ output {
 #anger {
     background-color: #c23a22;
     border-color: #c23a22;
+    color: lightgray;
 }
 
 #anger:hover {
     background-color: white;
+    color: black;
 }
 
 #anger:focus {
     background-color: white;
+    color: black;
 }
 
 #fear {
     background-color: #7d54ae;
     border-color: #7d54ae;
-    /*color: lightgray;*/
+    color: lightgray;
 }
 
 #fear:hover {
@@ -191,7 +194,7 @@ output {
 #sadness {
     background-color: #3e65bf;
     border-color: #3e65bf;
-    /*color: lightgray;*/
+    color: lightgray;
 }
 
 #sadness:hover {
@@ -205,8 +208,8 @@ output {
 }
 
 #irony {
-    background-color: #999999;
-    border-color: #999999;
+    background-color: #bbbbbb;
+    border-color: #bbbbbb;
 }
 
 #irony:hover {
@@ -215,6 +218,22 @@ output {
 
 #irony:focus {
     background-color: white;
+}
+
+#none {
+    background-color: black;
+    border-color: black;
+    color: lightgray;
+}
+
+#none:hover {
+    background-color: white;
+    color: black;
+}
+
+#none:focus {
+    background-color: white;
+    color: black;
 }
 
 #current-category {
@@ -261,19 +280,10 @@ output {
     border: none;
 }
 
-/*.restart-button {*/
-/*    background-color: red;*/
-/*    border-color: darkred;*/
-/*}*/
-
-/*.restart-button:hover {*/
-/*    background-color: mediumvioletred;*/
-/*}*/
-
-/*.restart-button:focus {*/
-/*    background-color: darkred;*/
-/*}*/
-
+#custom-textarea {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
+}
 
 #categorical-container > button {
     border-width: 10px;
