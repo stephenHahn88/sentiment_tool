@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "node index.js"
+  },
   "name": "sentiment_tool",
   "version": "1.0.0",
   "dependencies": {
