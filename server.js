@@ -33,7 +33,7 @@ server.get('/api/analyses', (request, response) => {
             response.status(200).json(analyses)
         })
         .catch(error => {
-            response.status(500).json({message: 'unable to find table'})
+            response.status(500).json({message: error})
         })
 })
 
@@ -43,6 +43,6 @@ server.post('/api/analyses', (request, response) => {
             response.status(200).json(analysis)
         })
         .catch(error => {
-            response.status(500).json({message: "cannot add analysis"})
+            response.status(500).json({message: error})
         })
 })
