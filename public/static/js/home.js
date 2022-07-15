@@ -119,7 +119,7 @@ function finishValenceAnnotation() {
         const data = {
             "piece": new_file,
             "analysis": p.innerText,
-            "comments": t.innerText
+            "comments": t.textContent
         };
 
         const options = {
