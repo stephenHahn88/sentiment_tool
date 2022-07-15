@@ -9,7 +9,7 @@ module.exports = {
 };
 
 async function add(analysis) {
-    return db('analyses').insert(analysis, ['id']);
+    return db('analyses').insert(analysis, ['id', 'piece', 'analysis']);
     // const {id} = await db('analyses').insert(analysis)
 
 }
