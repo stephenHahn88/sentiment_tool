@@ -110,6 +110,7 @@ function newAudio() {
 // }
 
 function finishValenceAnnotation() {
+    let t, p, e;
     if (confirm("Please confirm that you have completed your analysis") === true) {
         p = document.getElementById("audio-valence");
         e = document.getElementById("audio-options");
