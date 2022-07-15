@@ -9,7 +9,9 @@ module.exports = {
 };
 
 async function add(analysis) {
-    const {id} = await db('analyses').insert(analysis)
+    return await db('analyses').insert(analysis,['piece', 'sentiment'])
+    // const {id} = await db('analyses').insert(analysis)
+
 }
 
 function find() {
