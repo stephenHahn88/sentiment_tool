@@ -7,7 +7,7 @@ exports.up = function(knex) {
       .createTable("analyses", tbl => {
           tbl.increments();
           tbl.text("piece").notNullable()
-          tbl.json("analysis").notNullable()
+          tbl.text("analysis").notNullable()
           tbl.timestamp(true, true)
       })
 };
