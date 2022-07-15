@@ -8,8 +8,8 @@ exports.up = function(knex) {
           tbl.increments();
           tbl.text("piece")
           tbl.json("analysis")
+          tbl.timestamp(true, true)
       })
-
 };
 
 /**
