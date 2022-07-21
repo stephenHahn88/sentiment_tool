@@ -13,10 +13,10 @@ function toggleMinimizeInstructions() {
     let div = document.getElementById("description-container")
     let header = document.getElementById("description-header")
     if (div.style.maxHeight) {
-        header.innerText = "+ Instructions for use:"
+        header.innerText = "\u23F6 Instructions for use:"
         div.style.maxHeight = null
     } else {
-        header.innerText = "= Instructions for use:"
+        header.innerText = "\u23F7 Instructions for use:"
         div.style.maxHeight = div.scrollHeight + "px";
     }
 }
@@ -39,9 +39,11 @@ function annotate() {
     // appends the current time, valence pair to a p tag
     let audio = document.getElementById("audio")
     let p = document.getElementById("audio-valence")
+    let div = document.getElementById("audio-valence-container")
     // let i = document.getElementById("valence-slider")
     if (!audio.paused) {
         p.innerHTML += audio.currentTime + " : " + currentEmotion + ",<br/>"
+        // p.scrollIntoView(false)
     }
 }
 

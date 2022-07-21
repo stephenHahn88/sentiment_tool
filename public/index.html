@@ -10,7 +10,7 @@
 <body>
     <div id="description-large-container" class="largest-div">
         <div id="description-header-container" onclick="toggleMinimizeInstructions()">
-            <h1 id="description-header">+ Instructions for use:</h1>
+            <h1 id="description-header">&#9206 Instructions for use:</h1>
         </div>
         <div id="description-container">
             <ol>
@@ -56,32 +56,33 @@
                 <select name="audio-options" id="audio-options" onchange="newAudio()">
                     <option>op18_no1_mov1.mp3</option>
                     <option>op18_no1_mov2.mp3</option>
-                    <option>op18_no1_mov3.mp3</option>
+<!--                    <option>op18_no1_mov3.mp3</option>-->
                     <option>op18_no1_mov4.mp3</option>
                     <option>op18_no2_mov1.mp3</option>
-                    <option>op18_no2_mov3.mp3</option>
+<!--                    <option>op18_no2_mov3.mp3</option>-->
                     <option>op18_no2_mov4.mp3</option>
-                    <option>op18_no3_mov1.mp3</option>
+<!--                    <option>op18_no3_mov1.mp3</option>-->
                     <option>op18_no3_mov2.mp3</option>
-                    <option>op18_no3_mov3.mp3</option>
-                    <option>op18_no3_mov4.mp3</option>
-                    <option>op18_no4_mov1.mp3</option>
+<!--                    <option>op18_no3_mov3.mp3</option>-->
+<!--                    <option>op18_no3_mov4.mp3</option>-->
+<!--                    <option>op18_no4_mov1.mp3</option>-->
                     <option>op18_no4_mov2.mp3</option>
-                    <option>op18_no4_mov3.mp3</option>
-                    <option>op18_no4_mov4.mp3</option>
-                    <option>op18_no5_mov1.mp3</option>
-                    <option>op18_no5_mov2.mp3</option>
-                    <option>op18_no5_mov3.mp3</option>
-                    <option>op18_no5_mov4.mp3</option>
-                    <option>op18_no6_mov1.mp3</option>
+<!--                    <option>op18_no4_mov3.mp3</option>-->
+<!--                    <option>op18_no4_mov4.mp3</option>-->
+<!--                    <option>op18_no5_mov1.mp3</option>-->
+<!--                    <option>op18_no5_mov2.mp3</option>-->
+<!--                    <option>op18_no5_mov3.mp3</option>-->
+<!--                    <option>op18_no5_mov4.mp3</option>-->
+<!--                    <option>op18_no6_mov1.mp3</option>-->
                     <option>op18_no6_mov2.mp3</option>
-                    <option>op18_no6_mov3.mp3</option>
-                    <option>op18_no6_mov4.mp3</option>
+<!--                    <option>op18_no6_mov3.mp3</option>-->
+<!--                    <option>op18_no6_mov4.mp3</option>-->
                 </select>
             </div>
 
             <audio controls id="audio" src="static/media/op18_no1_mov1.mp3"></audio>
-            <audio src="static/media/op18_no1_mov1.mp3"></audio>
+<!--            <iframe id="audio" type="text/html" src="https://www.youtube.com/embed/Nm30eAKXI6c?rel=0&autohide=0&fs=0&modestbranding=1" frameborder="0" height="50px"></iframe>-->
+<!--            <audio src="static/media/op18_no1_mov1.mp3"></audio>&ndash;&gt;-->
         </div>
         <div id="category-large-container" class="small-div">
             <div id="categorical-container">
@@ -117,5 +118,9 @@
             </div>
         </div>
     </div>
+    <script>
+        let h = document.getElementById("description-header")
+        h.click()
+    </script>
 </body>
 </html>
