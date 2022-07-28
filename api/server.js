@@ -5,6 +5,7 @@ const server = express()
 
 server.use(express.static('public'))
 server.use(express.json({ limit: '1mb' }))
+server.use(express.urlencoded({ extended: false }))
 
 server.use('/api/analyses', analysesRouter)
 

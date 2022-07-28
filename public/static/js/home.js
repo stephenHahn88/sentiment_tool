@@ -112,17 +112,20 @@ function newAudio() {
 // }
 
 function finishValenceAnnotation() {
-    let t, p, e;
+    let t, p, e, id;
     if (confirm("Please confirm that you have completed your analysis") === true) {
         p = document.getElementById("audio-valence");
         e = document.getElementById("audio-options");
         t = document.getElementById("custom-textarea");
+        id = document.getElementById("id-field")
+
         new_file = e.options[e.selectedIndex].text
 
         const data = {
             "piece": new_file,
             "analysis": p.innerText,
-            "comments": t.value
+            "comments": t.value,
+            "custom_id": id.value
         };
 
         const options = {

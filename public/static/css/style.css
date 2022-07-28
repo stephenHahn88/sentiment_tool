@@ -271,6 +271,24 @@ output {
     border: none;
 }
 
+#custom-textarea {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
+}
+
+#categorical-container > button {
+    border-width: 10px;
+    border-style: solid;
+    height: 100px;
+}
+
+#id-field {
+    background-color: rgba(255, 255, 255, 0.4);
+    height: 20px;
+    width: 200px;
+    border-style: none;
+}
+
 #finish-container > button {
     background-color: rgba(255, 255, 255, 0.4);
     border: none;
@@ -281,15 +299,13 @@ output {
     border: none;
 }
 
-#custom-textarea {
-    background-color: rgba(255, 255, 255, 0.4);
-    border: none;
-}
-
-#categorical-container > button {
-    border-width: 10px;
-    border-style: solid;
-    height: 100px;
+#finish-container {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 20px;
+    border-radius: 0;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
 }
 
 .largest-div {
