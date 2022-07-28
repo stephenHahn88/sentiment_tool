@@ -49,8 +49,36 @@ function annotate() {
 
 function clickEmotion(emotion) {
     let p = document.getElementById("current-category")
-    p.innerText = "Current category: " + emotion[0].toUpperCase() + emotion.slice(1);
+    p.innerHTML = "Current category:<br>" + emotion[0].toUpperCase() + emotion.slice(1);
     currentEmotion = emotion
+    switch (emotion) {
+        case 'anger':
+            p.style.backgroundColor = "#c23a22"
+            break
+        case 'fear':
+            p.style.backgroundColor = "#7d54ae"
+            break
+        case 'sadness':
+            p.style.backgroundColor = '#3e65bf'
+            break
+        case 'none':
+            p.style.backgroundColor = '#000000'
+            break
+        case 'irony':
+            p.style.backgroundColor = '#bbbbbb'
+            break
+        case 'love':
+            p.style.backgroundColor = '#ffa0c5'
+            break
+        case 'joy':
+            p.style.backgroundColor = '#f9d476'
+            break
+    }
+    if (['none', 'sadness', 'fear', 'anger'].includes(emotion)) {
+        p.style.color = "lightgray"
+    } else {
+        p.style.color = "black"
+    }
 }
 
 function restartAnnotate(interval) {

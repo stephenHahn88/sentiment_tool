@@ -238,8 +238,32 @@ output {
 }
 
 #current-category {
+    display: table-cell;
     font-size: 24px;
-    padding-left: 10px;
+    top: 50%;
+    /*padding-left: 10px;*/
+    padding-top: 40px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: rgba(100, 100, 100, 0.4);
+}
+
+.squiggle {
+    height: 100px;
+    width: 300px;
+    padding-top: 30px;
+}
+
+.reflect {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    float: right;
+}
+
+#current-category-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 #category-large-container {
