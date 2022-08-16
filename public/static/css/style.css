@@ -95,11 +95,13 @@ output {
     margin: 0 auto;
     width: 98%;
     height: 200px;
-    overflow-y: scroll;
-    overflow-wrap: break-word;
-    /*scroll-behavior: smooth;*/
     border-radius: 4px;
     background-color: rgba(255, 255, 255, 0.4);
+
+    overflow: auto;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 /*#audio-info-container {*/
