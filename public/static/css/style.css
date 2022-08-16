@@ -110,6 +110,7 @@ output {
 #categorical-container {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 1fr 1fr;
     align-items: center;
 }
 
@@ -134,7 +135,7 @@ output {
     height: 200px;
 }
 
-#anger {
+#anger, .anger {
     background-color: #c23a22;
     border-color: #c23a22;
     color: lightgray;
@@ -150,7 +151,7 @@ output {
     color: black;
 }
 
-#fear {
+#fear, .fear {
     background-color: #7d54ae;
     border-color: #7d54ae;
     color: lightgray;
@@ -166,7 +167,7 @@ output {
     color: black;
 }
 
-#joy {
+#joy, .joy {
     background-color: #f9d476;
     border-color: #f9d476;
 }
@@ -179,7 +180,7 @@ output {
     background-color: white;
 }
 
-#love {
+#love, .love {
     background-color: #ffa0c5;
     border-color: #ffa0c5;
 }
@@ -192,7 +193,7 @@ output {
     background-color: white;
 }
 
-#sadness {
+#sadness, .sadness {
     background-color: #3e65bf;
     border-color: #3e65bf;
     color: lightgray;
@@ -208,7 +209,7 @@ output {
     color: black;
 }
 
-#irony {
+#irony, .irony {
     background-color: #bbbbbb;
     border-color: #bbbbbb;
 }
@@ -343,3 +344,11 @@ output {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
+.secondary-emotion {
+    flex: auto;
+    margin: 0;
+    font-size: 12px;
+    width: auto;
+    height: 20px;
+    border-style: none;
+}
