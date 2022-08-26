@@ -11406,9 +11406,21 @@ function cleanData() {
             json = data;
         })
     let analyses = {}
-    for (let line of json) {
-
+    for (let row of json) {
+        for (let item of row['analysis'].split(",\n")) {
+            let split = item.split(" : ")
+            let entry = {}
+            for ([t, e] of split) {
+                entry[Math.round(t*1000)/1000] = e
+            }
+            if (analyses.keys().includes(row['piece'])) {
+                analyses[row['piece']].assign(entry)
+            } else {
+                analyses[row['piece']] = entry
+            }
+        }
     }
+    console.log(analyses)
 }
 
 // def clean_data():
