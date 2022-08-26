@@ -43,7 +43,7 @@ function newAudio() {
     audio.load()
 }
 
-
+let DATA;
 async function getPercentEmotionsInRange() {
   let a = document.getElementById("audio-options")
   let s = document.getElementsByClassName("minimum")[0]
@@ -52,7 +52,9 @@ async function getPercentEmotionsInRange() {
   let piece = a.options[a.selectedIndex].text
   start = s.ariaValueNow
   end = e.ariaValueNow
-  let DATA = await cleanData()
+  if (DATA == null) {
+      DATA = await cleanData()
+  }
   const dat = DATA[piece]
   let counts = {
       "anger": 0,
