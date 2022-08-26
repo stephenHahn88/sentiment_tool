@@ -11408,7 +11408,7 @@ async function cleanData() {
                 entry[Math.round(t*1000)/1000] = e
             }
             if (row['piece'] in analyses) {
-                analyses[row['piece']].assign(entry)
+                Object.assign(analyses[row['piece']], entry)
             } else {
                 analyses[row['piece']] = entry
             }
