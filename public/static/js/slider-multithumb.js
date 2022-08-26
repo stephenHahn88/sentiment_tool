@@ -11391,11 +11391,6 @@ var DATA = {
   }
 }
 
-function fetchAnalyses() {
-    fetch("/api/analyses")
-        .then((response) => response.json())
-        .then((data) => console.log(data))
-}
 
 function cleanData() {
     let json;
