@@ -11391,16 +11391,14 @@ var DATA = {
   }
 }
 
-
-function cleanData() {
-    let json;
-    fetch("/api/analyses")
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-            json = data;
-        })
+async function fetchData() {
+    const response = await fetch("/api/analyses")
+    const json = await response.json()
     console.log(json)
+    return json
+}
+async function cleanData() {
+    let json = await fetchData()
     let analyses = {}
     for (let row of json) {
         for (let item of row['analysis'].split(",\n")) {
