@@ -11401,22 +11401,20 @@ async function cleanData() {
     let json = await fetchData()
     let analyses = {}
     for (let row of json) {
+        let entry = {}
         for (let item of row['analysis'].split(",\n")) {
             if (item === '') {
                 continue
             }
             console.log(item)
             let split = item.split(" : ")
-            let entry = {}
-            for ([t, e] of split) {
-                entry[Math.round(t*1000)/1000] = e
-            }
-            console.log(entry)
-            if (row['piece'] in analyses) {
+            entry[Math.round(split[0]*1000)/1000] = split[1]
+        }
+        console.log(entry)
+        if (row['piece'] in analyses) {
                 Object.assign(analyses[row['piece']], entry)
-            } else {
-                analyses[row['piece']] = entry
-            }
+        } else {
+            analyses[row['piece']] = entry
         }
     }
     console.log(analyses)
