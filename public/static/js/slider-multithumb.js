@@ -11400,6 +11400,7 @@ function cleanData() {
             console.log(data);
             json = data;
         })
+    console.log(json)
     let analyses = {}
     for (let row of json) {
         for (let item of row['analysis'].split(",\n")) {
