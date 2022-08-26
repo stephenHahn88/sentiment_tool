@@ -11407,7 +11407,7 @@ async function cleanData() {
             for ([t, e] of split) {
                 entry[Math.round(t*1000)/1000] = e
             }
-            if (analyses.keys().includes(row['piece'])) {
+            if (row['piece'] in analyses) {
                 analyses[row['piece']].assign(entry)
             } else {
                 analyses[row['piece']] = entry
