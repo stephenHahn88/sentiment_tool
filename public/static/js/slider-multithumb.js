@@ -11397,6 +11397,39 @@ function fetchAnalyses() {
         .then((data) => console.log(data))
 }
 
+function cleanData() {
+    let json;
+    fetch("/api/analyses")
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            json = data;
+        })
+    let analyses = {}
+    for (let line of json) {
+
+    }
+}
+
+// def clean_data():
+//     with open("data2.json", "r") as f:
+//         file = json.load(f)
+//     # print(file)
+//     analyses = {}
+//     for row in file:
+//         # print(row['piece'])
+//         split = [x.split(' : ') for x in row['analysis'].split(",\n") if x]
+//         split = {round(float(time), 3): emotion for time, emotion in split}
+//         # print(split)
+//         if row['piece'] in analyses.keys():
+//             analyses[row['piece']].update(split)
+//         else:
+//             analyses[row['piece']] = split
+//
+//     with open("data_temp.js", "w") as f:
+//         json.dump(analyses, f)
+
+
 function newAudio() {
     // loads new audio when a new melody is selected
     e = document.getElementById("audio-options");
@@ -11444,7 +11477,6 @@ function getPercentEmotionsInRange() {
       Math.round(counts['joy']/total*10000)/100
   ]
   graph(emotion_data)
-    fetchAnalyses()
 }
 
 let calls = 0
