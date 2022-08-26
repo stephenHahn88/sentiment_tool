@@ -11402,11 +11402,16 @@ async function cleanData() {
     let analyses = {}
     for (let row of json) {
         for (let item of row['analysis'].split(",\n")) {
+            if (item === '') {
+                continue
+            }
+            console.log(item)
             let split = item.split(" : ")
             let entry = {}
             for ([t, e] of split) {
                 entry[Math.round(t*1000)/1000] = e
             }
+            console.log(entry)
             if (row['piece'] in analyses) {
                 Object.assign(analyses[row['piece']], entry)
             } else {
@@ -11453,7 +11458,6 @@ function getPercentEmotionsInRange() {
   let piece = a.options[a.selectedIndex].text
   start = s.ariaValueNow
   end = e.ariaValueNow
-  console.log([start, end])
   const dat = DATA[piece]
   let counts = {
       "anger": 0,
