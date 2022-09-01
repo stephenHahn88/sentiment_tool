@@ -22,8 +22,8 @@ async function displayPhraseRanges() {
       DATA = await cleanData()
   }
   let e = document.getElementById("audio-options");
-  let file_name = e.options[e.selectedIndex].text.slice(0, -4)
-  let json = await fetchRNTimes(file_name)
+  let file_name = e.options[e.selectedIndex].text
+  let json = await fetchRNTimes(file_name.slice(0, -4))
 
   let curr_start_i = 0
   let phrase_end = json["phraseend"]
