@@ -90,4 +90,10 @@
 #debug-container {
   height: 200px;
   overflow: scroll;
+  white-space: pre;
 }
+
+#debug {
+  white-space: pre;
+}
+
