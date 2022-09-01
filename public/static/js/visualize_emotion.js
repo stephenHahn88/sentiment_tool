@@ -56,7 +56,7 @@ async function displayPhraseRanges() {
       phrase_num++
     }
   }
-  test.innerText = JSON.stringify(ranges)
+  test.innerText = JSON.stringify(ranges, null, "\t")
 
   // download(JSON.stringify(ranges), 'test.txt', 'text/plain')
 }
