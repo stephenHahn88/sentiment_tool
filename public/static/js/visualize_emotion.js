@@ -23,10 +23,10 @@ async function displayPhraseRanges() {
   }
   let e = document.getElementById("audio-options");
   let file_name = e.options[e.selectedIndex].text
-  let json = await fetchRNTimes(file_name.slice(0, -4))
+  let rn_json = await fetchRNTimes(file_name.slice(0, -4))
 
   let curr_start_i = 0
-  let phrase_end = json["phraseend"]
+  let phrase_end = rn_json["phraseend"]
 
   let test = document.getElementById("debug")
   let ranges = {}
@@ -34,14 +34,21 @@ async function displayPhraseRanges() {
   for (let ended_i in phrase_end) {
     ended_i = parseInt(ended_i)
     if (phrase_end[ended_i]) {
-      let start = json["time"][curr_start_i]
-      let end = json["time"][ended_i + 1]
+      let start = rn_json["time"][curr_start_i]
+      let end = rn_json["time"][ended_i + 1]
+
+      let rns = new Set()
+      for (let i = curr_start_i; i !== ended_i; i++) {
+        rns.add(rn_json["numeral"][i])
+      }
+
       ranges[phrase_num] = {
         "start":Math.round(start * 100) / 100,
         "end":Math.round(end * 100) / 100,
         "start_i":curr_start_i,
         "end_i": ended_i,
-        "emotion_distribution": getEmotionPercentages(file_name, start, end)
+        "emotion_distribution": getEmotionPercentages(file_name, start, end),
+        "harmonies": rns
       }
 
       curr_start_i = ended_i + 1
