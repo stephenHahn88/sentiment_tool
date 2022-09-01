@@ -58,7 +58,7 @@ async function displayPhraseRanges() {
   }
   test.innerText = JSON.stringify(ranges, null, "\t")
 
-  // download(JSON.stringify(ranges), 'test.txt', 'text/plain')
+  download(ranges, `${file_name.slice(0, -4)}.json`, 'application/json')
 }
 
 async function fetchAnalyses() {
