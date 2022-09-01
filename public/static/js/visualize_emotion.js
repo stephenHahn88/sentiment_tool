@@ -39,6 +39,7 @@ async function displayPhraseRanges() {
 
       let rns = new Set()
       for (let i = curr_start_i; i !== ended_i; i++) {
+        console.log([i, rns])
         rns.add(rn_json["numeral"][i])
       }
 
