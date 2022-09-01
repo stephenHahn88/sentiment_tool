@@ -86,3 +86,8 @@
   color: currentcolor;
   font-weight: bold;
 }
+
+#debug-container {
+  height: 200px;
+  overflow: scroll;
+}

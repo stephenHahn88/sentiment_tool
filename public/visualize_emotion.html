@@ -8,15 +8,15 @@
 <!--    <script src="static/data/data.js"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="static/js/slider-multithumb.js"></script>
+    <script src="static/js/visualize_emotion.js"></script>
     <link rel="stylesheet" type="text/css" href="static/css/slider-multithumb.css">
     <title>Title</title>
 </head>
-<body onload="cleanData()">
+<body onload="cleanData(); displayPhraseRanges()">
     <div class="">
         <div id="audio-selection-container">
             <label for="audio-options" style="font-size: 28px;">Choose a piece:  </label>
-            <select name="audio-options" id="audio-options" onchange="newAudio()">
+            <select name="audio-options" id="audio-options" onchange="newAudio(); displayPhraseRanges()">
                     <option>op18_no1_mov1.mp3</option>
                     <option>op18_no1_mov2.mp3</option>
 <!--                    <option>op18_no1_mov3.mp3</option>-->
@@ -43,11 +43,10 @@
                 </select>
             <audio controls id="audio" src="static/media/op18_no1_mov1.mp3"></audio>
         </div>
+        <div id="debug-container">
+            <p id="debug"></p>
+        </div>
         <div id="emotion-range-container">
-<!--            <label for="start-time">Start time:</label>-->
-<!--            <input id="start-time" name="start-time" type="text" placeholder="start as float">-->
-<!--            <label for="end-time">End time:</label>-->
-<!--            <input id="end-time" name="end-time" type="text" placeholder="end as float">-->
             <div class="slider-multithumb">
                 <svg role="none"
                    class="slider-group"
@@ -91,7 +90,7 @@
                 </g>
                 </svg>
                 </div>
-            <button onclick="getPercentEmotionsInRange()">Graph!</button>
+            <button onclick="graphEmotionDistribution()">Graph!</button>
         </div>
     </div>
     <div id="chart-container">
