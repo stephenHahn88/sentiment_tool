@@ -49,7 +49,7 @@ async function displayPhraseRanges() {
         "start_i":curr_start_i,
         "end_i": ended_i,
         "emotion_distribution": getEmotionPercentages(file_name, start, end),
-        "harmonies": rns
+        "harmonies": Array.from(rns.values())
       }
 
       curr_start_i = ended_i + 1
