@@ -72,6 +72,9 @@ async function cleanData() {
     let json = await fetchAnalyses()
     let analyses = {}
     for (let row of json) {
+        if (row.id in [1, 2, 5, 9]) {
+          continue;
+        }
         let entry = {}
         for (let item of row['analysis'].split(",\n")) {
             if (item === '') {

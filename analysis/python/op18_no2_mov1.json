@@ -1,0 +1,1581 @@
+{
+  "0": {
+    "start": 0.0,
+    "end": 13.92,
+    "start_i": 0,
+    "end_i": 2,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      42.47,
+      0.0,
+      57.53,
+      0.0
+    ],
+    "harmonies": [
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "I",
+      "V"
+    ]
+  },
+  "1": {
+    "start": 13.92,
+    "end": 19.26,
+    "start_i": 3,
+    "end_i": 12,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      6.54,
+      93.46
+    ],
+    "harmonies": [
+      "I",
+      "V",
+      "ii",
+      "vi"
+    ],
+    "sequence": [
+      "I",
+      "vi",
+      "ii",
+      "V",
+      "I",
+      "I",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "2": {
+    "start": 19.26,
+    "end": 24.76,
+    "start_i": 13,
+    "end_i": 17,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      100.0
+    ],
+    "harmonies": [
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "I"
+    ]
+  },
+  "3": {
+    "start": 24.76,
+    "end": 36.07,
+    "start_i": 18,
+    "end_i": 31,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      20.89,
+      79.11
+    ],
+    "harmonies": [
+      "iv",
+      "ii",
+      "vi",
+      "IV",
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "I",
+      "V",
+      "IV",
+      "iv",
+      "V",
+      "V",
+      "I",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "4": {
+    "start": 36.07,
+    "end": 55.09,
+    "start_i": 32,
+    "end_i": 54,
+    "emotion_distribution": [
+      12.93,
+      57.78,
+      0.0,
+      0.0,
+      0.0,
+      4.75,
+      24.54
+    ],
+    "harmonies": [
+      "ii",
+      "vi",
+      "I",
+      "V/vi",
+      "V",
+      "i"
+    ],
+    "sequence": [
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "V/vi",
+      "vi",
+      "V/vi",
+      "vi",
+      "V/vi",
+      "ii",
+      "V",
+      "I",
+      "V",
+      "i",
+      "V",
+      "i",
+      "V",
+      "i",
+      "V",
+      "i",
+      "V"
+    ]
+  },
+  "5": {
+    "start": 55.09,
+    "end": 65.41,
+    "start_i": 55,
+    "end_i": 72,
+    "emotion_distribution": [
+      0.0,
+      12.68,
+      0.0,
+      0.0,
+      0.0,
+      2.44,
+      84.88
+    ],
+    "harmonies": [
+      "V/ii",
+      "ii",
+      "vi",
+      "I",
+      "vii",
+      "V",
+      "#vii/vi",
+      "V/V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "vii",
+      "I",
+      "#vii/vi",
+      "vi",
+      "V/V",
+      "V",
+      "ii",
+      "V/ii",
+      "ii",
+      "V",
+      "I",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "6": {
+    "start": 65.41,
+    "end": 70.34,
+    "start_i": 73,
+    "end_i": 81,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      100.0
+    ],
+    "harmonies": [
+      "vi",
+      "I",
+      "V",
+      "V/V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "vi",
+      "V/V"
+    ]
+  },
+  "7": {
+    "start": 70.34,
+    "end": 75.37,
+    "start_i": 82,
+    "end_i": 89,
+    "emotion_distribution": [
+      0.0,
+      35.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      65.0
+    ],
+    "harmonies": [
+      "Ger",
+      "V/ii",
+      "iv",
+      "ii",
+      "V/iv"
+    ],
+    "sequence": [
+      "ii",
+      "V/ii",
+      "ii",
+      "V/ii",
+      "iv",
+      "V/iv",
+      "Ger"
+    ]
+  },
+  "8": {
+    "start": 75.37,
+    "end": 77.19,
+    "start_i": 90,
+    "end_i": 95,
+    "emotion_distribution": [
+      0.0,
+      50.0,
+      36.11,
+      0.0,
+      0.0,
+      0.0,
+      13.89
+    ],
+    "harmonies": [
+      "i",
+      "V"
+    ],
+    "sequence": [
+      "i",
+      "i",
+      "V",
+      "V",
+      "i"
+    ]
+  },
+  "9": {
+    "start": 77.19,
+    "end": 81.02,
+    "start_i": 96,
+    "end_i": 105,
+    "emotion_distribution": [
+      0.0,
+      50.67,
+      49.33,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "harmonies": [
+      "ii",
+      "i",
+      "#vii/ii",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "V",
+      "i",
+      "i",
+      "#vii/ii",
+      "ii",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "10": {
+    "start": 81.02,
+    "end": 83.49,
+    "start_i": 106,
+    "end_i": 112,
+    "emotion_distribution": [
+      0.0,
+      50.0,
+      50.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "harmonies": [
+      "i",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "i",
+      "i",
+      "V",
+      "V",
+      "i"
+    ]
+  },
+  "11": {
+    "start": 83.49,
+    "end": 87.59,
+    "start_i": 113,
+    "end_i": 121,
+    "emotion_distribution": [
+      0.0,
+      50.0,
+      50.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "harmonies": [
+      "ii",
+      "i",
+      "#vii/ii",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "V",
+      "i",
+      "i",
+      "#vii/ii",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "12": {
+    "start": 87.59,
+    "end": 95.43,
+    "start_i": 122,
+    "end_i": 133,
+    "emotion_distribution": [
+      0.0,
+      6.41,
+      9.62,
+      0.0,
+      0.0,
+      0.0,
+      83.97
+    ],
+    "harmonies": [
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V"
+    ]
+  },
+  "13": {
+    "start": 95.43,
+    "end": 114.66,
+    "start_i": 134,
+    "end_i": 174,
+    "emotion_distribution": [
+      0.0,
+      9.66,
+      0.0,
+      0.0,
+      0.0,
+      9.14,
+      81.2
+    ],
+    "harmonies": [
+      "V/IV",
+      "V/ii",
+      "#vii/V",
+      "ii",
+      "vi",
+      "IV",
+      "I",
+      "V/vi",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "I",
+      "V/ii",
+      "ii",
+      "V",
+      "V",
+      "V",
+      "I",
+      "V/IV",
+      "IV",
+      "I",
+      "IV",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V/vi",
+      "vi",
+      "#vii/V",
+      "V",
+      "V/vi",
+      "vi",
+      "#vii/V",
+      "V",
+      "V",
+      "#vii/V",
+      "V",
+      "I",
+      "V",
+      "#vii/V",
+      "V",
+      "V",
+      "I",
+      "ii",
+      "V",
+      "I",
+      "I",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "14": {
+    "start": 114.66,
+    "end": 120.03,
+    "start_i": 175,
+    "end_i": 177,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.93,
+      89.72,
+      9.35
+    ],
+    "harmonies": [
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "I",
+      "V"
+    ]
+  },
+  "15": {
+    "start": 120.03,
+    "end": 125.41,
+    "start_i": 178,
+    "end_i": 187,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      31.78,
+      68.22,
+      0.0
+    ],
+    "harmonies": [
+      "I",
+      "V",
+      "ii",
+      "vi"
+    ],
+    "sequence": [
+      "I",
+      "vi",
+      "ii",
+      "V",
+      "I",
+      "I",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "16": {
+    "start": 125.41,
+    "end": 130.93,
+    "start_i": 188,
+    "end_i": 192,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      58.18,
+      41.82
+    ],
+    "harmonies": [
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "I"
+    ]
+  },
+  "17": {
+    "start": 130.93,
+    "end": 142.28,
+    "start_i": 193,
+    "end_i": 206,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      17.26,
+      82.74
+    ],
+    "harmonies": [
+      "iv",
+      "ii",
+      "vi",
+      "IV",
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "I",
+      "V",
+      "IV",
+      "iv",
+      "V",
+      "V",
+      "I",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "18": {
+    "start": 142.28,
+    "end": 161.24,
+    "start_i": 207,
+    "end_i": 229,
+    "emotion_distribution": [
+      0.0,
+      70.45,
+      0.0,
+      0.0,
+      0.0,
+      1.85,
+      27.7
+    ],
+    "harmonies": [
+      "ii",
+      "vi",
+      "I",
+      "V/vi",
+      "V",
+      "i"
+    ],
+    "sequence": [
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "V/vi",
+      "vi",
+      "V/vi",
+      "vi",
+      "V/vi",
+      "ii",
+      "V",
+      "I",
+      "V",
+      "i",
+      "V",
+      "i",
+      "V",
+      "i",
+      "V",
+      "i",
+      "V"
+    ]
+  },
+  "19": {
+    "start": 161.24,
+    "end": 171.61,
+    "start_i": 230,
+    "end_i": 247,
+    "emotion_distribution": [
+      0.0,
+      20.39,
+      0.0,
+      0.0,
+      0.0,
+      40.29,
+      39.32
+    ],
+    "harmonies": [
+      "V/ii",
+      "ii",
+      "vi",
+      "I",
+      "vii",
+      "V",
+      "#vii/vi",
+      "V/V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "vii",
+      "I",
+      "#vii/vi",
+      "vi",
+      "V/V",
+      "V",
+      "ii",
+      "V/ii",
+      "ii",
+      "V",
+      "I",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "20": {
+    "start": 171.61,
+    "end": 176.54,
+    "start_i": 248,
+    "end_i": 256,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      49.49,
+      50.51
+    ],
+    "harmonies": [
+      "vi",
+      "I",
+      "V",
+      "V/V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "vi",
+      "V/V"
+    ]
+  },
+  "21": {
+    "start": 176.54,
+    "end": 181.51,
+    "start_i": 257,
+    "end_i": 264,
+    "emotion_distribution": [
+      0.0,
+      40.82,
+      0.0,
+      0.0,
+      0.0,
+      50.0,
+      9.18
+    ],
+    "harmonies": [
+      "Ger",
+      "V/ii",
+      "iv",
+      "ii",
+      "V/iv"
+    ],
+    "sequence": [
+      "ii",
+      "V/ii",
+      "ii",
+      "V/ii",
+      "iv",
+      "V/iv",
+      "Ger"
+    ]
+  },
+  "22": {
+    "start": 181.51,
+    "end": 183.38,
+    "start_i": 265,
+    "end_i": 270,
+    "emotion_distribution": [
+      0.0,
+      50.0,
+      21.05,
+      0.0,
+      0.0,
+      28.95,
+      0.0
+    ],
+    "harmonies": [
+      "i",
+      "V"
+    ],
+    "sequence": [
+      "i",
+      "i",
+      "V",
+      "V",
+      "i"
+    ]
+  },
+  "23": {
+    "start": 183.38,
+    "end": 187.26,
+    "start_i": 271,
+    "end_i": 280,
+    "emotion_distribution": [
+      0.0,
+      50.65,
+      49.35,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "harmonies": [
+      "ii",
+      "i",
+      "#vii/ii",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "V",
+      "i",
+      "i",
+      "#vii/ii",
+      "ii",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "24": {
+    "start": 187.26,
+    "end": 189.68,
+    "start_i": 281,
+    "end_i": 287,
+    "emotion_distribution": [
+      0.0,
+      50.0,
+      50.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "harmonies": [
+      "i",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "i",
+      "i",
+      "V",
+      "V",
+      "i"
+    ]
+  },
+  "25": {
+    "start": 189.68,
+    "end": 193.81,
+    "start_i": 288,
+    "end_i": 296,
+    "emotion_distribution": [
+      0.0,
+      40.24,
+      50.0,
+      0.0,
+      0.0,
+      9.76,
+      0.0
+    ],
+    "harmonies": [
+      "ii",
+      "i",
+      "#vii/ii",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "V",
+      "i",
+      "i",
+      "#vii/ii",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "26": {
+    "start": 193.81,
+    "end": 201.66,
+    "start_i": 297,
+    "end_i": 308,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      11.39,
+      0.0,
+      0.0,
+      0.63,
+      87.97
+    ],
+    "harmonies": [
+      "I",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V"
+    ]
+  },
+  "27": {
+    "start": 201.66,
+    "end": 222.17,
+    "start_i": 309,
+    "end_i": 349,
+    "emotion_distribution": [
+      0.0,
+      3.67,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      96.33
+    ],
+    "harmonies": [
+      "V/IV",
+      "V/ii",
+      "#vii/V",
+      "ii",
+      "vi",
+      "IV",
+      "I",
+      "V/vi",
+      "V"
+    ],
+    "sequence": [
+      "V",
+      "I",
+      "V/ii",
+      "ii",
+      "V",
+      "V",
+      "V",
+      "I",
+      "V/IV",
+      "IV",
+      "I",
+      "IV",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V/vi",
+      "vi",
+      "#vii/V",
+      "V",
+      "V/vi",
+      "vi",
+      "#vii/V",
+      "V",
+      "V",
+      "#vii/V",
+      "V",
+      "I",
+      "V",
+      "#vii/V",
+      "V",
+      "V",
+      "I",
+      "ii",
+      "V",
+      "I",
+      "I",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "28": {
+    "start": 222.17,
+    "end": 227.44,
+    "start_i": 350,
+    "end_i": 358,
+    "emotion_distribution": [
+      3.81,
+      46.67,
+      0.0,
+      0.0,
+      38.1,
+      0.0,
+      11.43
+    ],
+    "harmonies": [
+      "VI",
+      "i",
+      "ii",
+      "V"
+    ],
+    "sequence": [
+      "VI",
+      "ii",
+      "V",
+      "i",
+      "i",
+      "VI",
+      "ii",
+      "V"
+    ]
+  },
+  "29": {
+    "start": 227.44,
+    "end": 319.79,
+    "start_i": 359,
+    "end_i": 456,
+    "emotion_distribution": [
+      11.45,
+      43.05,
+      0.0,
+      0.0,
+      11.62,
+      0.0,
+      33.88
+    ],
+    "harmonies": [
+      "V/IV",
+      "V/v",
+      "#vii",
+      "#vii/V",
+      "iv",
+      null,
+      "ii",
+      "IV",
+      "V/iv",
+      "ii/v",
+      "I",
+      "vi",
+      "#vii/v",
+      "V",
+      "ii/iv",
+      "i",
+      "#vii/ii",
+      "V/V"
+    ],
+    "sequence": [
+      "V",
+      "i",
+      "V",
+      "i",
+      "V",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "i",
+      "V",
+      "i",
+      "V",
+      "V",
+      "i",
+      null,
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "I",
+      "V",
+      "I",
+      "I",
+      "V",
+      "V",
+      "V",
+      "I",
+      "I",
+      "V/IV",
+      "V/IV",
+      "IV",
+      "I",
+      "ii",
+      "V/V",
+      "V",
+      "V",
+      "V",
+      "V",
+      "i",
+      "iv",
+      "V",
+      "V",
+      "i",
+      "V",
+      "#vii",
+      "ii/iv",
+      "V/iv",
+      "#vii",
+      "V",
+      "i",
+      "V",
+      "V",
+      "#vii",
+      "#vii",
+      "ii/iv",
+      "V/iv",
+      "#vii/ii",
+      "#vii/ii",
+      "ii/v",
+      "V/v",
+      "#vii/v",
+      "#vii/v",
+      "#vii/V",
+      "#vii/V",
+      "V",
+      "V",
+      "V",
+      "V",
+      "I",
+      "V",
+      "V",
+      "V",
+      "I",
+      "I",
+      "V",
+      "V",
+      "I",
+      "vi",
+      "V",
+      "V",
+      "I",
+      "I",
+      "ii",
+      "V",
+      "#vii/V",
+      "V",
+      "V"
+    ]
+  },
+  "30": {
+    "start": 319.79,
+    "end": 337.73,
+    "start_i": 457,
+    "end_i": 473,
+    "emotion_distribution": [
+      0.0,
+      31.2,
+      0.0,
+      0.0,
+      0.0,
+      41.5,
+      27.3
+    ],
+    "harmonies": [
+      "Ger",
+      "VI",
+      "ii",
+      "I",
+      "v",
+      "V",
+      "i"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "I",
+      "V",
+      "I",
+      "v",
+      "ii",
+      "i",
+      "i",
+      "V",
+      "VI",
+      "V",
+      "Ger",
+      "V",
+      "Ger"
+    ]
+  },
+  "31": {
+    "start": 337.73,
+    "end": 348.9,
+    "start_i": 474,
+    "end_i": 488,
+    "emotion_distribution": [
+      0.0,
+      14.86,
+      0.0,
+      0.0,
+      0.0,
+      80.18,
+      4.95
+    ],
+    "harmonies": [
+      "iv",
+      "ii",
+      "vi",
+      "V/iv",
+      "I",
+      "V",
+      "i"
+    ],
+    "sequence": [
+      "V/iv",
+      "iv",
+      "V",
+      "i",
+      "ii",
+      "V",
+      "I",
+      "I",
+      "i",
+      "ii",
+      "V",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "32": {
+    "start": 348.9,
+    "end": 359.47,
+    "start_i": 489,
+    "end_i": 504,
+    "emotion_distribution": [
+      0.0,
+      2.37,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      97.63
+    ],
+    "harmonies": [
+      "#vii/V",
+      "ii",
+      "vi",
+      "I",
+      "vii",
+      "V",
+      "V/V"
+    ],
+    "sequence": [
+      "V/V",
+      "V/V",
+      "V",
+      "vii",
+      "I",
+      "#vii/V",
+      "V",
+      "vii",
+      "vi",
+      "#vii/V",
+      "V",
+      "ii",
+      "V",
+      "V/V",
+      "V"
+    ]
+  },
+  "33": {
+    "start": 359.47,
+    "end": 369.55,
+    "start_i": 505,
+    "end_i": 522,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      100.0
+    ],
+    "harmonies": [
+      "V/ii",
+      "ii",
+      "vi",
+      "I",
+      "V",
+      "#vii/vi",
+      "V/V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "#vii/vi",
+      "vi",
+      "#vii/vi",
+      "vi",
+      "V/V",
+      "V",
+      "ii",
+      "V/ii",
+      "ii",
+      "V",
+      "I",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "34": {
+    "start": 369.55,
+    "end": 374.48,
+    "start_i": 523,
+    "end_i": 531,
+    "emotion_distribution": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      100.0
+    ],
+    "harmonies": [
+      "vi",
+      "I",
+      "V",
+      "V/V"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "vi",
+      "V/V"
+    ]
+  },
+  "35": {
+    "start": 374.48,
+    "end": 378.9,
+    "start_i": 532,
+    "end_i": 540,
+    "emotion_distribution": [
+      0.0,
+      48.86,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      51.14
+    ],
+    "harmonies": [
+      "Ger",
+      "iv",
+      "#vii/iv",
+      "V/iv",
+      "i"
+    ],
+    "sequence": [
+      "iv",
+      "#vii/iv",
+      "iv",
+      "V/iv",
+      "iv",
+      "i",
+      "iv",
+      "Ger"
+    ]
+  },
+  "36": {
+    "start": 378.9,
+    "end": 385.23,
+    "start_i": 541,
+    "end_i": 558,
+    "emotion_distribution": [
+      0.0,
+      50.0,
+      44.44,
+      0.0,
+      0.0,
+      0.0,
+      5.56
+    ],
+    "harmonies": [
+      "iv",
+      "#vii/iv",
+      "ii",
+      "V",
+      "i"
+    ],
+    "sequence": [
+      "V",
+      "V",
+      "i",
+      "i",
+      "V",
+      "V",
+      "i",
+      "i",
+      "V",
+      "V",
+      "i",
+      "i",
+      "#vii/iv",
+      "iv",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "37": {
+    "start": 385.23,
+    "end": 391.42,
+    "start_i": 559,
+    "end_i": 575,
+    "emotion_distribution": [
+      0.0,
+      39.52,
+      50.0,
+      0.0,
+      0.0,
+      0.0,
+      10.48
+    ],
+    "harmonies": [
+      "#vii/iv",
+      "ii",
+      "I",
+      "V",
+      "i"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "i",
+      "i",
+      "V",
+      "V",
+      "i",
+      "i",
+      "V",
+      "V",
+      "i",
+      "i",
+      "#vii/iv",
+      "ii",
+      "V",
+      "V"
+    ]
+  },
+  "38": {
+    "start": 391.42,
+    "end": 418.51,
+    "start_i": 576,
+    "end_i": 633,
+    "emotion_distribution": [
+      0.0,
+      0.92,
+      4.44,
+      0.0,
+      21.81,
+      9.8,
+      63.03
+    ],
+    "harmonies": [
+      "V/IV",
+      "V/ii",
+      "#vii/V",
+      "III",
+      "ii",
+      "vi",
+      "IV",
+      "I",
+      "V/vi",
+      "V",
+      "vii"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V",
+      "I",
+      "III",
+      "IV",
+      "V/ii",
+      "ii",
+      "V",
+      "V",
+      "V",
+      "vi",
+      "V",
+      "I",
+      "V/IV",
+      "IV",
+      "V/IV",
+      "IV",
+      "V",
+      "I",
+      "V",
+      "I",
+      "V/vi",
+      "vi",
+      "#vii/V",
+      "V",
+      "V",
+      "vi",
+      "#vii/V",
+      "V",
+      "V",
+      "I",
+      "I",
+      "vii",
+      "#vii/V",
+      "V",
+      "V",
+      "I",
+      "vi",
+      "ii",
+      "V",
+      "I",
+      "I",
+      "vi",
+      "ii",
+      "V"
+    ]
+  },
+  "39": {
+    "start": 418.51,
+    "end": 440.14,
+    "start_i": 634,
+    "end_i": 650,
+    "emotion_distribution": [
+      0.0,
+      6.71,
+      28.94,
+      0.0,
+      0.0,
+      49.31,
+      15.05
+    ],
+    "harmonies": [
+      "V/IV",
+      "ii",
+      "vi",
+      "I",
+      "V/vi",
+      "V",
+      "vii",
+      "#vii/vi"
+    ],
+    "sequence": [
+      "I",
+      "V",
+      "I",
+      "ii",
+      "V/IV",
+      "V/IV",
+      "V/vi",
+      "vi",
+      "V/vi",
+      "#vii/vi",
+      "V",
+      "I",
+      "V",
+      "vii",
+      "I",
+      "V"
+    ]
+  }
+}

@@ -1,8 +1,6 @@
 import pandas as pd
-import numpy as np
-from pprint import pprint
 from copy import deepcopy
-from combine_abc_score import printPanda
+from analysis.python.data_cleaning.unused.combine_abc_score import printPanda
 
 
 def combine_data(
@@ -11,7 +9,7 @@ def combine_data(
         abc_file: str,
         anacrusis_beats: float,
         repeat_measures: list[range]):
-    measure_times = pd.read_csv("../annotations/measure_annotation/" + measure_file, header=None)
+    measure_times = pd.read_csv("../../annotations/measure_annotation/" + measure_file, header=None)
     measure_times.columns = ["Time", "Measure"]
     measure_times["Measure"] = range(1, 1 + len(measure_times["Measure"]))
     measure_times = {i: j for i, j in zip(measure_times["Measure"], measure_times["Time"])}
@@ -23,7 +21,7 @@ def combine_data(
     # time_sentiment = {t: c for t, c in zip(time_sentiment["Time"].values(), time_sentiment["Category"].values())}
 
     # DATA CLEANING
-    abc = pd.read_csv("../annotations/abc_dataset/tsv/" + abc_file, sep="\t")
+    abc = pd.read_csv("../../annotations/abc_dataset/tsv/" + abc_file, sep="\t")
     # Change all measure numbers to account for anacrusis as m. 0 instead of m. 1
     if anacrusis_beats > 0:
         abc["measure"] = [i - 1 for i in abc["measure"]]
@@ -89,16 +87,16 @@ def apply_avg_valence(df: pd.DataFrame, valence_dict: dict):
 
 
 if __name__ == "__main__":
-    movement = "op18_no1_mov1"
+    movement = "op18_no6_mov2"
     abc = combine_data(
         measure_file=f"{movement}_downbeats.csv",
         # annotation_file="op18_no2_mov1_clean.csv",
         abc_file=f"{movement}.tsv",
         anacrusis_beats=0,
         repeat_measures=[
-            range(1, 115)
+            # range(1, 82)
         ]
     )
     printPanda(abc)
-    abc.to_json(f"../../public/static/data/{movement}.json")
+    abc.to_json(f"./{movement}.json")
     # apply_avg_valence(abc, time_valence)
