@@ -64,7 +64,6 @@ async function displayPhraseRanges() {
 async function fetchAnalyses() {
     const response = await fetch("/api/analyses")
     const json = await response.json()
-    console.log(json["analyses"])
     return json["analyses"]
 }
 
@@ -129,7 +128,6 @@ function getEmotionPercentages(piece, start, end) {
       Math.round(counts['joy']/total*10000)/100
   ]
 }
-
 
 async function graphEmotionDistribution() {
   // Retrieves emotion data and generates pie chart based on distribution
