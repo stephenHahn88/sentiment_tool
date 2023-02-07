@@ -22,16 +22,6 @@ class PositionalEncoding(nn.Module):
         return self.dropout(x)
 
 
-# class EmotionalEncoder(nn.Module):
-#     def __init__(self, token_dimension, emotion_dimension):
-#         super().__init__()
-#         ee = torch.zeros(emotion_dimension, 1, token_dimension)
-#         self.register_buffer('ee', ee)
-#
-#     def forward(self, x: torch.Tensor, emotion_distribution) -> torch.Tensor:
-#         self.ee
-
-
 class EmotionTransformer(nn.Module):
     def __init__(self,
                  numHarmonies: int = 8,

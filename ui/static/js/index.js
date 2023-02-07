@@ -139,7 +139,7 @@ function newAudio() {
 //     }
 // }
 
-function finishValenceAnnotation() {
+async function finishValenceAnnotation() {
     let t, p, e, id;
     if (confirm("Please confirm that you have completed your analysis") === true) {
         p = document.getElementById("audio-valence");
@@ -163,11 +163,8 @@ function finishValenceAnnotation() {
             },
             body: JSON.stringify(data)
         }
-        fetch('/api/analyses', options)
-            .then(response => console.log(response.json()))
-            .catch(error => {
-                console.error('Error:', error)
-            })
+        let response = await (await fetch('/api/analyses', options)).json()
+        console.log(response)
 
         $("#finish-annotate").attr("disabled", true)
     }
