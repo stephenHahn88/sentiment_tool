@@ -14,6 +14,8 @@ def getAnalyses():
     allAnalyses = list(allAnalyses)
     if len(allAnalyses) == 0:
         return {"status": 404, "result": "No analyses found"}
+    for analysis in allAnalyses:
+        analysis["_id"] = str(analysis["_id"])
     return {"status": 200, "analyses": allAnalyses}
 
 

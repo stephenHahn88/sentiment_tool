@@ -64,8 +64,8 @@ async function displayPhraseRanges() {
 async function fetchAnalyses() {
     const response = await fetch("/api/analyses")
     const json = await response.json()
-    console.log(json)
-    return json
+    console.log(json["analyses"])
+    return json["analyses"]
 }
 
 async function cleanData() {
