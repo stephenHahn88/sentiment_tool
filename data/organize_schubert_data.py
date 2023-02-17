@@ -69,6 +69,7 @@ def getMostLikelyRomanNumeral(chromaticStepsAboveTonic: int):
     if chromaticStepsAboveTonic == 10: return "bVII"
     if chromaticStepsAboveTonic == 11: return "vii"
 
+
 def convertToSecondaryDom(rn: str):
     if rn == "I": return "V7/IV"
     if rn == "ii": return "V7/V"
@@ -80,6 +81,7 @@ def convertToSecondaryDom(rn: str):
     if rn == "vi": return "V7/ii"
     if rn == "bVII": return "V7/bIII"
     if rn == "vii": raise ValueError("viio is a secondary dominant?")
+
 
 def getScaleDegree(tonic, toNote):
     diatonicDistance = getDiatonicSteps(tonic, toNote)

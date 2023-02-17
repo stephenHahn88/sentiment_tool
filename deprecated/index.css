@@ -1,0 +1,356 @@
+* {
+    font-family: 'Arial', serif;
+    border-radius: 10px;
+}
+
+body {
+    background-image: url("../ui/src/images/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+div {
+    padding: 4px;
+}
+
+button {
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+    margin: 5px;
+}
+
+select {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+li {
+    margin: 10px;
+}
+
+#annotation-tool, #description-large-container  {
+    background-color: rgba(255, 255, 255, 0);
+    margin: 5px;
+}
+
+#description-container {
+    background-color: rgba(255, 255, 255, 0);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+#description-header-container {
+    margin-top: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#description-header-container:hover {
+    background-color: rgba(200, 200, 200, 0.4);
+}
+
+.slide-container {
+    width: 100%;
+}
+
+.slider {
+    width: 100%;
+    height: 25px;
+}
+
+output {
+    font-size: 72px;
+}
+
+#audio-options {
+    font-size: 24px;
+    height: 50px;
+}
+
+.same-line {
+    display: inline-block;
+}
+
+#audio-container {
+    display: flex;
+    justify-content: left;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin-bottom: 5px;
+}
+
+#audio-selection-container {
+    padding: 10px;
+}
+
+#audio-label {
+    order: 2;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#audio-valence-container {
+    margin: 0 auto;
+    width: 98%;
+    height: 200px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.4);
+
+    overflow: auto;
+    overflow-wrap: break-word;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+/*#audio-info-container {*/
+/*    display: grid;*/
+/*    grid-template-columns: 1fr 1fr;*/
+/*}*/
+
+#categorical-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+}
+
+#hierarchy-labels {
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    text-align: right;
+}
+
+#hierarchy-labels > h2 {
+    vertical-align: middle;
+}
+
+.primary-emotion {
+    height: 100%;
+    width: 100%;
+    transition-duration: 0.2s;
+    font-size: 24px;
+}
+
+.emotion-container {
+    height: 200px;
+}
+
+#anger, .anger {
+    background-color: #c23a22;
+    border-color: #c23a22;
+    color: lightgray;
+}
+
+#anger:hover {
+    background-color: white;
+    color: black;
+}
+
+#anger:focus {
+    background-color: white;
+    color: black;
+}
+
+#fear, .fear {
+    background-color: #7d54ae;
+    border-color: #7d54ae;
+    color: lightgray;
+}
+
+#fear:hover {
+    background-color: white;
+    color: black;
+}
+
+#fear:focus {
+    background-color: white;
+    color: black;
+}
+
+#joy, .joy {
+    background-color: #f9d476;
+    border-color: #f9d476;
+}
+
+#joy:hover {
+    background-color: white;
+}
+
+#joy:focus {
+    background-color: white;
+}
+
+#love, .love {
+    background-color: #ffa0c5;
+    border-color: #ffa0c5;
+}
+
+#love:hover {
+    background-color: white;
+}
+
+#love:focus {
+    background-color: white;
+}
+
+#sadness, .sadness {
+    background-color: #3e65bf;
+    border-color: #3e65bf;
+    color: lightgray;
+}
+
+#sadness:hover {
+    background-color: white;
+    color: black;
+}
+
+#sadness:focus {
+    background-color: white;
+    color: black;
+}
+
+#irony, .irony {
+    background-color: #bbbbbb;
+    border-color: #bbbbbb;
+}
+
+#irony:hover {
+    background-color: white;
+}
+
+#irony:focus {
+    background-color: white;
+}
+
+#none {
+    background-color: black;
+    border-color: black;
+    color: lightgray;
+}
+
+#none:hover {
+    background-color: white;
+    color: black;
+}
+
+#none:focus {
+    background-color: white;
+    color: black;
+}
+
+#current-category {
+    display: table-cell;
+    font-size: 24px;
+    top: 50%;
+    /*padding-left: 10px;*/
+    padding-top: 40px;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    background-color: rgba(100, 100, 100, 0.4);
+}
+
+.squiggle {
+    height: 100px;
+    width: 300px;
+    padding-top: 30px;
+}
+
+.reflect {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    float: right;
+}
+
+#current-category-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#category-large-container {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+#output-container {
+    margin-top: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#valence-button-start, #valence-button-stop {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
+}
+
+#valence-button-start:hover, #valence-button-stop:hover {
+    background-color: rgba(200, 200, 200, 0.4);
+    border: none;
+}
+
+#valence-button-restart {
+    background-color: rgba(233, 102, 94, 0.4);
+    border: none;
+}
+
+#valence-button-restart:hover {
+    background-color: rgba(183, 52, 44, 0.4);
+    border: none;
+}
+
+#custom-textarea {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
+}
+
+#categorical-container > button {
+    border-width: 10px;
+    border-style: solid;
+    height: 100px;
+}
+
+#id-field {
+    background-color: rgba(255, 255, 255, 0.4);
+    height: 20px;
+    width: 200px;
+    border-style: none;
+}
+
+#finish-container > button {
+    background-color: rgba(255, 255, 255, 0.4);
+    border: none;
+}
+
+#finish-container > button:hover {
+    background-color: rgba(200, 200, 200, 0.4);
+    border: none;
+}
+
+#finish-container {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 20px;
+    border-radius: 0;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+}
+
+.largest-div {
+    background-color: rgba(255, 255, 255, 0.6);
+    /*border-style: ridge;*/
+    /*border-width: 5px;*/
+    /*border-color: saddlebrown;*/
+}
+
+.medium-div {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.secondary-emotion {
+    flex: auto;
+    margin: 0;
+    font-size: 12px;
+    width: auto;
+    height: 20px;
+    border-style: none;
+}

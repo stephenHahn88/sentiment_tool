@@ -5,19 +5,19 @@ import {readFileSync} from 'fs'
 import {createServer} from 'https'
 
 export default defineConfig({
-	// resolve: {
-	// 	alias: {
-	// 		'@': `${path.resolve(__dirname, 'src')}`,
-	// 	},
-	// },
+	resolve: {
+		alias: {
+			'@': `${path.resolve(__dirname, 'src')}`,
+		},
+	},
 
 	build: {
 		minify: true,
 	},
 
-	// plugins: [
-	// 	vue(),
-	// ],
+	plugins: [
+		vue(),
+	],
 
 	server: {
 		// strictPort: true,

@@ -6,13 +6,17 @@
   "name": "sentiment_tool",
   "version": "1.0.0",
   "dependencies": {
-    "@vitejs/plugin-vue2": "^2.2.0",
-    "express": "^4.18.1",
-    "isomorphic-fetch": "^3.0.0",
-    "knex": "^2.1.0",
-    "nedb": "^1.8.0",
-    "pg": "^8.7.3",
-    "sqlite3": "^5.0.8",
-    "vite": "^4.1.1"
+    "@vueuse/core": "^9.0.0",
+    "bootstrap-vue": "^2.22.0",
+    "core-js": "^3.24.0",
+    "lodash": "^4.17.21",
+    "vue": "^2.7.8",
+    "vue-router": "^3.6.5"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.191",
+    "@vitejs/plugin-vue2": "^1.1.2",
+    "typescript": "^4.7.4",
+    "vite": "^3.1.0"
   }
 }

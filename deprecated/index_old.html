@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+    <link rel="icon" href="src/images/sentiment_favicon.svg">
+    <script src="static/js/index.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Music Sentiment Tool</title>
+</head>
+<body>
+    <div id="description-large-container" class="largest-div">
+        <div id="description-header-container" onclick="toggleMinimizeInstructions()">
+            <h1 id="description-header">&#9206; Instructions for use:</h1>
+        </div>
+        <div id="description-container">
+            <ol>
+                <li>Choose a recording from the drop down menu next to "Choose a piece."</li>
+                <li>Listen as much as you like to the recording to prepare for annotation.</li>
+                <li>When ready to annotate, press the "start annotation" button.</li>
+                <ul>
+                    <li>The chosen piece will be locked until the page is reloaded or "clear and restart" is pressed</li>
+                    <li>Annotations will only be recorded while the recording is playing.</li>
+                    <li>Annotation can be halted at any time with the "stop annotation" button.</li>
+                    <li>If you wish to restart your annotation, use the "clear and restart" button (annotation must be off).</li>
+                </ul>
+                <li class="important-instruction">
+                    Choose from the large colored emotion buttons to annotate the recording with the appropriate emotion. Smaller colored bubbles show words that belong to the larger, primary emotions - you can look to these words if you have trouble associating a primary emotion with the music.
+                    <ul>
+                        <li>Choose the emotion that best fits each passage in your opinion. There are <strong>no wrong answers</strong>.</li>
+                        <li>
+                            Buttons can be pressed with the mouse, or changed with the numbers in parentheses.
+                            For example, you can switch to "Fear" by pressing 2 on your keyboard or "Joy" by pressing 9.
+                        </li>
+                    </ul>
+                </li>
+                <li>If there are any concerns with your analysis, the recording, or bugs, please write your comment(s) in the text area below your analysis.</li>
+                <li>Once annotation is complete, submit your annotation with the "Complete and send to server" button below.</li>
+                <li>Check out previous analyses <a href="visualize_emotion.html">here</a> (under construction)</li>
+            </ol>
+        </div>
+    </div>
+    <!--Slider and output value-->
+<!--    <div id="slide-container">-->
+<!--        <h1>Valence Control Tool</h1>-->
+<!--        <input type="range" min="-100" max="100" value="0" class="slider" id="valence-slider" oninput="this.nextElementSibling.children[1].value = this.value">-->
+<!--        <div id="output-div">-->
+<!--            <h2 class="same-line">Current Value:&nbsp;&nbsp;&nbsp;&nbsp;</h2>-->
+<!--            <output class="same-line">0</output>-->
+<!--        </div>-->
+<!--    </div>-->
+    <!--Audio selection and player controls-->
+    <!-- PUT NEW AUDIO HERE -->
+    <div id="annotation-tool" class="largest-div">
+        <div id="audio-container" class="medium-div" onchange="newAudio()">
+            <div id="audio-selection-container">
+                <label for="audio-options" style="font-size: 28px;">Choose a piece:  </label>
+                <select name="audio-options" id="audio-options" onchange="newAudio()">
+                    <option>op18_no1_mov1.mp3</option>
+                    <option>op18_no1_mov2.mp3</option>
+<!--                    <option>op18_no1_mov3.mp3</option>-->
+                    <option>op18_no1_mov4.mp3</option>
+                    <option>op18_no2_mov1.mp3</option>
+<!--                    <option>op18_no2_mov3.mp3</option>-->
+                    <option>op18_no2_mov4.mp3</option>
+<!--                    <option>op18_no3_mov1.mp3</option>-->
+                    <option>op18_no3_mov2.mp3</option>
+<!--                    <option>op18_no3_mov3.mp3</option>-->
+<!--                    <option>op18_no3_mov4.mp3</option>-->
+<!--                    <option>op18_no4_mov1.mp3</option>-->
+                    <option>op18_no4_mov2.mp3</option>
+<!--                    <option>op18_no4_mov3.mp3</option>-->
+<!--                    <option>op18_no4_mov4.mp3</option>-->
+<!--                    <option>op18_no5_mov1.mp3</option>-->
+<!--                    <option>op18_no5_mov2.mp3</option>-->
+<!--                    <option>op18_no5_mov3.mp3</option>-->
+<!--                    <option>op18_no5_mov4.mp3</option>-->
+<!--                    <option>op18_no6_mov1.mp3</option>-->
+                    <option>op18_no6_mov2.mp3</option>
+<!--                    <option>op18_no6_mov3.mp3</option>-->
+<!--                    <option>op18_no6_mov4.mp3</option>-->
+                </select>
+            </div>
+
+            <audio controls id="audio" src="../deprecated/media/op18_no1_mov1.mp3"></audio>
+<!--            <iframe id="audio" type="text/html" src="https://www.youtube.com/embed/Nm30eAKXI6c?rel=0&autohide=0&fs=0&modestbranding=1" frameborder="0" height="50px"></iframe>-->
+<!--            <audio src="static/media/op18_no1_mov1.mp3"></audio>&ndash;&gt;-->
+        </div>
+        <div id="category-large-container" class="small-div">
+            <div id="categorical-container">
+                <button id="anger" class="primary-emotion" onclick="clickEmotion('anger')">Anger<br/>(1)</button>
+                <button id="fear" class="primary-emotion" onclick="clickEmotion('fear')">Fear<br/>(2)</button>
+                <button id="sadness" class="primary-emotion" onclick="clickEmotion('sadness')">Sadness<br/>(3)</button>
+                <button id="none" class="primary-emotion" onclick="clickEmotion('none')">None<br/>(4)</button>
+                <button id="irony" class="primary-emotion" onclick="clickEmotion('irony')">Irony<br/>(7)</button>
+                <button id="love" class="primary-emotion" onclick="clickEmotion('love')">Love<br/>(8)</button>
+                <button id="joy" class="primary-emotion" onclick="clickEmotion('joy')">Joy<br/>(9)</button>
+
+                <div>
+                    <button class="secondary-emotion anger">Disgust</button>
+                    <button class="secondary-emotion anger">Envy</button>
+                    <button class="secondary-emotion anger">Exasperation</button>
+                    <button class="secondary-emotion anger">Irritability</button>
+                    <button class="secondary-emotion anger">Rage</button>
+                    <button class="secondary-emotion anger">Torment</button>
+                </div>
+                <div>
+                    <button class="secondary-emotion fear">Nervousness</button>
+                    <button class="secondary-emotion fear">Horror</button>
+                    <button class="secondary-emotion fear">Anxiety</button>
+                    <button class="secondary-emotion fear">Suspense</button>
+                    <button class="secondary-emotion fear">Panic</button>
+                    <button class="secondary-emotion fear">Worry</button>
+                </div>
+                <div>
+                    <button class="secondary-emotion sadness">Disappointment</button>
+                    <button class="secondary-emotion sadness">Loneliness</button>
+                    <button class="secondary-emotion sadness">Rejection</button>
+                    <button class="secondary-emotion sadness">Shame</button>
+                    <button class="secondary-emotion sadness">Embarrassment</button>
+                    <button class="secondary-emotion sadness">Suffering</button>
+                    <button class="secondary-emotion sadness">Sympathy</button>
+                </div>
+                <div></div>
+                <div>
+                    <button class="secondary-emotion irony">Sarcastic</button>
+                    <button class="secondary-emotion irony">Satirical</button>
+                    <button class="secondary-emotion irony">Cynical</button>
+                </div>
+                <div>
+                    <button class="secondary-emotion love">Caring</button>
+                    <button class="secondary-emotion love">Sentimental</button>
+                    <button class="secondary-emotion love">Tender</button>
+                    <button class="secondary-emotion love">Longing</button>
+                    <button class="secondary-emotion love">Lustful</button>
+                </div>
+                <div>
+                    <button class="secondary-emotion joy">Cheerful</button>
+                    <button class="secondary-emotion joy">Content</button>
+                    <button class="secondary-emotion joy">Enthrallment</button>
+                    <button class="secondary-emotion joy">Optimism</button>
+                    <button class="secondary-emotion joy">Pride</button>
+                    <button class="secondary-emotion joy">Relief</button>
+                    <button class="secondary-emotion joy">Zest</button>
+                </div>
+            </div>
+            <div id="current-category-container">
+                <div>
+                    <img class="squiggle reflect" src="src/images/squiggle.svg" alt="squiggles">
+                </div>
+                <p id="current-category">Current category:<br>null</p>
+                <div>
+                    <img class="squiggle" src="src/images/squiggle.svg" alt="squiggles">
+                </div>
+            </div>
+        </div>
+        <!--Buttons and output for annotation-->
+        <div id="output-container" class="medium-div">
+            <div id="audio-info-container">
+                <div id="audio-valence-buttons">
+                    <button class="start-button" id="valence-button-start" onclick="startAnnotate()">start annotation</button>
+                    <button class="stop-button" id="valence-button-stop" onclick="stopAnnotate()">stop annotation</button>
+                    <button class="restart-button" id="valence-button-restart" onclick="restartAnnotate(valenceInterval)">clear and restart</button>
+                </div>
+                <div id="audio-valence-container">
+                    <p id="audio-valence"></p>
+                </div>
+                <div style="margin-left: 5px;">
+                    <textarea id="custom-textarea" name="textarea" rows="5" cols="60" placeholder="If you wish to clarify or comment on your analysis, please write a comment here."></textarea>
+                </div>
+            </div>
+            <div id="finish-container">
+                <input id="id-field" type="text" placeholder="Custom ID goes here">
+                <button id="finish-annotate" onclick="finishValenceAnnotation()">Complete And Send To Server</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let h = document.getElementById("description-header")
+        h.click()
+    </script>
+</body>
+</html>
