@@ -58,6 +58,7 @@
         <b-button
             id="finish-annotate"
             @click="saveAnnotation"
+            :disabled="submitDisabled"
         >Complete and Send to Server</b-button>
       </b-col>
       <b-col></b-col>
@@ -66,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, computed, ref, Ref, onMounted} from "vue"
+import {watch, reactive, computed, ref, Ref, onMounted} from "vue"
 import {round} from 'lodash'
 
 interface Props {
@@ -78,6 +79,12 @@ let props = withDefaults(defineProps<Props>(), {
   currentEmotion: "none",
   currentFile: "not chosen"
 })
+
+watch(() => props.currentFile, () => {
+  submitDisabled.value = false
+})
+
+let submitDisabled = ref(true)
 
 let audio: HTMLAudioElement;
 let audioListener: Function;
@@ -142,6 +149,7 @@ function restartAnnotate() {
 }
 
 async function saveAnnotation() {
+  if (!confirm("Please confirm that you have completed your analysis")) return
   let options = {
     method: 'POST',
     headers: {
@@ -156,6 +164,7 @@ async function saveAnnotation() {
   }
   let response = await (await fetch('/api/analyses', options)).json()
   console.log(response)
+  submitDisabled.value = true
 }
 
 
@@ -179,7 +188,7 @@ async function saveAnnotation() {
     border: none;
 }
 
-#start-button:hover, #stop-button:hover, #finish-annotate:hover {
+#start-button:hover, #stop-button:hover, #finish-annotate:disabled, #finish-annotate:hover {
     background-color: rgba(200, 200, 200, 0.4);
     border: none;
 }
