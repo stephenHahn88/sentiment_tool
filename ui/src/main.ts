@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import App from '@/App.vue'
+import AnnotationTool from '@/views/AnnotationTool.vue'
+import DataVisualization from '@/views/DataVisualization.vue'
 
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue"
 
@@ -16,8 +18,14 @@ export const router = new VueRouter({
   mode: "history",
   routes: [
     {
-      meta: {title: "home"},
+      meta: {title: "Annotation Tool"},
       path: "/",
+      component: AnnotationTool
+    },
+    {
+      meta: {title: "Data Charts"},
+      path: "/data",
+      component: DataVisualization
     }
   ],
 })

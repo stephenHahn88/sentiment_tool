@@ -33,7 +33,7 @@
           </li>
           <li>If there are any concerns with your analysis, the recording, or bugs, please write your comment(s) in the text area below your analysis.</li>
           <li>Once annotation is complete, submit your annotation with the "Complete and send to server" button below.</li>
-          <li>Check out previous analyses <a href="visualize_emotion.html">here</a> (under construction)</li>
+          <li>Check out previous analyses <a id="data-anchor" @click="pushRouter('/data')">here</a> (under construction)</li>
         </ol>
       </div>
     </b-container>
@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+import {pushRouter} from "@/utility";
+
 
 </script>
 
@@ -50,6 +52,15 @@
 #annotation-tool, #description-large-container  {
     background-color: rgba(255, 255, 255, 0);
     margin: 5px;
+}
+
+#data-anchor {
+  color: blue;
+}
+
+#data-anchor:hover {
+  color: blueviolet;
+  cursor: pointer;
 }
 
 </style>

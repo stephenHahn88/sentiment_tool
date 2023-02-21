@@ -98,44 +98,7 @@ function updateCurrChoice(choice: string) {
     height: 50px;
 }
 
-.same-line {
-    display: inline-block;
-}
-
-#audio-container {
-    display: flex;
-    justify-content: left;
-    flex-direction: row;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.2);
-    margin-bottom: 5px;
-}
-
 #audio-selection-container {
     padding: 10px;
 }
-
-#audio-label {
-    order: 2;
-    margin: 0 auto;
-    text-align: center;
-}
-
-#audio-valence-container {
-    margin: 0 auto;
-    width: 98%;
-    height: 200px;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.4);
-
-    overflow: auto;
-    overflow-wrap: break-word;
-    display: flex;
-    flex-direction: column-reverse;
-}
-
-/*#audio-info-container {*/
-/*    display: grid;*/
-/*    grid-template-columns: 1fr 1fr;*/
-/*}*/
 </style>
