@@ -1,7 +1,11 @@
 from pathlib import Path
 from pprint import pprint
+
+import pandas
 import pandas as pd
 import re
+from server import getSongAnalyses
+from collections import defaultdict
 
 annotationPath = Path(".", "Schubert_Winterreise_Dataset_v2-0", "02_Annotations")
 
@@ -178,7 +182,71 @@ def addRomanNumeral(df: pd.DataFrame):
             mostLikelyRN += "o"
         rns.append(mostLikelyRN)
     df.insert(4, "romannumeral", rns, True)
-    print(df.head(60))
+
+
+def addEmotionCounts(df: pd.DataFrame, songNumber: int):
+    newRowInfo = []
+    response = getSongAnalyses(str(songNumber))
+    for i, row in df.iterrows():
+        emotions = {
+            "anger": 0,
+            "fear": 0,
+            "sadness": 0,
+            "none": 0,
+            "irony": 0,
+            "love": 0,
+            "joy": 0
+        }
+        for analysis in response["analyses"]:
+            for sample, emotion in analysis["analysis"].items():
+                sample = float(sample)
+                start = row["start"]
+                end = row["end"]
+                if start <= sample <= end:
+                    emotions[emotion] += 1
+        newRowInfo.append(emotions)
+    for key in emotions.keys():
+        df.insert(5, key, [i[key] for i in newRowInfo], True)
+    # print(df.head(30))
+
+
+def completeDFToXMatrix(df: pandas.DataFrame):
+    emotions_t = df[["joy", "love", "irony", "none", "sadness", "fear", "anger"]].values.tolist()
+
+    rn_t_1 = df["romannumeral"].iloc[:-1].reset_index(drop=True).values.tolist()
+    rn_t_1 = ["START"] + rn_t_1
+
+    rn_t_2 = df["romannumeral"].iloc[:-2].reset_index(drop=True).values.tolist()
+    rn_t_2 = ["PAD", "START"] + rn_t_2
+
+    rn_t_3 = df["romannumeral"].iloc[:-3].reset_index(drop=True).values.tolist()
+    rn_t_3 = ["PAD", "PAD", "START"] + rn_t_3
+
+    X = [[rn_t_3[i], rn_t_2[i], rn_t_1[i]] + row for i, row in enumerate(emotions_t)]
+    Y = df["romannumeral"].values.tolist()
+    return X, Y
+
+
+def getXY(recording: str="HU33", annotationNum: int=1):
+    X = []
+    Y = []
+    pairs = getPairedChordLocalKeyPaths(recording, annotationNum)
+    for i, pair in enumerate(pairs):
+        print(pair)
+        try:
+            tempdf = combineChordLocalKey(pair)
+            addRomanNumeral(tempdf)
+            addEmotionCounts(tempdf, i + 1)
+            x, y = completeDFToXMatrix(tempdf)
+            # pprint(x)
+            # print(y)
+
+            X += x
+            Y += y
+        except ValueError as e:
+            print(e)
+    return X, Y
+
 
 if __name__ == "__main__":
     """
@@ -187,11 +255,9 @@ if __name__ == "__main__":
     annotator 2 doesn't list local keys for all chords...
     """
     pd.set_option('display.max_columns', None)
-    # n1, n2 = ("C", "B")
-    # sd = getScaleDegree(n1, n2)
-    # print(sd)
-    pairs = getPairedChordLocalKeyPaths("HU33", 3)
-    tempdf = combineChordLocalKey(pairs[1])
-    addRomanNumeral(tempdf)
-    # temp = parseShortHand("A:min7")
-    # print(temp)
+
+    X, Y = getXY()
+
+    pprint(X)
+    pprint(Y)
+

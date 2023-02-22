@@ -26,39 +26,55 @@
             id="audio"
             :src="currAudioSrc"
             class="m-4"
+
         ></audio>
+        <b-form-group>
+          <label for="time-span">Time Span:</label>
+          <b-form-input
+              id="time-span"
+              style="width: 80px;"
+            type="number"
+            v-model="timeSpan"
+          ></b-form-input>
+        </b-form-group>
         <b-container id="debug-container">
             <p id="debug"></p>
         </b-container>
         <MultiRangeSlider
           :min="0"
-          :max="300"
+          :max="maxTime"
           :minValue="minVal"
           :maxValue="maxVal"
           :labels="sliderLabels"
-          min-caption="hi"
-          max-caption="yo"
-          :step="1"
+          :min-caption="minCaption"
+          :max-caption="maxCaption"
+          :step="0.01"
           @input="UpdateValues"
         />
     </b-container>
-    <div id="chart-container">
-      <Doughnut
-        :data="data"
-        :options="options"
-      ></Doughnut>
+    <div id="chart-container" style="width: 500px; height: 500px">
+      <canvas id="chart" style="width: 500px; height: 500px"></canvas>
     </div>
   </b-container>
 </template>
 
 <script setup lang="ts">
-import {computed, ref, Ref, reactive, watch} from "vue";
+import {computed, ref, Ref, reactive, watch, onMounted} from "vue";
 import MultiRangeSlider from "multi-range-slider-vue"
 import {Analysis} from "@/types"
-import {Doughnut} from "vue-chartjs";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Chart, registerables } from 'chart.js'
+import {round} from "lodash"
+import {createLabels, timeString} from "@/utility";
 
-ChartJS.register(ArcElement, Tooltip, Legend)
+Chart.register(...registerables)
+
+let audioElement: HTMLAudioElement;
+onMounted(() => {
+  audioElement = document.getElementById("audio") as HTMLAudioElement
+  audioElement.addEventListener('timeupdate', () => {
+    currAudioTime.value = audioElement.currentTime
+  }, false);
+})
 
 let dropDownItems = computed(() => {
   return Object.keys(choiceToPath)
@@ -117,6 +133,12 @@ let currChoice = ref(Object.keys(choiceToPath)[0])
 let currAudioSrc: Ref<string> = computed(() => {
   return choiceToPath[currChoice.value]
 })
+let currAudioTime: Ref<number> = ref(0)
+let timeSpan = ref(10)
+watch(currAudioTime, async () => {
+  maxVal.value = await currAudioTime.value + 0.1
+  minVal.value = await Math.max(currAudioTime.value - timeSpan.value, 0)
+})
 
 let minVal = ref(0)
 let maxVal = ref(120)
@@ -124,57 +146,27 @@ function UpdateValues(e: any) {
   minVal.value = e.minValue
   maxVal.value = e.maxValue
 }
+watch([minVal, maxVal], () => {
+  graph(getEmotionPercentages())
+})
+let maxTime = ref(50)
+let minCaption = computed(() => timeString(minVal.value))
+let maxCaption = computed(() => timeString(maxVal.value))
 let sliderLabels: Ref<string[]> = ref([])
 
 let currData: Ref<Analysis[]> = ref([])
-watch([minVal, maxVal], () => {
-  data.datasets = [
-      {
-        backgroundColor: [
-                '#c23a22',
-                '#7d54ae',
-                '#3e65bf',
-                '#000000',
-                '#bbbbbb',
-                '#ffa0c5',
-                '#f9d476'
-            ],
-        data: getEmotionPercentages(),
-        hoverOffset: 10
-      }
-    ]
-})
-
-let data = reactive({
-  labels: ['Anger', 'Fear', 'Sadness', 'None', 'Irony', 'Love', 'Joy'],
-    datasets: [
-      {
-        backgroundColor: [
-                '#c23a22',
-                '#7d54ae',
-                '#3e65bf',
-                '#000000',
-                '#bbbbbb',
-                '#ffa0c5',
-                '#f9d476'
-            ],
-        data: [1,1,1,1,1,1,1],
-        hoverOffset: 10
-      }
-    ]
-})
-
-const options = {
-  animation: {duration: 0},
-  responsive: true,
-  maintainAspectRatio: false
-}
 
 async function updateCurrChoice(choice: string) {
   currChoice.value = choice
+
   let choiceURI = choice.slice(0, 2).replace(".", "")
   let response = await (await fetch(`/api/song-analyses/${choiceURI}`)).json()
   currData.value = response.analyses
+  maxTime.value = round(audioElement.duration)
+  sliderLabels.value = createLabels(maxTime.value, 10)
+  minVal.value = 0
+  maxVal.value = audioElement.duration - 0.1
+  graph(getEmotionPercentages())
 }
 
 function getEmotionPercentages() {
@@ -201,8 +193,51 @@ function getEmotionPercentages() {
   for (let [emotion, count] of Object.entries(counts)) {
     answer.push(count)
   }
-  console.log(answer)
   return answer
+}
+
+let calls = 0
+let myChart: Chart;
+function graph(emotion_data: number[]) {
+  let chart = document.getElementById('chart') as HTMLCanvasElement
+  if (calls > 0) {
+    myChart.destroy()
+  }
+  const labels = ['Anger', 'Fear', 'Sadness', 'None', 'Irony', 'Love', 'Joy']
+  const data = {
+      labels: labels,
+      datasets: [{
+          label: 'test',
+          backgroundColor: [
+              '#c23a22',
+              '#7d54ae',
+              '#3e65bf',
+              '#000000',
+              '#bbbbbb',
+              '#ffa0c5',
+              '#f9d476'
+          ],
+          data: emotion_data,
+          hoverOffset: 10,
+      }]
+  };
+  const config = {
+      type: 'doughnut',
+      data: data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 0
+        }
+      }
+  }
+  myChart = new Chart(
+      chart,
+      config as any
+  )
+
+  calls++;
 }
 </script>
 
