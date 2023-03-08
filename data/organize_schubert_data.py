@@ -1,13 +1,13 @@
 from pathlib import Path
 from pprint import pprint
 
+from tqdm import tqdm
 import pandas
 import pandas as pd
 import re
 from server import getSongAnalyses
 from collections import defaultdict
-
-annotationPath = Path(".", "Schubert_Winterreise_Dataset_v2-0", "02_Annotations")
+import pickle
 
 pitchClasses = {
     "B#": 0,
@@ -120,6 +120,7 @@ def getScaleDegree(tonic, toNote):
 
 
 def getPairedChordLocalKeyPaths(identifier: str, annotatorNumber: int):
+    annotationPath = Path("C:/Users/88ste/OneDrive/Documents/GitHub/sentiment_tool/data/Schubert_Winterreise_Dataset_v2-0/02_Annotations")
     pathChord = annotationPath / "ann_audio_chord"
     pathLocalKey = annotationPath / f"ann_audio_localkey-ann{annotatorNumber}"
     globChord = pathChord.glob(f"Schubert_D911-[0-9][0-9]_{identifier}.csv")
@@ -168,20 +169,50 @@ def combineChordLocalKey(pathPair: tuple[Path, Path]):
     return chordDF
 
 
+def rnToFunction(rn, nextRN):
+    if rn in ["vi", "bVI"] and nextRN in ["V", "viio"]:
+        return "PD"
+    if rn in ["i", "I", "iii", "bIII", "vi", "bVI"]:
+        return "T"
+    if rn in ["ii", "iio", "iv", "IV", "viio/V", "viio/ii"]:
+        return "PD"
+    if rn in ["v", "V", "viio", "vii", "bvii"]:
+        return "D"
+
+def rnToFunctionNoNext(rn):
+    if rn in ["i", "I", "iii", "bIII", "vi", "bVI"]:
+        return "T"
+    if rn in ["ii", "iio", "iv", "IV", "viio/V", "viio/ii"]:
+        return "PD"
+    if rn in ["v", "V", "viio", "vii", "bvii"]:
+        return "D"
+
 def addRomanNumeral(df: pd.DataFrame):
     rns = []
     for i, row in df.iterrows():
         root, quality, bass = parseShortHand(row["shorthand"])
         chromaticSteps = getChromaticSteps(row["localkey"], root)
         mostLikelyRN = getMostLikelyRomanNumeral(chromaticSteps)
-        if quality == "dom":
-            mostLikelyRN = convertToSecondaryDom(mostLikelyRN)
-        elif quality == "min":
+        # if quality == "dom":
+        #     mostLikelyRN = convertToSecondaryDom(mostLikelyRN)
+        if quality == "min":
             mostLikelyRN = mostLikelyRN.lower()
-        elif quality == "dim":
-            mostLikelyRN += "o"
+        # if quality == "dim":
+        #     mostLikelyRN += "o"
         rns.append(mostLikelyRN)
+
     df.insert(4, "romannumeral", rns, True)
+
+
+def addmajmin(df: pd.DataFrame):
+    majmin = []
+    for i, row in df.iterrows():
+        if "dim" in row["shorthand"]:
+            majmin.append("dim")
+            continue
+        val = row["majmin"]
+        majmin.append(val.split(":")[1])
+    df.insert(4, "romannumeral", majmin, True)
 
 
 def addEmotionCounts(df: pd.DataFrame, songNumber: int):
@@ -204,15 +235,15 @@ def addEmotionCounts(df: pd.DataFrame, songNumber: int):
                 end = row["end"]
                 if start <= sample <= end:
                     emotions[emotion] += 1
+        total = sum(emotions.values())
+        for key in emotions.keys():
+            emotions[key] = round(emotions[key] / total, 2)
         newRowInfo.append(emotions)
     for key in emotions.keys():
         df.insert(5, key, [i[key] for i in newRowInfo], True)
     # print(df.head(30))
 
-
-def completeDFToXMatrix(df: pandas.DataFrame):
-    emotions_t = df[["joy", "love", "irony", "none", "sadness", "fear", "anger"]].values.tolist()
-
+def insertRNLags(df: pandas.DataFrame):
     rn_t_1 = df["romannumeral"].iloc[:-1].reset_index(drop=True).values.tolist()
     rn_t_1 = ["START"] + rn_t_1
 
@@ -222,30 +253,72 @@ def completeDFToXMatrix(df: pandas.DataFrame):
     rn_t_3 = df["romannumeral"].iloc[:-3].reset_index(drop=True).values.tolist()
     rn_t_3 = ["PAD", "PAD", "START"] + rn_t_3
 
-    X = [[rn_t_3[i], rn_t_2[i], rn_t_1[i]] + row for i, row in enumerate(emotions_t)]
-    Y = df["romannumeral"].values.tolist()
-    return X, Y
+    for i, rn in enumerate([rn_t_3, rn_t_2, rn_t_1]):
+        df.insert(0, f"t-{3-i}", rn)
 
+def getAllDF(recording: str="HU33", annotationNum: int=1):
+    finaldf = pd.DataFrame()
 
-def getXY(recording: str="HU33", annotationNum: int=1):
-    X = []
-    Y = []
     pairs = getPairedChordLocalKeyPaths(recording, annotationNum)
-    for i, pair in enumerate(pairs):
-        print(pair)
+    for i, pair in tqdm(enumerate(pairs), total=len(pairs)):
         try:
             tempdf = combineChordLocalKey(pair)
             addRomanNumeral(tempdf)
+            # addmajmin(tempdf)
             addEmotionCounts(tempdf, i + 1)
-            x, y = completeDFToXMatrix(tempdf)
-            # pprint(x)
-            # print(y)
-
-            X += x
-            Y += y
+            insertRNLags(tempdf)
+            finaldf = pd.concat([finaldf, tempdf])
         except ValueError as e:
             print(e)
-    return X, Y
+
+    return finaldf
+
+def getAllIndividualDF(recording: str="HU33", annotationNum: int=1):
+    dfs = {}
+
+    pairs = getPairedChordLocalKeyPaths(recording, annotationNum)
+    for i, pair in tqdm(enumerate(pairs), total=len(pairs)):
+        try:
+            tempdf = combineChordLocalKey(pair)
+            addRomanNumeral(tempdf)
+            addEmotionCounts(tempdf, i+1)
+            insertRNLags(tempdf)
+            dfs[i+1] = tempdf
+        except ValueError as e:
+            print(e)
+
+    return dfs
+
+
+def vocabMaps(df: pd.DataFrame):
+    vocab = list(set(df["romannumeral"].values.tolist()))
+    vocabToInt = {v: i for i, v in enumerate(vocab)}
+    intToVocab = {i: v for v, i in vocabToInt.items()}
+    vocabToInt["START"] = -1
+    vocabToInt["PAD"] = -2
+    intToVocab[-1] = "START"
+    intToVocab[-2] = "PAD"
+    return vocabToInt, intToVocab
+
+def saveAllDFs():
+    df = getAllDF()
+    with open("./allDF.pickle", "wb") as f:
+        pickle.dump(df, f)
+
+def saveAllIndividualDFs():
+    dfs = getAllIndividualDF()
+    for i, df in dfs.items():
+        with open(f"./organized_for_emotions/df_{i}.pickle", "wb") as f:
+            pickle.dump(df, f)
+
+
+def mapToInt(df: pd.DataFrame, vocabToIntMap: dict[str: int], cols: list[str]=None):
+    if cols is None:
+        cols = ["romannumeral", "t-1", "t-2", "t-3"]
+    for col in cols:
+        rn = df[col].values.tolist()
+        rn = [vocabToIntMap[r] for r in rn]
+        df[col] = rn
 
 
 if __name__ == "__main__":
@@ -255,9 +328,22 @@ if __name__ == "__main__":
     annotator 2 doesn't list local keys for all chords...
     """
     pd.set_option('display.max_columns', None)
+    pd.set_option('display.max_rows', None)
 
-    X, Y = getXY()
+    # df = pd.DataFrame()
+    # pairs = getPairedChordLocalKeyPaths("HU33", 1)
+    # for i, pair in enumerate(pairs):
+    #
+    #     try:
+    #         tempdf = combineChordLocalKey(pairs[i])
+    #         addmajmin(tempdf)
+    #         print(tempdf)
+    #     except:
+    #         continue
+    #     df = pd.concat([df, tempdf])
 
-    pprint(X)
-    pprint(Y)
+    # saveAllDFs()
+    saveAllIndividualDFs()
+
+    # print(df[["t-1", "t-2", "t-3", "romannumeral", "joy", "love", "fear", "anger"]].head(20))
 
