@@ -21,23 +21,41 @@ def softmax(x):
     return e_x / e_x.sum(axis=0)
 
 def getMixtureTransitionMatrices(df: pandas.DataFrame, threshold: float=0.02, plot: bool=False):
+    """
+    Produces the mixture transition matrix from the provided df
+    :param df: a pandas dataframe holding information from the Winterreise dataset, Roman numerals, and emotions
+    :param threshold: what portion of an emotion needs to exist at a given time to count as present
+    :param plot: boolean determining whether to visualize heatmaps of transition matrices
+    :return: (
+        matrices: a dict[emotion: np.array] that stores the transition matrix for each emotion
+        VtoI: a dict[str:int] that translates Roman numerals to their index in the transition matrix
+        ItoV: a dict[int:str] that does the reverse of VtoI
+    )
+    """
+    # Get vocab/int maps for all Roman numerals in df
     VtoI, ItoV = vocabMaps(df)
+
+    # Set counts for each transition matrix to 0
     numUnique = len(df["romannumeral"].unique()) + 2
     matrices = {emotion: np.zeros((numUnique, numUnique)) for emotion in emotions}
 
+    # Loop through every row looking for pairs with the same emotion, adding to the corresponding matrix count
     for i, row in df.iterrows():
         if i == 0: continue
         prevRow = df.iloc[i-1, :]
         for emotion in emotions:
+            # Check that the emotion appears in the current and previous rows above the given threshold
             if row[emotion] >= threshold and prevRow[emotion] >= threshold:
                 fromRnIdx = VtoI[prevRow["romannumeral"]]
                 toRnIdx = VtoI[row["romannumeral"]]
                 matrices[emotion][fromRnIdx, toRnIdx] += 1
+    # Turn all rows in every transition matrix into probability distributions
     for key, matrix in matrices.items():
         for i, row in enumerate(matrix):
             if np.sum(row) == 0: continue
             matrices[key][i] = row/np.sum(row)
 
+    # Plot heatmap of each emotion matrix if plot is True
     if plot:
         for emotion, matrix in matrices.items():
             plt.imshow(matrix, cmap='hot', interpolation='nearest')
@@ -103,6 +121,16 @@ def getTransitionProbabilities(
         vocabToInt: dict[str:int],
         intToVocab: dict[int:str]
 ):
+    """
+    Find the transition probabilities based on a mixture of transition matrices and
+    a particular emotion distribution and previous RomanNumeral
+    :param transitionMatrices: dict[emotion:transition matrix] from getMixtureTransitionMatrices
+    :param fromEmotionDistribution: dict[emotion:proportion] where all proportions add up to 1
+    :param prevRN: the Roman numeral at the previous time step
+    :param vocabToInt:
+    :param intToVocab:
+    :return: an np.array of probabilities for the next harmony given the above parameters
+    """
     prevRNInt = vocabToInt[prevRN]
     answer = np.zeros(len(vocabToInt))
     for emotion, matrix in transitionMatrices.items():
