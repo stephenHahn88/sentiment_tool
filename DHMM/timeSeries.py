@@ -5,8 +5,10 @@ import pandas as pd
 import pickle
 import pymc as pm
 import os
-
-
+from statsmodels.tsa.stattools import adfuller
+from statsmodels.tsa.api import VAR
+from statsmodels.tools.eval_measures import rmse, aic, bic
+from statsmodels.tsa.vector_ar.vecm import coint_johansen
 
 emotions = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
 
@@ -24,6 +26,66 @@ def plotSeries(series: pd.Series):
     ax.set_ylabel("alpha")
     ax.set_title(f"Time Series for {series.name}")
     plt.show()
+
+# Based on https://www.analyticsvidhya.com/blog/2021/08/vector-autoregressive-model-in-python/
+def augmentedDickeyFuller(series: pd.Series, title=''):
+    print(f'Augmented Dickey-Fuller Test: {title}')
+    result = adfuller(series.dropna(), autolag='AIC')  # .dropna() handles differenced data
+    labels = [
+        'ADF test statistic',
+        'p-value',
+        '# lags used',
+        '# observations'
+    ]
+    print(result)
+    out = pd.Series(result[0:4], index=labels)
+    for key, val in result[4].items():
+        out[f'critical value ({key})'] = val
+    print(out.to_string())  # .to_string() removes the line "dtype: float64"
+    if result[1] <= 0.05:
+        print("Strong evidence against the null hypothesis")
+        print("Reject the null hypothesis")
+        print("Data has no unit root and is stationary")
+    else:
+        print("Weak evidence against the null hypothesis")
+        print("Fail to reject the null hypothesis")
+        print("Data has a unit root and is non-stationary")
+
+# Based on https://www.machinelearningplus.com/time-series/vector-autoregression-examples-python/
+def cointegrationTest(df: pd.DataFrame, alpha=0.10):
+    out = coint_johansen(df, -1, 5)
+    d = {0.90: 0, 0.95: 1, 0.99: 2}
+    traces = out.lr1
+    cvts = out.cvt[:, d[1-alpha]]
+    def adjust(val, length=6): return str(val).ljust(length)
+
+    print('Name   ::  Test Stat > C(95%)    =>   Signif  \n', '--' * 20)
+    for col, trace, cvt in zip(df.columns, traces, cvts):
+        print(adjust(col), ':: ', adjust(round(trace, 2), 9), ">", adjust(cvt, 8), ' =>  ', trace > cvt)
+
+
+def myVAR(df: pd.DataFrame, criterion: str="aic"):
+    test_len = 10
+    train = df[:-test_len]
+    test = df[-test_len:]
+
+    model = VAR(train)
+    criterions = {
+        'aic': [],
+        'bic': [],
+        'fpe': [],
+        'hqic': []
+    }
+    for i in range(1, 10):
+        result = model.fit(i)
+        criterions["aic"].append(result.aic)
+        criterions["bic"].append(result.bic)
+        criterions["fpe"].append(result.fpe)
+        criterions["hqic"].append(result.hqic)
+    optimal_i = np.argmin(criterions[criterion]) + 1
+    model_fitted = model.fit(optimal_i)
+    print(model_fitted.summary())
+    model_fitted.plot()
 
 
 def BVAR(df: pd.DataFrame):
@@ -87,10 +149,17 @@ def BVAR(df: pd.DataFrame):
 def main():
     az.style.use("arviz-darkgrid")
 
-    alphas = loadAlphas(32, 3)
-    BVAR(alphas)
+    alphas: pd.DataFrame = loadAlphas(32, 3)
+    alphas_diff = alphas.diff().dropna()[emotions]
+    # cointegrationTest(alphas_diff.dropna()[emotions])
+    myVAR(alphas_diff)
+
     # for emotion in emotions:
-    #     plotSeries(alphas[emotion])
+        # plotSeries(alphas[emotion])
+        # augmentedDickeyFuller(alphas[emotion], emotion)
+
+        # plotSeries(alphas_diff[emotion])
+        # augmentedDickeyFuller(alphas_diff[emotion], emotion)
     # print(alphas)
 
 

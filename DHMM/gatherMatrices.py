@@ -161,7 +161,7 @@ def main():
             try:
                 with open(f"../data/organized_for_emotions/df_{i}.pickle", "rb") as f:
                     df = pickle.load(f)
-                    for ws in [32, 64]:
+                    for ws in [8, 16]:
                         emotionConvolutionMLE(df, str(i), windowSize=ws, manager=manager)
             except Exception as e:
                 # print(e)
