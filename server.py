@@ -1,6 +1,6 @@
-from flask import Flask, request, send_file
+from flask import Flask, request
 from pymongo import MongoClient
-from ENV_VARIABLE import password
+from ENV_VARIABLE.ENV_VARIABLE import password
 
 app = Flask(__name__)
 

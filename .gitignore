@@ -2,5 +2,5 @@
 /__pycache__
 node_modules
 data/Schubert_Winterreise_Dataset_v2-0
-ENV_VARIABLE.py
+ENV_VARIABLE
 data/__pycache__
