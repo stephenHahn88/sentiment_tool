@@ -1,20 +1,32 @@
 <template>
-    <b-container>
-        <Bar></Bar>
-    </b-container>
+    <Bar
+      id="input-bar"
+      :options="chartOptions"
+      :data="chartData"
+    />
 </template>
 
-<script setup lang="ts">
+<script>
+import { Bar } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
 
-import {watch, reactive, computed, ref, Ref, onMounted} from "vue"
-import {Bar} from "vue-chartjs";
-import {Chart, registerables} from 'chart.js'
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
-Chart.register(...registerables)
+let chartData = {
+            labels: ["anger", "fear", "sadness", "none", "irony", "love", "joy"],
+            datasets: [ { data: [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2] } ]
+        }
 
-
+export default {
+    name: 'BarChart',
+    components: { Bar },
+    data() {
+        return {
+        chartData,
+        chartOptions: {
+            responsive: true
+        }
+        }
+    }
+}
 </script>
-
-<style scoped>
-
-</style>
