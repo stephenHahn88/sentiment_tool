@@ -6,9 +6,15 @@ from DHMM.gatherMatrices import getMixtureTransitionMatrices
 
 EMOTIONS = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
 
-def getJSONTransitionMatrices(just_transition_matrix=False):
+def getJSONTransitionMatrices(load_from_pickle=False, just_transition_matrix=False):
 
-    all_dfs = readPickleAsDF()
+    all_dfs = None
+
+    if load_from_pickle:
+        all_dfs = readPickleAsDF()
+    else:
+        all_dfs = getAllDF()
+
     transition_matrices = getMixtureTransitionMatrices(all_dfs)
     transition_matrices = list(transition_matrices)
 
@@ -21,3 +27,5 @@ def getJSONTransitionMatrices(just_transition_matrix=False):
             json.dump(transition_matrices[0], f, indent=1)
         else:
             json.dump(transition_matrices, f, indent=1)
+
+getJSONTransitionMatrices()

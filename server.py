@@ -2,7 +2,6 @@ from flask import Flask, request, send_file
 from pymongo import MongoClient
 
 from ENV_VARIABLE import password
-from gather_frontend_data import getJSONTransitionMatrices
 
 app = Flask(__name__)
 
@@ -35,8 +34,6 @@ choiceToPath = {
   "23": "src/media/Schubert_D911-23_HU33.wav",
   "24": "src/media/Schubert_D911-24_HU33.wav"
 }
-
-transition_matrix_json = getJSONTransitionMatrices()
 
 @app.route("/api/analyses")
 def getAnalyses():
