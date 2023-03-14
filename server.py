@@ -34,7 +34,6 @@ choiceToPath = {
   "24": "src/media/Schubert_D911-24_HU33.wav"
 }
 
-
 @app.route("/api/analyses")
 def getAnalyses():
     db = client["sentiment"]
