@@ -1,10 +1,11 @@
 from flask import Flask, request, send_file
 from pymongo import MongoClient
+from ENV_VARIABLE import password
 
 app = Flask(__name__)
 
 # client = MongoClient('localhost', 27017)
-client = MongoClient("mongodb+srv://bob:a_weird_password_that_only_I_know@hahnmusic.lcqyy3z.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient(f"mongodb+srv://bob:{password}@hahnmusic.lcqyy3z.mongodb.net/?retryWrites=true&w=majority")
 
 choiceToPath = {
   "1": "src/media/Schubert_D911-01_HU33.wav",
