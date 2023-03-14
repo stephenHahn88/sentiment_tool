@@ -14,13 +14,13 @@
           </b-form-group>
           <h5> Input Emotion Mixture </h5>
           <!-- Put bar plot input controls here -->
-          <b-img src="https://picsum.photos/500/500/?image=54" fluid thumbnail></b-img>
+          <BarPlotInput @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
           <h5> Playback Controls </h5>
         </div>
       </b-sidebar>
     </div>
     <div class="body">
-      <BarPlotInput></BarPlotInput>
+      
     </div>
   </b-container>
 </template>
@@ -28,10 +28,15 @@
 <script setup lang="ts">
 
 import {onMounted, ref, Ref, watch} from "vue"
+
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 
 let timerPerChord: Ref<number> = ref(0)
 let timerPerChordSpan = ref(10)
+
+function handleEmotionMixtureUpdate (mixtures: Array<number>) {
+  console.log("hellooooo")
+}
 
 </script>
 
