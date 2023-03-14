@@ -300,6 +300,9 @@ def vocabMaps(df: pd.DataFrame):
     intToVocab[-2] = "PAD"
     return vocabToInt, intToVocab
 
+def readPickleAsDF():
+    return pandas.read_pickle("./data/allDF.pickle")
+
 def saveAllDFs():
     df = getAllDF()
     with open("./allDF.pickle", "wb") as f:

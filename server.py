@@ -1,10 +1,13 @@
 from flask import Flask, request, send_file
 from pymongo import MongoClient
 
+from ENV_VARIABLE import password
+from gather_frontend_data import getJSONTransitionMatrices
+
 app = Flask(__name__)
 
 # client = MongoClient('localhost', 27017)
-client = MongoClient("mongodb+srv://bob:a_weird_password_that_only_I_know@hahnmusic.lcqyy3z.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://bob:{password}@hahnmusic.lcqyy3z.mongodb.net/?retryWrites=true&w=majority")
 
 choiceToPath = {
   "1": "src/media/Schubert_D911-01_HU33.wav",
@@ -33,6 +36,7 @@ choiceToPath = {
   "24": "src/media/Schubert_D911-24_HU33.wav"
 }
 
+transition_matrix_json = getJSONTransitionMatrices()
 
 @app.route("/api/analyses")
 def getAnalyses():
@@ -76,7 +80,6 @@ def postAnalyses():
         "custom_id": json["custom_id"]
     })
     return {"status": 200}
-
 
 if __name__ == "__main__":
     app.run(port=8889, debug=True)
