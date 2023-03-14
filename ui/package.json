@@ -9,6 +9,7 @@
     "@vueuse/core": "^9.0.0",
     "bootstrap-vue": "^2.22.0",
     "chart.js": "^4.2.1",
+    "chartjs-plugin-dragdata": "^2.2.5",
     "core-js": "^3.24.0",
     "lodash": "^4.17.21",
     "multi-range-slider-vue": "^1.1.4",
