@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import App from '@/App.vue'
 import AnnotationTool from '@/views/AnnotationTool.vue'
 import DataVisualization from '@/views/DataVisualization.vue'
+import ProgressionGeneration from '@/views/ProgressionGeneration.vue'
 
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue"
 
@@ -26,6 +27,11 @@ export const router = new VueRouter({
       meta: {title: "Data Charts"},
       path: "/data",
       component: DataVisualization
+    },
+    {
+      meta: {title: "Progressions"},
+      path: "/gen",
+      component: ProgressionGeneration
     }
   ],
 })
