@@ -28,10 +28,7 @@
 <script setup lang="ts">
 
 import {onMounted, ref, Ref, watch} from "vue"
-import { Chart, registerables } from 'chart.js'
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
-
-Chart.register(...registerables)
 
 let timerPerChord: Ref<number> = ref(0)
 let timerPerChordSpan = ref(10)

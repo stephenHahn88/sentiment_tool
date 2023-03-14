@@ -7,7 +7,7 @@
 <script>
 
 import { Chart, registerables } from 'chart.js'
-import 'chartjs-plugin-dragdata'
+import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
 let chartOptions = {
             type: "bar",
@@ -17,7 +17,13 @@ let chartOptions = {
             },
             options: {
                 responsive: true,
-                plugins: {dragData: true}
+                plugins: {dragData: true},
+                scales: {
+                    y: {
+                        max: 1.0,
+                        min: 0.01
+                    }
+                }
             }
         }
 
