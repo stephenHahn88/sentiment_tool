@@ -20,7 +20,7 @@
       </b-sidebar>
     </div>
     <div class="body">
-      <CumulativeLinePlot id = "lineChartOutput"></CumulativeLinePlot>
+      <AreaPlot id = "lineChartOutput"></AreaPlot>
     </div>
   </b-container>
 </template>
@@ -29,7 +29,7 @@
 
 import { onMounted, ref, Ref, watch } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
-import CumulativeLinePlot from "@/components/progression/CumulativeLinePlot.vue"
+import AreaPlot from "@/components/progression/AreaPlot.vue"
 
 import model from "/static/data/transition_matrices.json"
 
