@@ -15,17 +15,28 @@
           <h5> Input Emotion Mixture </h5>
           <!-- Put bar plot input controls here -->
           <BarPlotInput id = "emotionMixtureInput" :priorDist="currentEmotionMixture" @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
-          <h5> Playback Controls </h5>
+          <h5 class="mt-3"> Playback Controls </h5>
         </div>
       </b-sidebar>
     </div>
     <div class="body">
-      <AreaPlot id = "lineChartOutput"
-          ref = "areaPlot"
-          :time="timePerChord"
-          :currEmotionDist="currentEmotionMixture"
-          @timedEmit="handleTimedEmit">
-      </AreaPlot>
+      <b-row>
+        <b-col>
+          <h5> Emotional Content over Time </h5>
+          <AreaPlot id = "lineChartOutput"
+            ref = "areaPlot"
+            :time="timePerChord"
+            :currEmotionDist="currentEmotionMixture"
+            @timedEmit="handleTimedEmit"
+            style="width: 500px;">
+          </AreaPlot>
+        </b-col>
+      </b-row>
+      <b-row class="mt-3">
+        <b-col>
+          <h5> Chord Progression </h5>
+        </b-col>
+      </b-row>
     </div>
   </b-container>
 </template>
@@ -67,7 +78,7 @@ function handleTimedEmit () {
 
 .body {
   margin-left: 320px;
-  margin-top: 50px;
+  margin-top: 60px;
 }
 
 </style>
