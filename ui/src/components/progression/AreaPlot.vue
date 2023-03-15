@@ -138,7 +138,14 @@ let chartOptions = {
                 plugins: {
                     filler: {
                         propagate: true
-                    }
+                    },
+                    // legend: {
+                    //     labels: {   
+                    //         font: {
+                    //             family: 'consolas'
+                    //         }
+                    //     }
+                    // }
                 },
                 scales: {
                     y: {
@@ -173,4 +180,5 @@ defineExpose({ updateTime, updateEmotionMixture });
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 </style>

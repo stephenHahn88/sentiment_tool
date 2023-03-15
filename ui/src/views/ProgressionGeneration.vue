@@ -16,6 +16,11 @@
           <!-- Put bar plot input controls here -->
           <BarPlotInput id = "emotionMixtureInput" :priorDist="currentEmotionMixture" @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
           <h5 class="mt-3"> Playback Controls </h5>
+          <b-row class="justify-content-md-center mt-3">
+            <b-col>
+              <b-button> {{ playButtonText }} </b-button>
+            </b-col>
+          </b-row>
         </div>
       </b-sidebar>
     </div>
@@ -47,38 +52,103 @@ import { onMounted, ref, Ref, watch } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
 
+// import "nes.css/css/nes.min.css";
+import { WiredButton, WiredInput } from "wired-elements"
+
 import model from "/static/data/transition_matrices.json"
 
 let timePerChord: Ref<number> = ref(1)
 let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let areaPlot = ref()
 
+let playButtonText = "Paused"
+const emotionLabels: string[] = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
+const chordRNs: string[] = ["iii", "viio/V", "iv", "bVI", "bvii", "i", "v", "I", "vii", "IV",  "vi", "bIII", "viio/ii", "bVII", "V", "ii", "START", "PAD"]
+
 watch(timePerChord, (newTime) => {
   console.log("time change")
   areaPlot.value.updateTime(newTime)
 })
 
-let transition_matrices = model[0]
-let encode_chords = model[1]
-let decode_chords = model[2]
+let transitionMatrices = model[0]
+let encodeChords = model[1]
+let decodeChords = model[2]
+let lastRN = "START";
+
+function normalize(input: number[]) {
+    let sum = 0;
+    for (let i=0; i<input.length; i++) {
+        sum += input[i];
+    }
+    if (sum == 0) {
+        sum = 1;
+    }
+    for (let i=0; i<input.length; i++) {
+        input[i] = input[i] / sum;
+    }
+    return input;
+}
+
+function getNextChord () {
+
+  let mostLikelyRN = "";
+  let maxRNProb = 0.0;
+
+  // For each RN, find the probability of getting that RN given the previous RN and the emotional mixture
+  chordRNs.forEach(function (RN) {
+
+    let totalProb = 0;
+    let index = 0;
+    let currentMixture = JSON.parse(JSON.stringify(currentEmotionMixture));
+    currentMixture = normalize(currentMixture);
+
+    emotionLabels.forEach(function (emotion) {
+
+      let transition_matrix = transitionMatrices.emotion;
+      let weight = currentMixture[index];
+
+      let i = encodeChords.lastRN;
+      let j = encodeChords.RN;
+
+      totalProb += weight * (transition_matrix[i][j]);
+      index++;
+
+    });
+
+    if (totalProb >= maxRNProb) {
+      maxRNProb = totalProb;
+      mostLikelyRN = RN;
+    }
+
+  });
+
+  return mostLikelyRN;
+
+}
 
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
   currentEmotionMixture = mixtures;
-  console.log("emotion change")
-  areaPlot.value.updateEmotionMixture(currentEmotionMixture)
+  console.log("emotion change");
+  areaPlot.value.updateEmotionMixture(currentEmotionMixture);
 }
 
 function handleTimedEmit () {
-  console.log("hello!")
+  console.log("hello!");
+  // areaPlot.value.updateEmotionMixture(currentEmotionMixture);
 }
 
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
 
 .body {
   margin-left: 320px;
   margin-top: 60px;
 }
+
+/* html, body, pre, code, kbd, samp, span, p, h5 {
+  font-family: 'Press Start 2P';
+} */
 
 </style>
