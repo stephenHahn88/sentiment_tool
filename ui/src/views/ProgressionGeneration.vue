@@ -3,7 +3,7 @@
     <div>
       <b-sidebar id="sidebar-1" title="Generation Controls" width="360px" shadow visible no-header-close>
         <div class="px-3 py-2">
-          <h5> Time per Chord </h5>
+          <h5> Time per Chord (in seconds) </h5>
           <b-form-group>
             <b-form-input
                 id="time-span"
@@ -23,7 +23,8 @@
       <AreaPlot id = "lineChartOutput"
           ref = "areaPlot"
           :time="timePerChord"
-          :currEmotionDist="currentEmotionMixture">
+          :currEmotionDist="currentEmotionMixture"
+          @timedEmit="handleTimedEmit">
       </AreaPlot>
     </div>
   </b-container>
@@ -54,6 +55,10 @@ function handleEmotionMixtureUpdate (mixtures: Array<number>) {
   currentEmotionMixture = mixtures;
   console.log("emotion change")
   areaPlot.value.updateEmotionMixture(currentEmotionMixture)
+}
+
+function handleTimedEmit () {
+  console.log("hello!")
 }
 
 </script>

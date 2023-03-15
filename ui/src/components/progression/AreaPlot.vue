@@ -166,7 +166,7 @@ onMounted(() => {
 
 setInterval(() => {
     emit("timedEmit")
-}, timePerChord);
+}, timePerChord * 1000);
 
 defineExpose({ updateTime, updateEmotionMixture });
 
