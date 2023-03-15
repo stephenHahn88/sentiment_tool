@@ -20,7 +20,7 @@
       </b-sidebar>
     </div>
     <div class="body">
-      
+      <CumulativeLinePlot id = "lineChartOutput"></CumulativeLinePlot>
     </div>
   </b-container>
 </template>
@@ -29,6 +29,7 @@
 
 import { onMounted, ref, Ref, watch } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
+import CumulativeLinePlot from "@/components/progression/CumulativeLinePlot.vue"
 
 import model from "/static/data/transition_matrices.json"
 
@@ -41,7 +42,7 @@ let encode_chords = model[1]
 let decode_chords = model[2]
 
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
-  console.log(mixtures);
+  console.log(mixtures)
   currentEmotionMixture = mixtures;
 }
 

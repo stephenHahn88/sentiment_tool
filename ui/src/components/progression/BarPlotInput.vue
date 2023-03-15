@@ -1,6 +1,6 @@
 <template>
     <div>
-      <canvas id="chart" @dragEnd="handleDragEnd"></canvas>
+      <canvas id="barChart" @dragEnd="handleDragEnd"></canvas>
     </div>
 </template>
 
@@ -18,7 +18,10 @@ let chartOptions = {
             type: "bar",
             data: {
                 labels: ["anger", "fear", "sadness", "none", "irony", "love", "joy"],
-                datasets: [ { data: inputData } ]
+                datasets: [ {
+                    data: inputData,
+                    backgroundColor: ['#c23a22', '#7d54ae', '#3e65bf', '#000000', '#bbbbbb', '#ffa0c5', '#f9d476']
+                } ]
             },
             options: {
                 responsive: true,
@@ -27,21 +30,26 @@ let chartOptions = {
                     if (point.length) e.native.target.style.cursor = 'grab'
                     else e.native.target.style.cursor = 'default'
                 },
-                plugins: {dragData: {
-                    onDragStart: function(e) {
-                        // console.log(e)
+                plugins: {
+                    dragData: {
+                        onDragStart: function(e) {
+                            // console.log(e)
+                        },
+                        onDrag: function(e, datasetIndex, index, value) {              
+                            e.target.style.cursor = 'grabbing'
+                            // console.log(e, datasetIndex, index, value)
+                        },
+                        onDragEnd: function(e, datasetIndex, index, value) {
+                            e.target.style.cursor = 'default' 
+                            inputData[index] = value;
+                            const dragEndEvent = new Event("dragEnd")
+                            e.target.dispatchEvent(dragEndEvent)
+                        },
                     },
-                    onDrag: function(e, datasetIndex, index, value) {              
-                        e.target.style.cursor = 'grabbing'
-                        // console.log(e, datasetIndex, index, value)
+                    legend: {
+                        display: false
                     },
-                    onDragEnd: function(e, datasetIndex, index, value) {
-                        e.target.style.cursor = 'default' 
-                        inputData[index] = value;
-                        const dragEndEvent = new Event("dragEnd")
-                        e.target.dispatchEvent(dragEndEvent)
-                    },
-                }},
+                },
                 scales: {
                     y: {
                         max: 1.0,
@@ -57,12 +65,9 @@ export default {
             chartOptions
         }
     },
-    setup() {
-        console.log("joij")
-    },
     mounted() {
         Chart.register(...registerables)
-        this.createChart('chart', this.chartOptions)
+        this.createChart('barChart', this.chartOptions)
     },
     methods: {
         createChart(chartId, chartData) {
