@@ -41,7 +41,7 @@ function updateTime (newTime) {
 }
 
 function updateEmotionMixture (newEmotionMixture) {
-    newEmotionMixture = normalize(newEmotionMixture);
+    newEmotionMixture = normalize(JSON.parse(JSON.stringify(newEmotionMixture)));
     // Update emotionProgressionMatrix
     for (let r=0; r<emotionProgressionMatrix.length; r++) {
         emotionProgressionMatrix[r].shift();
@@ -49,7 +49,7 @@ function updateEmotionMixture (newEmotionMixture) {
     }
     // Update chart - remove earliest data
     areaChart.data.labels.shift();
-    
+
     // Update chart - push new data
     areaChart.data.labels.push(parseInt(areaChart.data.labels[areaChart.data.labels.length - 1]) + parseInt(timePerChord));
     areaChart.data.datasets = generateDataset();
