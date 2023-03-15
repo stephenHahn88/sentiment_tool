@@ -35,9 +35,9 @@ function updateTime (newTime) {
         return;
     }
     timePerChord = newTime;
-    let newLabels = generateLabels();
-    areaChart.data.labels = newLabels;
-    areaChart.update();
+    //let newLabels = generateLabels();
+    //areaChart.data.labels = newLabels;
+    //areaChart.update();
 }
 
 function updateEmotionMixture (newEmotionMixture) {
