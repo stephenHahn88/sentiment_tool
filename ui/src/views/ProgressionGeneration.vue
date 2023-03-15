@@ -27,21 +27,23 @@
 
 <script setup lang="ts">
 
-import {onMounted, ref, Ref, watch} from "vue"
+import { onMounted, ref, Ref, watch } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
-import { Vue3Instance } from "vue/types/v3-component-public-instance";
 
-let timerPerChord: Ref<number> = ref(0)
+import model from "/static/data/transition_matrices.json"
+
 let timerPerChordSpan = ref(10)
+let timerPerChord: Ref<number> = ref(0)
+let currentEmotionMixture: number[];
+
+let transition_matrices = model[0]
+let encode_chords = model[1]
+let decode_chords = model[2]
 
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
-  console.log("update received");
+  console.log(mixtures);
+  currentEmotionMixture = mixtures;
 }
-
-onMounted (()=> {
-  let barInput = document.getElementById("emotionMixtureInput") as Vue3Instance
-  console.log(barInput)
-})
 
 </script>
 
