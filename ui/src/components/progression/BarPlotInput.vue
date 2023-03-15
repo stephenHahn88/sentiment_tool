@@ -20,7 +20,9 @@ let chartOptions = {
                 labels: ["anger", "fear", "sadness", "none", "irony", "love", "joy"],
                 datasets: [ {
                     data: inputData,
-                    backgroundColor: ['#c23a22', '#7d54ae', '#3e65bf', '#000000', '#bbbbbb', '#ffa0c5', '#f9d476']
+                    borderWidth: 3,
+                    borderColor: ['#c23a22', '#7d54ae', '#3e65bf', '#000000', '#bbbbbb', '#ffa0c5', '#f9d476'],
+                    backgroundColor: ['rgb(194,58,34, 0.7)', 'rgb(125, 84, 174, 0.7)', 'rgb(62, 101, 191, 0.7)', 'rgb(0, 0, 0, 0.7)', 'rgb(187, 187, 187, 0.7)', 'rgb(255, 160, 197, 0.7)', 'rgb(249, 212, 118, 0.7)']
                 } ]
             },
             options: {

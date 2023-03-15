@@ -52,6 +52,7 @@ function handleEmotionMixtureUpdate (mixtures: Array<number>) {
 
 .body {
   margin-left: 320px;
+  margin-top: 50px;
 }
 
 </style>
