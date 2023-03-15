@@ -91,6 +91,7 @@ function normalize(input: number[]) {
 
 function getNextChord () {
 
+  // To be returned
   let mostLikelyRN = "";
   let maxRNProb = 0.0;
 
@@ -99,6 +100,7 @@ function getNextChord () {
 
     let totalProb = 0;
     let index = 0;
+    // Deep copy emotion mixture to avoid mutating the barplot
     let currentMixture = JSON.parse(JSON.stringify(currentEmotionMixture));
     currentMixture = normalize(currentMixture);
 
@@ -107,6 +109,7 @@ function getNextChord () {
       let transition_matrix = transitionMatrices.emotion;
       let weight = currentMixture[index];
 
+      // Turn RN from string to matching index; note that lastRN inits as START
       let i = encodeChords.lastRN;
       let j = encodeChords.RN;
 
