@@ -5,25 +5,36 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-const props = defineProps(['timePerChord', 'currEmotionDist'])
+import { ref, watch, onMounted } from 'vue'
+const props = defineProps(['time', 'currEmotionDist'])
 const emit = defineEmits(['timedEmit'])
 
 import { Chart, registerables } from 'chart.js'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
+const displayDuration = 10
+let timePerChord = props.time
+
+function buildInitMatrix (currEmotionDist) {
+    let matrix = [[],[],[],[],[],[],[]]
+    for (let i=0; i<7; i++) {
+        for (let j=0; j<displayDuration; j++) {
+            matrix[i].push(currEmotionDist[i])
+        }
+    }
+    return matrix
+}
+
 // Each row is the progression of one emotion through 10 time steps
-let emotionProgressionMatrix = [[1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2],
-                                [0.8, 0.7, 0.8, 0.2, 0.3, 0.2, 0.2, 0.5, 0.2, 0.2, 0.2],
-                                [0.6, 0.6, 0.7, 0.4, 0.4, 0.2, 0.2, 0.6, 0.2, 0.2, 0.2],
-                                [0.4, 0.5, 0.6, 0.3, 0.5, 0.2, 0.2, 0.9, 0.2, 0.2, 0.2],
-                                [0.3, 0.4, 0.5, 0.4, 0.6, 0.2, 0.2, 0.5, 0.2, 0.2, 0.2],
-                                [0.2, 0.3, 0.4, 0.1, 0.7, 0.2, 0.2, 0.1, 0.2, 0.2, 0.2],
-                                [0.1, 0.2, 0.3, 0.1, 0.8, 0.2, 0.2, 0.9, 0.2, 0.2, 0.2]]
-let timePerChord = props.timePerChord
+let emotionProgressionMatrix = buildInitMatrix(props.currEmotionDist)
+
+function updateTime (newTime) {
+    timePerChord = newTime
+    console.log(timePerChord)
+}
 
 function generateLabels() {
-    return Array.from(new Array(10), (val,index) => timePerChord*index );
+    return Array.from(new Array(displayDuration), (val,index) => timePerChord*index );
 }
 
 function normalize(input) {
@@ -129,6 +140,8 @@ onMounted(() => {
     Chart.register(...registerables)
     createChart('lineChart', chartOptions)
 })
+
+defineExpose({ updateTime });
 
 </script>
 

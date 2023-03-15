@@ -9,19 +9,20 @@
                 id="time-span"
                 style="width: 80px;"
                 type="number"
-                v-model="timerPerChordSpan"
+                v-model="timePerChord"
             ></b-form-input>
           </b-form-group>
           <h5> Input Emotion Mixture </h5>
           <!-- Put bar plot input controls here -->
-          <BarPlotInput id = "emotionMixtureInput" @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
+          <BarPlotInput id = "emotionMixtureInput" :priorDist="currentEmotionMixture" @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
           <h5> Playback Controls </h5>
         </div>
       </b-sidebar>
     </div>
     <div class="body">
       <AreaPlot id = "lineChartOutput"
-          :timePerChord="timerPerChord"
+          ref = "areaPlot"
+          :time="timePerChord"
           :currEmotionDist="currentEmotionMixture">
       </AreaPlot>
     </div>
@@ -36,9 +37,14 @@ import AreaPlot from "@/components/progression/AreaPlot.vue"
 
 import model from "/static/data/transition_matrices.json"
 
-let timerPerChordSpan = ref(1)
-let timerPerChord: Ref<number> = ref(1)
-let currentEmotionMixture: number[];
+let timePerChord: Ref<number> = ref(1)
+let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
+let areaPlot = ref()
+
+watch(timePerChord, (newTime) => {
+  console.log("time change")
+  areaPlot.value.updateTime(newTime)
+})
 
 let transition_matrices = model[0]
 let encode_chords = model[1]

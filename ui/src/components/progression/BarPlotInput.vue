@@ -10,10 +10,11 @@ import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
+const props = defineProps(["priorDist"])
 const emit = defineEmits(["emotionMixtureUpdate"])
 
-let barInput;
-let inputData = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
+let barInput
+let inputData = props.priorDist
 let chartOptions = {
             type: "bar",
             data: {
