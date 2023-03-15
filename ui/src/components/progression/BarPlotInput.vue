@@ -5,12 +5,12 @@
 </template>
 
 <script setup>
-    defineEmits(["emotionMixtureUpdate"])
-</script>
 
-<script>
+import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
+
+const emit = defineEmits(["emotionMixtureUpdate"])
 
 let barInput;
 let inputData = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
@@ -61,30 +61,23 @@ let chartOptions = {
             }
         }
 
-export default {
-    data() {
-        return {
-            chartOptions
-        }
-    },
-    mounted() {
-        Chart.register(...registerables)
-        this.createChart('barChart', this.chartOptions)
-    },
-    methods: {
-        createChart(chartId, chartData) {
-            const ctx = document.getElementById(chartId)
-            const myChart = new Chart(ctx, {
-                type: chartData.type,
-                data: chartData.data,
-                options: chartData.options,
-            })
-        },
-        handleDragEnd: function (e) {
-            console.log("drag end detected")
-            this.$emit("emotionMixtureUpdate", inputData)
-        }
-    }
+function createChart(chartId, chartData) {
+    const ctx = document.getElementById(chartId)
+    const myChart = new Chart(ctx, {
+        type: chartData.type,
+        data: chartData.data,
+        options: chartData.options,
+    })
+}
+
+onMounted(() => {
+    Chart.register(...registerables)
+    createChart('barChart', chartOptions)
+})
+
+function handleDragEnd (e) {
+    console.log("drag end detected")
+    emit("emotionMixtureUpdate", inputData)
 }
 
 </script>

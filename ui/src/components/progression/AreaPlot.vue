@@ -5,10 +5,10 @@
 </template>
 
 <script setup>
-    defineEmits(["emotionMixtureUpdate"])
-</script>
+import { ref, onMounted } from 'vue'
+const props = defineProps(['timePerChord', 'currEmotionDist'])
+const emit = defineEmits(['timedEmit'])
 
-<script>
 import { Chart, registerables } from 'chart.js'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
@@ -20,7 +20,7 @@ let emotionProgressionMatrix = [[1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2, 0.4, 0.2, 0.2,
                                 [0.3, 0.4, 0.5, 0.4, 0.6, 0.2, 0.2, 0.5, 0.2, 0.2, 0.2],
                                 [0.2, 0.3, 0.4, 0.1, 0.7, 0.2, 0.2, 0.1, 0.2, 0.2, 0.2],
                                 [0.1, 0.2, 0.3, 0.1, 0.8, 0.2, 0.2, 0.9, 0.2, 0.2, 0.2]]
-let timePerChord = 1
+let timePerChord = props.timePerChord
 
 function generateLabels() {
     return Array.from(new Array(10), (val,index) => timePerChord*index );
@@ -50,20 +50,20 @@ function cumulativeSum(input) {
     return newInput;
 }
 
+function transposeMatrix(input) {
+    return input[0].map((_, colIndex) => input.map(row => row[colIndex]));
+}
+
 function normData() {
-
     // Transpose matrix
-    emotionProgressionMatrix = emotionProgressionMatrix[0].map((_, colIndex) => emotionProgressionMatrix.map(row => row[colIndex]));
-
+    emotionProgressionMatrix = transposeMatrix(emotionProgressionMatrix);
     // Normalize each row (former columns)
     for (let i=0; i<emotionProgressionMatrix.length; i++) {
         emotionProgressionMatrix[i] = normalize(emotionProgressionMatrix[i]);
         // emotionProgressionMatrix[i] = cumulativeSum(emotionProgressionMatrix[i]);
     }
-    
     // Tranpose matrix back
-    emotionProgressionMatrix = emotionProgressionMatrix[0].map((_, colIndex) => emotionProgressionMatrix.map(row => row[colIndex]));
-
+    emotionProgressionMatrix = transposeMatrix(emotionProgressionMatrix);
 }
 
 const emotionLabels = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
@@ -116,27 +116,19 @@ let chartOptions = {
             }
         }
 
-export default {
-    data() {
-        return {
-            chartOptions
-        }
-    },
-    mounted() {
-        Chart.register(...registerables)
-        this.createChart('lineChart', this.chartOptions)
-    },
-    methods: {
-        createChart(chartId, chartData) {
-            const ctx = document.getElementById(chartId)
-            const myChart = new Chart(ctx, {
-                type: chartData.type,
-                data: chartData.data,
-                options: chartData.options,
-            })
-        }
-    }
+function createChart(chartId, chartData) {
+    const ctx = document.getElementById(chartId)
+    const myChart = new Chart(ctx, {
+        type: chartData.type,
+        data: chartData.data,
+        options: chartData.options,
+    })
 }
+
+onMounted(() => {
+    Chart.register(...registerables)
+    createChart('lineChart', chartOptions)
+})
 
 </script>
 

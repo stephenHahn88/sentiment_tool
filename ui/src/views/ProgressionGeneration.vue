@@ -20,7 +20,10 @@
       </b-sidebar>
     </div>
     <div class="body">
-      <AreaPlot id = "lineChartOutput"></AreaPlot>
+      <AreaPlot id = "lineChartOutput"
+          :timePerChord="timerPerChord"
+          :currEmotionDist="currentEmotionMixture">
+      </AreaPlot>
     </div>
   </b-container>
 </template>
@@ -33,8 +36,8 @@ import AreaPlot from "@/components/progression/AreaPlot.vue"
 
 import model from "/static/data/transition_matrices.json"
 
-let timerPerChordSpan = ref(10)
-let timerPerChord: Ref<number> = ref(0)
+let timerPerChordSpan = ref(1)
+let timerPerChord: Ref<number> = ref(1)
 let currentEmotionMixture: number[];
 
 let transition_matrices = model[0]
