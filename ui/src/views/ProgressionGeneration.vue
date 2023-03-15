@@ -46,6 +46,11 @@ watch(timePerChord, (newTime) => {
   areaPlot.value.updateTime(newTime)
 })
 
+// watch(currentEmotionMixture, (newEmotionMixture) => {
+//   console.log("emotion change")
+//   areaPlot.value.updateEmotionMixture(newEmotionMixture)
+// })
+
 let transition_matrices = model[0]
 let encode_chords = model[1]
 let decode_chords = model[2]

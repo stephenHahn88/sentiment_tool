@@ -12,6 +12,8 @@ const emit = defineEmits(['timedEmit'])
 import { Chart, registerables } from 'chart.js'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
+let areaChart;
+
 const displayDuration = 10
 let timePerChord = props.time
 
@@ -29,8 +31,17 @@ function buildInitMatrix (currEmotionDist) {
 let emotionProgressionMatrix = buildInitMatrix(props.currEmotionDist)
 
 function updateTime (newTime) {
-    timePerChord = newTime
-    console.log(timePerChord)
+    if (newTime === '') {
+        return;
+    }
+    timePerChord = newTime;
+    let newLabels = generateLabels();
+    areaChart.data.labels = newLabels;
+    areaChart.update();
+}
+
+function updateEmotionMixture (newEmotionMixture) {
+
 }
 
 function generateLabels() {
@@ -129,7 +140,7 @@ let chartOptions = {
 
 function createChart(chartId, chartData) {
     const ctx = document.getElementById(chartId)
-    const myChart = new Chart(ctx, {
+    areaChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,
         options: chartData.options,
@@ -141,7 +152,7 @@ onMounted(() => {
     createChart('lineChart', chartOptions)
 })
 
-defineExpose({ updateTime });
+defineExpose({ updateTime, updateEmotionMixture });
 
 </script>
 
