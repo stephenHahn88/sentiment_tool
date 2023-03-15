@@ -14,7 +14,7 @@
           </b-form-group>
           <h5> Input Emotion Mixture </h5>
           <!-- Put bar plot input controls here -->
-          <BarPlotInput @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
+          <BarPlotInput id = "emotionMixtureInput" @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
           <h5> Playback Controls </h5>
         </div>
       </b-sidebar>
@@ -28,15 +28,20 @@
 <script setup lang="ts">
 
 import {onMounted, ref, Ref, watch} from "vue"
-
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
+import { Vue3Instance } from "vue/types/v3-component-public-instance";
 
 let timerPerChord: Ref<number> = ref(0)
 let timerPerChordSpan = ref(10)
 
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
-  console.log("hellooooo")
+  console.log("update received");
 }
+
+onMounted (()=> {
+  let barInput = document.getElementById("emotionMixtureInput") as Vue3Instance
+  console.log(barInput)
+})
 
 </script>
 

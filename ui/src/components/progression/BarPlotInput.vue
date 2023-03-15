@@ -1,6 +1,6 @@
 <template>
     <div>
-      <canvas id="chart"></canvas>
+      <canvas id="chart" @dragEnd="handleDragEnd"></canvas>
     </div>
 </template>
 
@@ -9,10 +9,10 @@
 </script>
 
 <script>
-
 import { Chart, registerables } from 'chart.js'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
+let barInput;
 let inputData = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let chartOptions = {
             type: "bar",
@@ -37,12 +37,9 @@ let chartOptions = {
                     },
                     onDragEnd: function(e, datasetIndex, index, value) {
                         e.target.style.cursor = 'default' 
-                        console.log(datasetIndex, index, value)
                         inputData[index] = value;
-                        console.log(inputData)
-                        e => {
-                            this.emit('emotionMixtureUpdate', inputData)
-                        }
+                        const dragEndEvent = new Event("dragEnd")
+                        e.target.dispatchEvent(dragEndEvent)
                     },
                 }},
                 scales: {
@@ -60,6 +57,9 @@ export default {
             chartOptions
         }
     },
+    setup() {
+        console.log("joij")
+    },
     mounted() {
         Chart.register(...registerables)
         this.createChart('chart', this.chartOptions)
@@ -72,10 +72,15 @@ export default {
                 data: chartData.data,
                 options: chartData.options,
             })
+        },
+        handleDragEnd: function (e) {
+            console.log("drag end detected")
+            this.$emit("emotionMixtureUpdate", inputData)
         }
     }
 }
 
 </script>
+
 <style>
 </style>
