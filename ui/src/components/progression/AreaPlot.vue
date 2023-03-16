@@ -6,6 +6,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import _ from 'lodash'
 const props = defineProps(['time', 'currEmotionDist'])
 const emit = defineEmits(['timedEmit', 'timedGraphUpdate'])
 
