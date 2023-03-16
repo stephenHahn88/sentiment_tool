@@ -60,13 +60,15 @@
 <script setup lang="ts">
 
 import { onMounted, ref, Ref, watch, getCurrentInstance } from "vue"
+import { playChord } from "@/play-music";
+import { weightedRandom } from "@/utility"
+import model from "/static/data/transition_matrices.json"
+
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
 import PianoKeyboard from "@/components/PianoKeyboard.vue"
-import { playChord } from "@/play-music";
-// import "nes.css/css/nes.min.css";
 
-import model from "/static/data/transition_matrices.json"
+// import "nes.css/css/nes.min.css";
 
 let timePerChord: Ref<number> = ref(5)
 let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
@@ -120,11 +122,20 @@ function normalize(input: number[]) {
     return input;
 }
 
+function sampleVector (input: Map<string, number>) {
+  let keys: string[] = Array.from(input.keys());
+  let weights: number[] = Array.from(input.values())
+  console.log(input);
+  console.log(keys);
+  console.log(weights);
+  console.log(weightedRandom(keys, weights));
+  return weightedRandom(keys, weights);
+}
+
 function getNextChord () {
 
   // To be returned
-  let mostLikelyRN = "";
-  let maxRNProb = 0.0;
+  let transitions = new Map();
 
   // For each RN, find the probability of getting that RN given the previous RN and the emotional mixture
   chordRNs.forEach(function (RN) {
@@ -149,14 +160,16 @@ function getNextChord () {
 
     });
 
-    if (totalProb >= maxRNProb) {
-      maxRNProb = totalProb;
-      mostLikelyRN = RN;
+    // Check to see if value is NaN; if it is, replace with 0 prob
+    if (isNaN(totalProb)) {
+       totalProb = 0;
     }
+    // Set key (RN) and value (probability) in transitions map
+    transitions.set(RN, totalProb);
 
   });
 
-  return mostLikelyRN;
+  return sampleVector(transitions);
 
 }
 

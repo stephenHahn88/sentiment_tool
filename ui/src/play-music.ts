@@ -36,8 +36,6 @@ export function playChord (chord: string) {
     window.dispatchEvent(keyupEvent2);
     window.dispatchEvent(keyupEvent3);
 
-    console.log("playing chords");
-
     if (chord === "V") {
         playVChord();
     } else {
@@ -79,8 +77,10 @@ export function playVChord () {
     window.dispatchEvent(keyupEvent2);
     window.dispatchEvent(keyupEvent3);
 
+    piano.triggerAttack("E4", 0);
+    piano.triggerAttack("G4", 0);
     piano.triggerAttack("B4", 0);
-    piano.triggerAttack("A4", 0);
+    piano.triggerRelease("E4", 16);
     piano.triggerRelease("B4", 16);
     piano.triggerRelease("A4", 16);
 
