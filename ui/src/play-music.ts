@@ -1,4 +1,6 @@
 import * as Tone from "tone";
+import RNSToPitches from "/static/data/notes_from_chord.json"
+import notesToKeys from "/static/data/notes_to_keys.json"
 
 // Instrument consts
 const synth = new Tone.Synth().toDestination();
@@ -40,10 +42,28 @@ export function playChord (chord: string) {
     window.dispatchEvent(keyupEvent2);
     window.dispatchEvent(keyupEvent3);
 
-    if (chord === "V") {
-        playVChord();
+    if (chord === "START" || chord === "PAD") {
+        return;
     } else {
-        playIChord();
+        let note1 = RNSToPitches[chord][0];
+        let note2 = RNSToPitches[chord][1];
+        let note3 = RNSToPitches[chord][2];
+
+        piano.triggerAttackRelease(note1, 3);
+        piano.triggerAttackRelease(note2, 3);
+        piano.triggerAttackRelease(note3, 3);
+
+        let keydownEvent1 = new KeyboardEvent('keydown', {'key': notesToKeys[note1]});
+        let keydownEvent2 = new KeyboardEvent('keydown', {'key': notesToKeys[note2]});
+        let keydownEvent3 = new KeyboardEvent('keydown', {'key': notesToKeys[note3]});
+        window.dispatchEvent(keydownEvent1);
+        window.dispatchEvent(keydownEvent2);
+        window.dispatchEvent(keydownEvent3);
+    
+        // Load up keys for later
+        keyupEvent1 = new KeyboardEvent('keyup', {'key': notesToKeys[note1]});
+        keyupEvent2 = new KeyboardEvent('keyup', {'key': notesToKeys[note2]});
+        keyupEvent3 = new KeyboardEvent('keyup', {'key': notesToKeys[note3]});
     }
 
 }
@@ -74,30 +94,3 @@ export function playIChord () {
     keyupEvent3 = new KeyboardEvent('keyup', {'key': '7'});
 
 }
-
-export function playVChord () {
-
-    window.dispatchEvent(keyupEvent1);
-    window.dispatchEvent(keyupEvent2);
-    window.dispatchEvent(keyupEvent3);
-
-    piano.triggerAttack("E4", 0);
-    piano.triggerAttack("G4", 0);
-    piano.triggerAttack("B4", 0);
-    piano.triggerRelease("E4", 16);
-    piano.triggerRelease("B4", 16);
-    piano.triggerRelease("A4", 16);
-
-    let keydownEvent1 = new KeyboardEvent('keydown', {'key': '2'});
-    let keydownEvent2 = new KeyboardEvent('keydown', {'key': '5'});
-    let keydownEvent3 = new KeyboardEvent('keydown', {'key': '8'});
-
-    window.dispatchEvent(keydownEvent1);
-    window.dispatchEvent(keydownEvent2);
-    window.dispatchEvent(keydownEvent3);
-
-    keyupEvent1 = new KeyboardEvent('keyup', {'key': '2'});
-    keyupEvent2 = new KeyboardEvent('keyup', {'key': '5'});
-    keyupEvent3 = new KeyboardEvent('keyup', {'key': '8'});
-
-  }
