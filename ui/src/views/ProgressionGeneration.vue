@@ -127,7 +127,7 @@ const chordRNs: string[] = buildChordRNs()
 let emojis = {
   piano: '&#127929;',
   casio: '&#127899;',
-  game: '&#128126;'
+  game: '&#127928;'
 }
 
 const forceRerender = () => {
