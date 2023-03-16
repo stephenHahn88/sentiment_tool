@@ -15,7 +15,7 @@ import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
 let areaChart;
 
-const displayDuration = 10
+const displayDuration = 20
 let timePerChord = props.time
 
 function buildInitMatrix (currEmotionDist) {
@@ -135,6 +135,11 @@ let chartOptions = {
             },
             options: {
                 responsive: true,
+                elements: {
+                    point:{
+                        radius: 0
+                    }
+                },
                 plugins: {
                     filler: {
                         propagate: true
@@ -176,7 +181,7 @@ onMounted(() => {
 
 setInterval(() => {
     emit("timedGraphUpdate")
-}, 1000);
+}, 100);
 
 
 setInterval(() => {

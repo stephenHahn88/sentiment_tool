@@ -150,7 +150,7 @@ function getNextChord () {
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
   currentEmotionMixture = mixtures;
   console.log("emotion change");
-  areaPlot.value.updateEmotionMixture(currentEmotionMixture);
+  // areaPlot.value.updateEmotionMixture(currentEmotionMixture);
 }
 
 function handleTimedEmit () {
