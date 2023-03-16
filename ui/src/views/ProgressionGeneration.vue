@@ -179,7 +179,6 @@ function handleEmotionMixtureUpdate (mixtures: Array<number>) {
 function handleTimedEmit () {
 
   // Get next chord's roman numeral and make a deep copy to lastRN if not currently paused
-  console.log(paused);
   if (!paused.value) {
     let nextRN = getNextChord();
     lastRN = JSON.parse(JSON.stringify(nextRN));

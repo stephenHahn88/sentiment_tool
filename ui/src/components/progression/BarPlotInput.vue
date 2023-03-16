@@ -1,6 +1,6 @@
 <template>
     <div>
-      <canvas id="barChart" @dragEnd="handleDragEnd"></canvas>
+      <canvas id="barChart" @dragEnd="handleDragEnd" @mouseup="handleClick(null);"></canvas>
     </div>
 </template>
 
@@ -32,6 +32,25 @@ let chartOptions = {
                     const point = e.chart.getElementsAtEventForMode(e, 'nearest', { intersect: true }, false)
                     if (point.length) e.native.target.style.cursor = 'grab'
                     else e.native.target.style.cursor = 'default'
+                },
+                onClick: function(e) {
+                    const points = e.chart.getElementsAtEventForMode(e, 'x', { intersect: false }, true);
+                    if (points.length) {
+
+                        const firstPoint = points[0];
+                        const label = e.chart.data.labels[firstPoint.index];
+                        const value = e.chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+                        
+                        console.log(e.chart.data.datasets);
+
+                        const height = e.chart.height;
+                        e.chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index] = (height - e.y)/height;
+                        e.chart.update();
+
+                        // Send a mouseup event to so that it triggers after the code in this onClick function triggers
+                        const clickEvent = new Event("mouseup")
+                        e.native.target.dispatchEvent(clickEvent)
+                    }
                 },
                 plugins: {
                     dragData: {
@@ -78,6 +97,11 @@ onMounted(() => {
 
 function handleDragEnd (e) {
     console.log("drag end detected")
+    emit("emotionMixtureUpdate", inputData)
+}
+
+function handleClick (e) {
+    console.log("click updated")
     emit("emotionMixtureUpdate", inputData)
 }
 
