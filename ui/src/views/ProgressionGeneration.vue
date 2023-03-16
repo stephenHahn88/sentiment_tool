@@ -40,6 +40,11 @@
       <b-row class="mt-3">
         <b-col>
           <h5> Chord Progression </h5>
+          <ChordProgression 
+            id = "chord-progression"
+            ref="chordProgression"
+            :currChord="lastRN">
+          </ChordProgression>
         </b-col>
       </b-row>
     </div>
@@ -51,6 +56,7 @@
 import { onMounted, ref, Ref, watch } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
+import ChordProgression from "@/components/progression/ChordProgression.vue"
 
 // import "nes.css/css/nes.min.css";
 import { WiredButton, WiredInput } from "wired-elements"
@@ -60,10 +66,7 @@ import model from "/static/data/transition_matrices.json"
 let timePerChord: Ref<number> = ref(1)
 let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let areaPlot = ref()
-
-let playButtonText = "Paused"
-const emotionLabels: string[] = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
-const chordRNs: string[] = ["iii", "viio/V", "iv", "bVI", "bvii", "i", "v", "I", "vii", "IV",  "vi", "bIII", "viio/ii", "bVII", "V", "ii", "START", "PAD"]
+let chordProgression = ref()
 
 watch(timePerChord, (newTime) => {
   console.log("time change")
@@ -74,6 +77,18 @@ let transitionMatrices = model[0]
 let encodeChords = model[1]
 let decodeChords = model[2]
 let lastRN = "I";
+
+function buildChordRNs () {
+  let RNs = [];
+  for (let key in encodeChords) {
+    RNs.push(key);
+  }
+  return RNs;
+}
+
+let playButtonText = "Paused"
+const emotionLabels: string[] = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
+const chordRNs: string[] = buildChordRNs()
 
 function normalize(input: number[]) {
     let sum = 0;
@@ -129,8 +144,6 @@ function getNextChord () {
 
 }
 
-console.log(getNextChord());
-
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
   currentEmotionMixture = mixtures;
   console.log("emotion change");
@@ -138,8 +151,11 @@ function handleEmotionMixtureUpdate (mixtures: Array<number>) {
 }
 
 function handleTimedEmit () {
-  console.log("hello!");
+  let nextRN = getNextChord();
+  // console.log(lastRN);
+  lastRN = nextRN;
   // areaPlot.value.updateEmotionMixture(currentEmotionMixture);
+  chordProgression.value.addChord(lastRN);
 }
 
 </script>
