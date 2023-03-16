@@ -180,6 +180,7 @@ watch: {
 },
 
 created() {
+  this.synth = new Tone.Synth().toDestination();
   this.generateNotes();
   this.generateNotesIndexesByKey();
 
@@ -189,7 +190,7 @@ created() {
 
     if(index != undefined){
       const noteObject = this.notes[index].key === key ? this.notes[index] : this.notes[index].blackNote;
-      // this.playNote(noteObject);
+      this.playNote(noteObject);
     }
   });
 
@@ -228,10 +229,10 @@ computed: {
 
 methods: {
   playNote(noteObject) {
-      if(!noteObject.pressed){
-          this.synth.triggerAttackRelease(noteObject.note, this.sustain ? "2n" : "8n");
-          noteObject.pressed = true;
-      }
+      noteObject.pressed = true;
+      // if(!noteObject.pressed){
+      //     this.synth.triggerAttackRelease(noteObject.note, this.sustain ? "2n" : "8n");
+      // }
   },
 
   playNoteMouse(noteObject) {

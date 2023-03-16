@@ -63,7 +63,7 @@ import { onMounted, ref, Ref, watch, getCurrentInstance } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
 import PianoKeyboard from "@/components/PianoKeyboard.vue"
-import { playIChord, playVChord } from "@/play-music";
+import { playChord } from "@/play-music";
 // import "nes.css/css/nes.min.css";
 
 import model from "/static/data/transition_matrices.json"
@@ -84,7 +84,7 @@ let encodeChords = model[1]
 // Number mapped to RN (reverse of encodeChords)
 let decodeChords = model[2]
 // Start RN token
-let lastRN = "I";
+let lastRN = "iii";
 
 const maxListLength = 5
 const RNList: string[] = [lastRN];
@@ -177,7 +177,7 @@ function handleTimedEmit () {
 
   // Add new chord to RNList once space has been freed; force rerender element to display
   RNList.push(JSON.parse(JSON.stringify(lastRN)));
-  playIChord();
+  playChord(lastRN);
   forceRerender();
 
 }
