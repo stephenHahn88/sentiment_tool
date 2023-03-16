@@ -12,7 +12,7 @@
                 v-model="timePerChord"
             ></b-form-input>
           </b-form-group>
-          <h5> Input Emotion Mixture </h5>
+          <h5> Emotion Mixture Input </h5>
           <!-- Put bar plot input controls here -->
           <BarPlotInput id = "emotionMixtureInput"
             :priorDist="currentEmotionMixture"
@@ -20,7 +20,7 @@
           </BarPlotInput>
           <h5 class="mt-3"> Playback Controls </h5>
           <b-row class="justify-content-md-center mt-3">
-              <b-button variant="success" class="pause-button" @click="handlePause">
+              <b-button block variant="primary" class="pause-button ml-3 mr-3 nes-btn is-primary" @click="handlePause">
                 <div v-if="paused">Play</div>
                 <div v-else>Pause</div>
               </b-button>
@@ -50,7 +50,7 @@
           </DonutPlot>
         </b-col>
       </b-row>
-      <b-row class="mt-3">
+      <b-row>
         <b-col>
           <h5> Chord Progression </h5>
           <PianoKeyboard class="mt-3" style="width:500px;height:150px;"
@@ -83,7 +83,7 @@ import PianoKeyboard from "@/components/PianoKeyboard.vue"
 
 // import "nes.css/css/nes.min.css";
 
-let timePerChord: Ref<number> = ref(5)
+let timePerChord: Ref<number> = ref(1)
 let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let areaPlot = ref()
 let donutPlot = ref()
@@ -230,14 +230,13 @@ function handlePause () {
 
 .chords {
   display: inline-block;
-  margin-left: 60px;
+  margin-left: 35px;
+  margin-right: 60px;
   font-size: 40px;
-  font-weight: 600;
+  font-weight: 800;
 }
 
 .pause-button {
-  width: 200px;
-  height: 50px;
   font-size: 20px;
 }
 
@@ -251,7 +250,7 @@ function handlePause () {
   transform: translateX(30px);
 }
 
-/* html, body, pre, code, kbd, samp, span, p, h5 {
+/* html, body, pre, code, kbd, samp, span, p, h5, button, li {
   font-family: 'Press Start 2P';
 } */
 

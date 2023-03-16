@@ -49,9 +49,9 @@ export function playChord (chord: string) {
         let note2 = RNSToPitches[chord][1];
         let note3 = RNSToPitches[chord][2];
 
-        piano.triggerAttackRelease(note1, 3);
-        piano.triggerAttackRelease(note2, 3);
-        piano.triggerAttackRelease(note3, 3);
+        piano.triggerAttackRelease(note1, 1);
+        piano.triggerAttackRelease(note2, 1);
+        piano.triggerAttackRelease(note3, 1);
 
         let keydownEvent1 = new KeyboardEvent('keydown', {'key': notesToKeys[note1]});
         let keydownEvent2 = new KeyboardEvent('keydown', {'key': notesToKeys[note2]});

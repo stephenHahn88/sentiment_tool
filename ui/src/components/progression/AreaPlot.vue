@@ -144,13 +144,13 @@ let chartOptions = {
                     filler: {
                         propagate: true
                     },
-                    // legend: {
-                    //     labels: {   
-                    //         font: {
-                    //             family: 'consolas'
-                    //         }
-                    //     }
-                    // }
+                    legend: {
+                        labels: {   
+                            font: {
+                                family: 'helvetica'
+                            }
+                        }
+                    }
                 },
                 scales: {
                     x: {
