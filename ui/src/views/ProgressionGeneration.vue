@@ -41,11 +41,13 @@
       <b-row class="mt-3">
         <b-col>
           <h5> Chord Progression </h5>
+          <Keyboard class="mt-3"></Keyboard>
           <ChordProgression 
             id = "chord-progression"
-            ref="chordProgression"
-            :currChord="lastRN">
-          </ChordProgression>
+            class = "mt-3 chords"
+            v-for="RN in RNList"
+            :key="componentKey"
+            :RN="RN"></ChordProgression>
         </b-col>
       </b-row>
     </div>
@@ -54,10 +56,11 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref, Ref, watch } from "vue"
+import { onMounted, ref, Ref, watch, getCurrentInstance } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
 import ChordProgression from "@/components/progression/ChordProgression.vue"
+import Keyboard from "@/components/Keyboard.vue"
 
 // import "nes.css/css/nes.min.css";
 import { WiredButton, WiredInput } from "wired-elements"
@@ -67,7 +70,6 @@ import model from "/static/data/transition_matrices.json"
 let timePerChord: Ref<number> = ref(1)
 let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let areaPlot = ref()
-let chordProgression = ref()
 
 watch(timePerChord, (newTime) => {
   areaPlot.value.updateTime(newTime)
@@ -79,7 +81,17 @@ let transitionMatrices = model[0]
 let encodeChords = model[1]
 // Number mapped to RN (reverse of encodeChords)
 let decodeChords = model[2]
+// Start RN token
 let lastRN = "I";
+
+const maxListLength = 5
+let RNList: string[] = [lastRN];
+const componentKey = ref(0);
+
+const forceRerender = () => {
+  console.log(componentKey.value);
+  componentKey.value += 1;
+};
 
 function buildChordRNs () {
   let RNs = [];
@@ -149,16 +161,17 @@ function getNextChord () {
 
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
   currentEmotionMixture = mixtures;
-  console.log("emotion change");
-  // areaPlot.value.updateEmotionMixture(currentEmotionMixture);
 }
 
 function handleTimedEmit () {
   let nextRN = getNextChord();
-  // console.log(lastRN);
   lastRN = nextRN;
-  // areaPlot.value.updateEmotionMixture(currentEmotionMixture);
-  chordProgression.value.addChord(lastRN);
+  RNList.push(JSON.parse(JSON.stringify(nextRN)));
+  if (RNList.length > maxListLength) {
+    RNList.shift();
+  }
+  console.log(RNList);
+  forceRerender();
 }
 
 function handleTimedGraphEmit () {
@@ -173,6 +186,10 @@ function handleTimedGraphEmit () {
 .body {
   margin-left: 320px;
   margin-top: 60px;
+}
+
+.chords {
+  display: inline-block;
 }
 
 /* html, body, pre, code, kbd, samp, span, p, h5 {
