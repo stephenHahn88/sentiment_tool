@@ -103,7 +103,7 @@ props: {
 
   blackNoteColor: {
       type: String,
-      default: "#f9bb2d"
+      default: "#1eb7eb"
   },
 
   showKeys: {

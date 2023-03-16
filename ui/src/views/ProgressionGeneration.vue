@@ -18,7 +18,10 @@
           <h5 class="mt-3"> Playback Controls </h5>
           <b-row class="justify-content-md-center mt-3">
             <b-col>
-              <b-button> {{ playButtonText }} </b-button>
+              <b-button @click="handlePause">
+                <div v-if="paused">Play</div>
+                <div v-else>Pause</div>
+              </b-button>
             </b-col>
           </b-row>
         </div>
@@ -92,6 +95,10 @@ const maxListLength = 5
 const RNList: string[] = [lastRN];
 const componentKey = ref(0);
 
+let paused = ref(true)
+const emotionLabels: string[] = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
+const chordRNs: string[] = buildChordRNs()
+
 const forceRerender = () => {
   componentKey.value += 1;
 };
@@ -103,10 +110,6 @@ function buildChordRNs () {
   }
   return RNs;
 }
-
-let playButtonText = "Paused"
-const emotionLabels: string[] = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
-const chordRNs: string[] = buildChordRNs()
 
 function normalize(input: number[]) {
     let sum = 0;
@@ -125,10 +128,6 @@ function normalize(input: number[]) {
 function sampleVector (input: Map<string, number>) {
   let keys: string[] = Array.from(input.keys());
   let weights: number[] = Array.from(input.values())
-  console.log(input);
-  console.log(keys);
-  console.log(weights);
-  console.log(weightedRandom(keys, weights));
   return weightedRandom(keys, weights);
 }
 
@@ -179,24 +178,32 @@ function handleEmotionMixtureUpdate (mixtures: Array<number>) {
 
 function handleTimedEmit () {
 
-  // Get next chord's roman numeral and make a deep copy to lastRN
-  let nextRN = getNextChord();
-  lastRN = JSON.parse(JSON.stringify(nextRN));
+  // Get next chord's roman numeral and make a deep copy to lastRN if not currently paused
+  console.log(paused);
+  if (!paused.value) {
+    let nextRN = getNextChord();
+    lastRN = JSON.parse(JSON.stringify(nextRN));
 
-  // Truncate RNList if it exceeds max display length
-  if (RNList.length >= maxListLength) {
-    RNList.shift();
+    // Truncate RNList if it exceeds max display length
+    if (RNList.length >= maxListLength) {
+      RNList.shift();
+    }
+
+    // Add new chord to RNList once space has been freed; force rerender element to display
+    RNList.push(JSON.parse(JSON.stringify(lastRN)));
+    playChord(lastRN);
+    forceRerender();
   }
-
-  // Add new chord to RNList once space has been freed; force rerender element to display
-  RNList.push(JSON.parse(JSON.stringify(lastRN)));
-  playChord(lastRN);
-  forceRerender();
 
 }
 
 function handleTimedGraphEmit () {
   areaPlot.value.updateEmotionMixture(currentEmotionMixture);
+}
+
+function handlePause () {
+  console.log("handle pause");
+  paused.value = !paused.value;
 }
 
 </script>

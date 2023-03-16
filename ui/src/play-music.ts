@@ -31,6 +31,10 @@ let keyupEvent3: Event = new KeyboardEvent('keyup', {'key': '7'});
 
 export function playChord (chord: string) {
 
+    if (Tone.context.state !== 'running') {
+        Tone.context.resume();
+    }
+
     // Clear the previous keys
     window.dispatchEvent(keyupEvent1);
     window.dispatchEvent(keyupEvent2);
