@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 id = "chord-progression"> {{ props.currChord }}
+        <h1 id = "chord-progression" v-for="RN in RNList"> {{ RN }}
         </h1>
     </div>
 </template>
@@ -10,8 +10,15 @@
 import { ref, watch, onMounted } from 'vue'
 const props = defineProps(['currChord'])
 
-function addChord () {
-    
+const maxListLength = 5
+let RNList = [props.currChord]
+
+function addChord (lastRN) {
+    RNList.push(lastRN);
+    console.log(RNList)
+    if (RNList.length > maxListLength) {
+        RNList.shift();
+    }
 }
 
 defineExpose({addChord})

@@ -73,8 +73,11 @@ watch(timePerChord, (newTime) => {
   areaPlot.value.updateTime(newTime)
 })
 
+// Transition matrices from chords to chords given an emotion
 let transitionMatrices = model[0]
+// RNs mapped to number
 let encodeChords = model[1]
+// Number mapped to RN (reverse of encodeChords)
 let decodeChords = model[2]
 let lastRN = "I";
 

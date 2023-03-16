@@ -49,10 +49,18 @@ function updateEmotionMixture (newEmotionMixture) {
     }
     // Update chart - remove earliest data
     areaChart.data.labels.shift();
+    areaChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
 
     // Update chart - push new data
     areaChart.data.labels.push(parseInt(areaChart.data.labels[areaChart.data.labels.length - 1]) + parseInt(timePerChord));
-    areaChart.data.datasets = generateDataset();
+    // areaChart.data.datasets = generateDataset();
+    let index = 0;
+    areaChart.data.datasets.forEach((dataset) => {
+        dataset.data.push(newEmotionMixture[index]);
+        index++;
+    });
     areaChart.update();
 }
 

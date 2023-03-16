@@ -7,7 +7,7 @@
 <script setup>
 
 import { ref, onMounted } from 'vue'
-import { Chart, registerables } from 'chart.js'
+import Chart from 'chart.js/auto'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
 const props = defineProps(["priorDist"])
@@ -72,7 +72,7 @@ function createChart(chartId, chartData) {
 }
 
 onMounted(() => {
-    Chart.register(...registerables)
+    // Chart.register(...registerables)
     createChart('barChart', chartOptions)
 })
 
