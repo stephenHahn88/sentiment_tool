@@ -7,7 +7,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 const props = defineProps(['time', 'currEmotionDist'])
-const emit = defineEmits(['timedEmit'])
+const emit = defineEmits(['timedEmit', 'timedGraphUpdate'])
 
 import Chart from 'chart.js/auto'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
@@ -156,6 +156,9 @@ let chartOptions = {
                     // }
                 },
                 scales: {
+                    x: {
+                        display: false
+                    },
                     y: {
                         stacked: true,
                         max: 1.0,
@@ -178,6 +181,11 @@ function createChart(chartId, chartData) {
 onMounted(() => {
     createChart('lineChart', chartOptions)
 })
+
+setInterval(() => {
+    emit("timedGraphUpdate")
+}, 1000);
+
 
 setInterval(() => {
     emit("timedEmit")

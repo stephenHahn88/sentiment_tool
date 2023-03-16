@@ -33,6 +33,7 @@
             :time="timePerChord"
             :currEmotionDist="currentEmotionMixture"
             @timedEmit="handleTimedEmit"
+            @timedGraphUpdate="handleTimedGraphEmit"
             style="width: 500px;">
           </AreaPlot>
         </b-col>
@@ -158,6 +159,10 @@ function handleTimedEmit () {
   lastRN = nextRN;
   // areaPlot.value.updateEmotionMixture(currentEmotionMixture);
   chordProgression.value.addChord(lastRN);
+}
+
+function handleTimedGraphEmit () {
+  areaPlot.value.updateEmotionMixture(currentEmotionMixture);
 }
 
 </script>
