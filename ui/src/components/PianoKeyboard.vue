@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { onMounted } from "vue";
 import * as Tone from "tone";
 
 export default {
@@ -127,7 +128,12 @@ props: {
 
   sustain: {
       type: Boolean,
-      default: true
+      default: false
+  },
+
+  indianNotes:{
+      type: Boolean,
+      default: false
   },
 
   noteConfig:{
@@ -174,14 +180,6 @@ watch: {
 },
 
 created() {
-  this.synth = new Tone.Sampler({
-      urls: {
-      A1: "A1.mp3",
-      A2: "A2.mp3",
-    },
-      release: 1,
-    baseUrl: "https://tonejs.github.io/audio/casio/",
-  }).toDestination();
   this.generateNotes();
   this.generateNotesIndexesByKey();
 
@@ -191,7 +189,7 @@ created() {
 
     if(index != undefined){
       const noteObject = this.notes[index].key === key ? this.notes[index] : this.notes[index].blackNote;
-      this.playNote(noteObject);
+      // this.playNote(noteObject);
     }
   });
 
@@ -323,6 +321,7 @@ methods: {
     return this.indianNotes? this.swaralipi.toIndianNote(note+octave): note;
   }
 },
+
 }
 </script>
 

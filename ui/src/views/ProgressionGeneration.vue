@@ -41,7 +41,9 @@
       <b-row class="mt-3">
         <b-col>
           <h5> Chord Progression </h5>
-          <PianoKeyboard class="mt-3" style="width:500px;height:150px;"></PianoKeyboard>
+          <PianoKeyboard class="mt-3" style="width:500px;height:150px;"
+            ref="keyboard">
+          </PianoKeyboard>
           <li 
             id = "chord-progression"
             class = "mt-3 chords"
@@ -61,15 +63,15 @@ import { onMounted, ref, Ref, watch, getCurrentInstance } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
 import PianoKeyboard from "@/components/PianoKeyboard.vue"
-
+import { playIChord, playVChord } from "@/play-music";
 // import "nes.css/css/nes.min.css";
-import { WiredButton, WiredInput } from "wired-elements"
 
 import model from "/static/data/transition_matrices.json"
 
-let timePerChord: Ref<number> = ref(1)
+let timePerChord: Ref<number> = ref(5)
 let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let areaPlot = ref()
+let keyboard = ref()
 
 watch(timePerChord, (newTime) => {
   areaPlot.value.updateTime(newTime)
@@ -82,14 +84,13 @@ let encodeChords = model[1]
 // Number mapped to RN (reverse of encodeChords)
 let decodeChords = model[2]
 // Start RN token
-let lastRN = "iii";
+let lastRN = "I";
 
 const maxListLength = 5
 const RNList: string[] = [lastRN];
 const componentKey = ref(0);
 
 const forceRerender = () => {
-  console.log(componentKey.value);
   componentKey.value += 1;
 };
 
@@ -164,14 +165,21 @@ function handleEmotionMixtureUpdate (mixtures: Array<number>) {
 }
 
 function handleTimedEmit () {
+
+  // Get next chord's roman numeral and make a deep copy to lastRN
   let nextRN = getNextChord();
   lastRN = JSON.parse(JSON.stringify(nextRN));
+
+  // Truncate RNList if it exceeds max display length
   if (RNList.length >= maxListLength) {
     RNList.shift();
-    //forceRerender();
   }
+
+  // Add new chord to RNList once space has been freed; force rerender element to display
   RNList.push(JSON.parse(JSON.stringify(lastRN)));
+  playIChord();
   forceRerender();
+
 }
 
 function handleTimedGraphEmit () {
