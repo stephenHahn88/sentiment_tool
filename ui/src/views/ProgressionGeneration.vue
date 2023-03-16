@@ -73,7 +73,7 @@ watch(timePerChord, (newTime) => {
 let transitionMatrices = model[0]
 let encodeChords = model[1]
 let decodeChords = model[2]
-let lastRN = "START";
+let lastRN = "I";
 
 function normalize(input: number[]) {
     let sum = 0;
@@ -106,14 +106,14 @@ function getNextChord () {
 
     emotionLabels.forEach(function (emotion) {
 
-      let transition_matrix = transitionMatrices.emotion;
+      let transitionMatrix = transitionMatrices[emotion];
       let weight = currentMixture[index];
 
       // Turn RN from string to matching index; note that lastRN inits as START
-      let i = encodeChords.lastRN;
-      let j = encodeChords.RN;
+      let i = encodeChords[lastRN];
+      let j = encodeChords[RN];
 
-      totalProb += weight * (transition_matrix[i][j]);
+      totalProb += weight * (transitionMatrix[i][j]);
       index++;
 
     });
@@ -128,6 +128,8 @@ function getNextChord () {
   return mostLikelyRN;
 
 }
+
+console.log(getNextChord());
 
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
   currentEmotionMixture = mixtures;
