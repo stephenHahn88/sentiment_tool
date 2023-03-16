@@ -215,7 +215,7 @@ def addmajmin(df: pd.DataFrame):
     df.insert(4, "romannumeral", majmin, True)
 
 
-def addEmotionCounts(df: pd.DataFrame, songNumber: int):
+def addEmotionCounts(df: pd.DataFrame, songNumber: int, toDistribution=True):
     newRowInfo = []
     response = getSongAnalyses(str(songNumber))
     for i, row in df.iterrows():
@@ -235,12 +235,18 @@ def addEmotionCounts(df: pd.DataFrame, songNumber: int):
                 end = row["end"]
                 if start <= sample <= end:
                     emotions[emotion] += 1
-        total = sum(emotions.values())
-        for key in emotions.keys():
-            emotions[key] = round(emotions[key] / total, 2)
+        if toDistribution:
+            total = sum(emotions.values())
+            for key in emotions.keys():
+                emotions[key] = round(emotions[key] / total, 2)
         newRowInfo.append(emotions)
-    for key in emotions.keys():
-        df.insert(5, key, [i[key] for i in newRowInfo], True)
+    if toDistribution:
+        for key in emotions.keys():
+            df.insert(5, key, [i[key] for i in newRowInfo], True)
+    else:
+        for key in emotions.keys():
+            df.insert(5, key + "Count", [i[key] for i in newRowInfo], True)
+
     # print(df.head(30))
 
 def insertRNLags(df: pandas.DataFrame):
