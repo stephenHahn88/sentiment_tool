@@ -18,7 +18,20 @@
             :priorDist="currentEmotionMixture"
             @emotionMixtureUpdate="handleEmotionMixtureUpdate">
           </BarPlotInput>
-          <h5 class="mt-3"> Playback Controls </h5>
+          <h5 class="mt-3"> Choose your instrument </h5>
+          <b-row class="mb-4">
+              <b-col
+                  class=""
+                  v-for="(val, key, i) in emojis"
+              >
+                <b-button
+                    style="width: 100%"
+                    variant="btn"
+                    @click="setInstrument(key);"
+                > <span style="font-size:30px;" v-html="val"></span>
+                </b-button>
+              </b-col>
+          </b-row>
           <b-row class="justify-content-md-center mt-3">
               <b-button block variant="primary" class="pause-button ml-3 mr-3 nes-btn is-primary" @click="handlePause">
                 <div v-if="paused">Play</div>
@@ -36,7 +49,6 @@
             ref = "areaPlot"
             :time="timePerChord"
             :currEmotionDist="currentEmotionMixture"
-            @timedEmit="handleTimedEmit"
             @timedGraphUpdate="handleTimedGraphEmit"
             style="width: 500px;">
           </AreaPlot>
@@ -72,9 +84,10 @@
 <script setup lang="ts">
 
 import { onMounted, ref, Ref, watch, getCurrentInstance } from "vue"
-import { playChord } from "@/play-music";
+import { playChord, piano, casio, synth } from "@/play-music";
 import { weightedRandom } from "@/utility"
 import model from "/static/data/transition_matrices.json"
+import * as Tone from "tone";
 
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
@@ -88,6 +101,7 @@ let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let areaPlot = ref()
 let donutPlot = ref()
 let keyboard = ref()
+let instrument = ref("piano")
 
 watch(timePerChord, (newTime) => {
   areaPlot.value.updateTime(newTime)
@@ -109,6 +123,12 @@ const componentKey = ref(0);
 let paused = ref(true)
 const emotionLabels: string[] = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
 const chordRNs: string[] = buildChordRNs()
+
+let emojis = {
+  piano: '&#127929;',
+  casio: '&#127899;',
+  game: '&#128126;'
+}
 
 const forceRerender = () => {
   componentKey.value += 1;
@@ -183,6 +203,10 @@ function getNextChord () {
 
 }
 
+function setInstrument (key: string) {
+  instrument.value = key;
+}
+
 function handleEmotionMixtureUpdate (mixtures: Array<number>) {
   currentEmotionMixture = mixtures;
 }
@@ -201,7 +225,7 @@ function handleTimedEmit () {
 
     // Add new chord to RNList once space has been freed; force rerender element to display
     RNList.push(JSON.parse(JSON.stringify(lastRN)));
-    playChord(lastRN);
+    playChord(lastRN, timePerChord.value, instrument.value);
     forceRerender();
 
   }
@@ -214,9 +238,17 @@ function handleTimedGraphEmit () {
 }
 
 function handlePause () {
-  console.log("handle pause");
   paused.value = !paused.value;
 }
+
+let totalTimElapsed = 0;
+setInterval(() => {
+  totalTimElapsed += 100;
+  if (totalTimElapsed >= timePerChord.value * 1000) {
+    handleTimedEmit();
+    totalTimElapsed = 0;
+  }
+}, 100);
 
 </script>
 

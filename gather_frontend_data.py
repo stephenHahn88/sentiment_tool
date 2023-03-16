@@ -33,7 +33,7 @@ def getJSONTransitionMatrices(load_from_pickle=False, just_transition_matrix=Fal
             rn = RN(chordRN)
             rn.key = Key('C')
             # Keep octaves bounded
-            harmony = [str(p).replace('6', '5') for p in rn.pitches]
+            harmony = [str(p).replace('-', 'b').replace('6', '5') for p in rn.pitches]
             chords[chordRN] = harmony
 
     with open('transition_matrices.json', 'w') as f:

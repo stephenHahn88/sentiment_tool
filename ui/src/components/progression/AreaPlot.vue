@@ -8,7 +8,7 @@
 import { ref, watch, onMounted } from 'vue'
 import _ from 'lodash'
 const props = defineProps(['time', 'currEmotionDist'])
-const emit = defineEmits(['timedEmit', 'timedGraphUpdate'])
+const emit = defineEmits(['timedGraphUpdate'])
 
 import Chart from 'chart.js/auto'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
@@ -182,11 +182,6 @@ onMounted(() => {
 setInterval(() => {
     emit("timedGraphUpdate")
 }, 100);
-
-
-setInterval(() => {
-    emit("timedEmit")
-}, timePerChord * 1000);
 
 defineExpose({ updateTime, updateEmotionMixture });
 
