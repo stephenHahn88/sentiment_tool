@@ -69,17 +69,8 @@ function generateLabels() {
 }
 
 function normalize(input) {
-    let sum = 0;
-    for (let i=0; i<input.length; i++) {
-        sum += input[i];
-    }
-    if (sum == 0) {
-        sum = 1;
-    }
-    for (let i=0; i<input.length; i++) {
-        input[i] = input[i] / sum;
-    }
-    return input;
+    let sum = _.sum(input)
+    return input.map((e) => e/sum)
 }
 
 function cumulativeSum(input) {
