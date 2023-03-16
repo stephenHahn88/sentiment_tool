@@ -14,15 +14,16 @@
           </b-form-group>
           <h5> Input Emotion Mixture </h5>
           <!-- Put bar plot input controls here -->
-          <BarPlotInput id = "emotionMixtureInput" :priorDist="currentEmotionMixture" @emotionMixtureUpdate="handleEmotionMixtureUpdate"></BarPlotInput>
+          <BarPlotInput id = "emotionMixtureInput"
+            :priorDist="currentEmotionMixture"
+            @emotionMixtureUpdate="handleEmotionMixtureUpdate">
+          </BarPlotInput>
           <h5 class="mt-3"> Playback Controls </h5>
           <b-row class="justify-content-md-center mt-3">
-            <b-col>
-              <b-button @click="handlePause">
+              <b-button variant="success" class="pause-button" @click="handlePause">
                 <div v-if="paused">Play</div>
                 <div v-else>Pause</div>
               </b-button>
-            </b-col>
           </b-row>
         </div>
       </b-sidebar>
@@ -39,6 +40,14 @@
             @timedGraphUpdate="handleTimedGraphEmit"
             style="width: 500px;">
           </AreaPlot>
+        </b-col>
+        <b-col>
+          <DonutPlot id = "donutChartOutput"
+            ref = "donutPlot"
+            class = "mt-5"
+            :currEmotionDist="currentEmotionMixture"
+            style="width: 250px;">
+          </DonutPlot>
         </b-col>
       </b-row>
       <b-row class="mt-3">
@@ -69,6 +78,7 @@ import model from "/static/data/transition_matrices.json"
 
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
+import DonutPlot from "@/components/progression/DonutPlot.vue"
 import PianoKeyboard from "@/components/PianoKeyboard.vue"
 
 // import "nes.css/css/nes.min.css";
@@ -76,6 +86,7 @@ import PianoKeyboard from "@/components/PianoKeyboard.vue"
 let timePerChord: Ref<number> = ref(5)
 let currentEmotionMixture: number[] = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2]
 let areaPlot = ref()
+let donutPlot = ref()
 let keyboard = ref()
 
 watch(timePerChord, (newTime) => {
@@ -192,13 +203,14 @@ function handleTimedEmit () {
     RNList.push(JSON.parse(JSON.stringify(lastRN)));
     playChord(lastRN);
     forceRerender();
-    
+
   }
 
 }
 
 function handleTimedGraphEmit () {
   areaPlot.value.updateEmotionMixture(currentEmotionMixture);
+  donutPlot.value.updateEmotionMixture(currentEmotionMixture);
 }
 
 function handlePause () {
@@ -221,6 +233,12 @@ function handlePause () {
   margin-left: 60px;
   font-size: 40px;
   font-weight: 600;
+}
+
+.pause-button {
+  width: 200px;
+  height: 50px;
+  font-size: 20px;
 }
 
 .list-enter-active,
