@@ -1,3 +1,4 @@
+<!-- Taken from: https://github.com/MicuEmerson/vue-piano. Thank you! -->
 <template>
   <div class="piano-keyboard">
 
@@ -126,12 +127,7 @@ props: {
 
   sustain: {
       type: Boolean,
-      default: false
-  },
-
-  indianNotes:{
-      type: Boolean,
-      default: false
+      default: true
   },
 
   noteConfig:{
@@ -178,7 +174,14 @@ watch: {
 },
 
 created() {
-  this.synth = new Tone.Synth().toDestination();
+  this.synth = new Tone.Sampler({
+      urls: {
+      A1: "A1.mp3",
+      A2: "A2.mp3",
+    },
+      release: 1,
+    baseUrl: "https://tonejs.github.io/audio/casio/",
+  }).toDestination();
   this.generateNotes();
   this.generateNotesIndexesByKey();
 
