@@ -192,6 +192,7 @@ function handleTimedEmit () {
     RNList.push(JSON.parse(JSON.stringify(lastRN)));
     playChord(lastRN);
     forceRerender();
+    
   }
 
 }
