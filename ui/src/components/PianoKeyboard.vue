@@ -6,13 +6,13 @@
         class="white-note" :class="[noteObject.pressed ? 'white-note-pressed' : '']"
         :style="{width: whiteNoteWidthSize + '%', background: whiteNoteBackground(noteObject.pressed)}"
         @mousedown="playNoteMouse(noteObject)" @mouseup="removePressedKeyMouse(noteObject)"
-        @mouseover="playNoteHover(noteObject)" @mouseleave="removePressedKey(noteObject)">
+        @mouseover="playNoteHover(noteObject)">
           
         <div v-if="noteObject.blackNote"
           class="black-note" :class="[noteObject.blackNote.pressed ? 'black-note-pressed' : '']" 
           :style="{background: blackNoteBackground(noteObject.blackNote.pressed)}"
           @mousedown.stop="playNoteMouse(noteObject.blackNote)" @mouseup.stop="removePressedKeyMouse(noteObject.blackNote)"
-          @mouseover.stop="playNoteHover(noteObject.blackNote)" @mouseleave.stop="removePressedKey(noteObject.blackNote)">
+          @mouseover.stop="playNoteHover(noteObject.blackNote)">
 
           <div class="key-group unselectable">
               <div v-if="showKeys" class="key-input">
@@ -241,8 +241,8 @@ methods: {
   },
 
   playNoteHover(noteObject) {
-      if(this.isMousePressed)
-          this.playNote(noteObject);
+      // if(this.isMousePressed)
+      //     this.playNote(noteObject);
   },
 
   removePressedKey(noteObject) {
