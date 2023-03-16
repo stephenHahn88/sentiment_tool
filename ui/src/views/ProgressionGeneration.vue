@@ -69,7 +69,6 @@ let areaPlot = ref()
 let chordProgression = ref()
 
 watch(timePerChord, (newTime) => {
-  console.log("time change")
   areaPlot.value.updateTime(newTime)
 })
 

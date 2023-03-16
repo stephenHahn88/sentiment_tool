@@ -9,7 +9,7 @@ import { ref, watch, onMounted } from 'vue'
 const props = defineProps(['time', 'currEmotionDist'])
 const emit = defineEmits(['timedEmit'])
 
-import { Chart, registerables } from 'chart.js'
+import Chart from 'chart.js/auto'
 import ChartJSdragDataPlugin from 'chartjs-plugin-dragdata'
 
 let areaChart;
@@ -172,10 +172,10 @@ function createChart(chartId, chartData) {
         data: chartData.data,
         options: chartData.options,
     })
+    areaChart.options.animations = false;
 }
 
 onMounted(() => {
-    Chart.register(...registerables)
     createChart('lineChart', chartOptions)
 })
 
