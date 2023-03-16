@@ -41,13 +41,14 @@
       <b-row class="mt-3">
         <b-col>
           <h5> Chord Progression </h5>
-          <Keyboard class="mt-3"></Keyboard>
-          <ChordProgression 
+          <PianoKeyboard class="mt-3" style="width:500px;height:150px;"></PianoKeyboard>
+          <li 
             id = "chord-progression"
             class = "mt-3 chords"
             v-for="RN in RNList"
-            :key="componentKey"
-            :RN="RN"></ChordProgression>
+            :key="componentKey">
+            {{ RN }}
+          </li>
         </b-col>
       </b-row>
     </div>
@@ -59,8 +60,7 @@
 import { onMounted, ref, Ref, watch, getCurrentInstance } from "vue"
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 import AreaPlot from "@/components/progression/AreaPlot.vue"
-import ChordProgression from "@/components/progression/ChordProgression.vue"
-import Keyboard from "@/components/Keyboard.vue"
+import PianoKeyboard from "@/components/PianoKeyboard.vue"
 
 // import "nes.css/css/nes.min.css";
 import { WiredButton, WiredInput } from "wired-elements"
@@ -82,10 +82,10 @@ let encodeChords = model[1]
 // Number mapped to RN (reverse of encodeChords)
 let decodeChords = model[2]
 // Start RN token
-let lastRN = "I";
+let lastRN = "iii";
 
 const maxListLength = 5
-let RNList: string[] = [lastRN];
+const RNList: string[] = [lastRN];
 const componentKey = ref(0);
 
 const forceRerender = () => {
@@ -165,12 +165,12 @@ function handleEmotionMixtureUpdate (mixtures: Array<number>) {
 
 function handleTimedEmit () {
   let nextRN = getNextChord();
-  lastRN = nextRN;
-  RNList.push(JSON.parse(JSON.stringify(nextRN)));
-  if (RNList.length > maxListLength) {
+  lastRN = JSON.parse(JSON.stringify(nextRN));
+  if (RNList.length >= maxListLength) {
     RNList.shift();
+    //forceRerender();
   }
-  console.log(RNList);
+  RNList.push(JSON.parse(JSON.stringify(lastRN)));
   forceRerender();
 }
 
@@ -190,6 +190,19 @@ function handleTimedGraphEmit () {
 
 .chords {
   display: inline-block;
+  margin-left: 60px;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 
 /* html, body, pre, code, kbd, samp, span, p, h5 {
