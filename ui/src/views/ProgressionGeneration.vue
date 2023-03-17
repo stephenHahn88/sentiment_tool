@@ -23,8 +23,7 @@
           <b-row class="mb-4">
               <b-col
                   class=""
-                  v-for="(val, key, i) in emojis"
-              >
+                  v-for="(val, key, i) in emojis">
                 <b-button
                     style="width: 100%"
                     variant="btn"
@@ -45,7 +44,8 @@
     <div class="body">
       <b-row>
         <b-col>
-          <h5> Emotional Content over Time </h5>
+          <h3 class="sidebar-header"> Output Panel </h3>
+          <h5 class="py-2"> Emotional Content over Time </h5>
           <AreaPlot id = "lineChartOutput"
             ref = "areaPlot"
             :time="timePerChord"
@@ -57,9 +57,8 @@
         <b-col>
           <DonutPlot id = "donutChartOutput"
             ref = "donutPlot"
-            class = "mt-5"
             :currEmotionDist="currentEmotionMixture"
-            style="width: 250px;">
+            style="width: 250px; margin-top: 95px;">
           </DonutPlot>
         </b-col>
       </b-row>
@@ -258,7 +257,7 @@ setInterval(() => {
 
 .body {
   margin-left: 320px;
-  margin-top: 60px;
+  margin-top: 15px;
 }
 
 .sidebar-header {
