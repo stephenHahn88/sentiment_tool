@@ -268,8 +268,9 @@ setInterval(() => {
 
 .chords {
   display: inline-block;
+  width: 50px;
   margin-left: 35px;
-  margin-right: 60px;
+  margin-right: 50px;
   font-size: 40px;
   font-weight: 800;
 }
@@ -288,7 +289,7 @@ setInterval(() => {
   transform: translateX(30px);
 }
 
-/* html, body, pre, code, kbd, samp, span, p, h5, button, li {
+/* html, body, pre, code, kbd, samp, span, p, h5, button, li, h3 {
   font-family: 'Press Start 2P';
 } */
 
