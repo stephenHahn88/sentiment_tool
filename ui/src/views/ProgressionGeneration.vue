@@ -1,7 +1,8 @@
 <template>
   <b-container>
     <div>
-      <b-sidebar id="sidebar-1" title="Generation Controls" width="360px" shadow visible no-header-close>
+      <b-sidebar id="sidebar-1" width="360px" shadow visible no-header-close>
+        <h3 class="ml-3 sidebar-header"> Generation Controls </h3>
         <div class="px-3 py-2">
           <h5> Time per Chord (in seconds) </h5>
           <b-form-group>
@@ -258,6 +259,11 @@ setInterval(() => {
 .body {
   margin-left: 320px;
   margin-top: 60px;
+}
+
+.sidebar-header {
+  font-weight: 800;
+  font-size: 25px;
 }
 
 .chords {
