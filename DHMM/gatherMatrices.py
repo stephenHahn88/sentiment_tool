@@ -114,6 +114,55 @@ def getEmotionTransitionMatrix(df: pd.DataFrame, threshold: float=0.02):
     return matrix
 
 
+def getDiscretizedAlphaStates(threshold: float=0.02):
+    states = set()
+    for pieceI in range(1, 25):
+        try:
+            with open(f"../data/organized_for_emotions/df_{pieceI}.pickle", "rb") as f:
+                df = pickle.load(f)
+                for i, row in df.iterrows():
+                    currState = [0 for _ in range(len(emotions))]
+                    for j, emotion in enumerate(emotions):
+                        currState[j] = int(df.iloc[i][emotion] > threshold)
+                    states.add(tuple(currState))
+        except OSError as e:
+            # print(e)
+            continue
+
+    return {j: i for i, j in enumerate(states)}, {i: j for i, j in enumerate(states)}
+
+
+def getDiscretizedAlphaTransitionFromDF(df: pd.DataFrame, encoder, decoder, threshold: float=0.02):
+    matrix = np.zeros((len(decoder), len(decoder)))
+    for i, row in df.iterrows():
+        if i == 0: continue
+        currState = [0 for _ in range(len(emotions))]
+        prevState = [0 for _ in range(len(emotions))]
+        for j, emotion in enumerate(emotions):
+            currState[j] = int(df[emotion][i] > threshold)
+            prevState[j] = int(df[emotion][i - 1] > threshold)
+        row = encoder[tuple(prevState)]
+        col = encoder[tuple(currState)]
+        matrix[row, col] += 1
+    return matrix
+
+
+def getDiscretizedAlphaTransitionMatrix(threshold: float=0.02):
+    encoder, decoder = getDiscretizedAlphaStates(threshold)
+    matrix = np.zeros((len(encoder), len(encoder)))
+    for i in range(1, 25):
+        try:
+            with open(f"../data/organized_for_emotions/df_{i}.pickle", "rb") as f:
+                df = pickle.load(f)
+                # print(df.head())
+                matrix += getDiscretizedAlphaTransitionFromDF(df, encoder, decoder)
+        except OSError as e:
+            # print(e)
+            continue
+    np.set_printoptions(linewidth=np.inf)
+    print(matrix)
+
+
 def getTransitionProbabilities(
         transitionMatrices: dict[str:np.array],
         fromEmotionDistribution: dict[str:float],
@@ -180,8 +229,7 @@ def emotionConvolutionMLE(df: pd.DataFrame, name: str, windowSize: int=16, manag
     with open(basePath + f"/{name}_alphas.pickle", "wb") as f:
         pickle.dump(alphaDF, f)
 
-
-def main():
+def getAlphas(windowSizes: list[int]):
     with enlighten.get_manager() as manager:
         pbar = manager.counter(total=24, desc="Songs", unit="songs", leave=False)
 
@@ -189,12 +237,15 @@ def main():
             try:
                 with open(f"../data/organized_for_emotions/df_{i}.pickle", "rb") as f:
                     df = pickle.load(f)
-                    for ws in [8, 16]:
+                    for ws in windowSizes:
                         emotionConvolutionMLE(df, str(i), windowSize=ws, manager=manager)
             except Exception as e:
                 # print(e)
                 continue
             pbar.update()
+
+def main():
+    getDiscretizedAlphaTransitionMatrix()
 
 
 if __name__ == "__main__":
