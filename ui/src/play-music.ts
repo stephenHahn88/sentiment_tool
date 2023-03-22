@@ -25,7 +25,19 @@ export const casio = new Tone.Sampler({
 	baseUrl: "https://tonejs.github.io/audio/casio/",
 }).toDestination();
 
-export const synth = new Tone.Synth().toDestination();
+const crusher = new Tone.BitCrusher(1).toDestination();
+const dist = new Tone.Distortion(0.4).toDestination();
+const cheby = new Tone.Chebyshev(2).toDestination();
+const vol = new Tone.Volume(-40).toDestination();
+export const synth = new Tone.Sampler({
+    urls: {
+		D4: "D4.mp3",
+		A2: "A2.mp3",
+        F4: "F4.mp3"
+	},
+    release: 1,
+	baseUrl: "http://localhost:8091/static/samples/",
+}).toDestination();
 
 // Buffer for keyup events (needed to re-animate the keyboard)
 let keyupEvent1: Event = new KeyboardEvent('keyup', {'key': '`'});

@@ -1,7 +1,8 @@
 <template>
   <b-container>
     <div>
-      <b-sidebar id="sidebar-1" title="Generation Controls" width="360px" shadow visible no-header-close>
+      <b-sidebar id="sidebar-1" width="360px" shadow visible no-header-close>
+        <h3 class="ml-3 sidebar-header"> Generation Controls </h3>
         <div class="px-3 py-2">
           <h5> Time per Chord (in seconds) </h5>
           <b-form-group>
@@ -22,8 +23,7 @@
           <b-row class="mb-4">
               <b-col
                   class=""
-                  v-for="(val, key, i) in emojis"
-              >
+                  v-for="(val, key, i) in emojis">
                 <b-button
                     style="width: 100%"
                     variant="btn"
@@ -44,7 +44,8 @@
     <div class="body">
       <b-row>
         <b-col>
-          <h5> Emotional Content over Time </h5>
+          <h3 class="sidebar-header"> Output Panel </h3>
+          <h5 class="py-2"> Emotional Content over Time </h5>
           <AreaPlot id = "lineChartOutput"
             ref = "areaPlot"
             :time="timePerChord"
@@ -56,9 +57,8 @@
         <b-col>
           <DonutPlot id = "donutChartOutput"
             ref = "donutPlot"
-            class = "mt-5"
             :currEmotionDist="currentEmotionMixture"
-            style="width: 250px;">
+            style="width: 250px; margin-top: 95px;">
           </DonutPlot>
         </b-col>
       </b-row>
@@ -127,7 +127,7 @@ const chordRNs: string[] = buildChordRNs()
 let emojis = {
   piano: '&#127929;',
   casio: '&#127899;',
-  game: '&#128126;'
+  game: '&#127928;'
 }
 
 const forceRerender = () => {
@@ -257,13 +257,19 @@ setInterval(() => {
 
 .body {
   margin-left: 320px;
-  margin-top: 60px;
+  margin-top: 15px;
+}
+
+.sidebar-header {
+  font-weight: 800;
+  font-size: 25px;
 }
 
 .chords {
   display: inline-block;
+  width: 50px;
   margin-left: 35px;
-  margin-right: 60px;
+  margin-right: 50px;
   font-size: 40px;
   font-weight: 800;
 }
@@ -282,7 +288,7 @@ setInterval(() => {
   transform: translateX(30px);
 }
 
-/* html, body, pre, code, kbd, samp, span, p, h5, button, li {
+/* html, body, pre, code, kbd, samp, span, p, h5, button, li, h3 {
   font-family: 'Press Start 2P';
 } */
 
