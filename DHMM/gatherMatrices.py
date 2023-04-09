@@ -67,7 +67,7 @@ def getMixtureTransitionMatrices(df: pandas.DataFrame, threshold: float=0.02, pl
     return matrices, VtoI, ItoV
 
 
-def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02):
+def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02, plot=False):
     VtoI, ItoV = vocabMaps(df)
     numUnique = len(df["romannumeral"].unique())
     matrix = np.zeros((len(emotions), numUnique))
@@ -81,12 +81,14 @@ def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02):
     for i, row in enumerate(matrix):
         if np.sum(row) == 0: continue
         matrix[i] = row / np.sum(row)
-    pprint(matrix)
 
-    plt.imshow(matrix, cmap='hot', interpolation='nearest')
-    plt.xticks(range(numUnique), [ItoV[i] for i in range(numUnique)], rotation=45)
-    plt.yticks(range(len(emotions)), [ItoE[i] for i in range(len(emotions))])
-    plt.show()
+    if plot:
+        plt.imshow(matrix, cmap='hot', interpolation='nearest')
+        plt.xticks(range(numUnique), [ItoV[i] for i in range(numUnique)], rotation=45)
+        plt.yticks(range(len(emotions)), [ItoE[i] for i in range(len(emotions))])
+        plt.show()
+
+    return matrix
 
 
 def getEmotionTransitionMatrix(df: pd.DataFrame, threshold: float=0.02):
