@@ -67,7 +67,7 @@ def getMixtureTransitionMatrices(df: pandas.DataFrame, threshold: float=0.02, pl
     return matrices, VtoI, ItoV
 
 
-def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02):
+def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02, plot=False):
     VtoI, ItoV = vocabMaps(df)
     numUnique = len(df["romannumeral"].unique())
     matrix = np.zeros((len(emotions), numUnique))
@@ -81,12 +81,14 @@ def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02):
     for i, row in enumerate(matrix):
         if np.sum(row) == 0: continue
         matrix[i] = row / np.sum(row)
-    pprint(matrix)
 
-    plt.imshow(matrix, cmap='hot', interpolation='nearest')
-    plt.xticks(range(numUnique), [ItoV[i] for i in range(numUnique)], rotation=45)
-    plt.yticks(range(len(emotions)), [ItoE[i] for i in range(len(emotions))])
-    plt.show()
+    if plot:
+        plt.imshow(matrix, cmap='hot', interpolation='nearest')
+        plt.xticks(range(numUnique), [ItoV[i] for i in range(numUnique)], rotation=45)
+        plt.yticks(range(len(emotions)), [ItoE[i] for i in range(len(emotions))])
+        plt.show()
+
+    return matrix
 
 
 def getEmotionTransitionMatrix(df: pd.DataFrame, threshold: float=0.02):
@@ -112,6 +114,106 @@ def getEmotionTransitionMatrix(df: pd.DataFrame, threshold: float=0.02):
     plt.show()
 
     return matrix
+
+
+def getDiscretizedAlphaStates(threshold: float=0.02):
+    hiddenStates = set()
+    observedStates = set()
+    for pieceI in range(1, 25):
+        try:
+            with open(f"../data/organized_for_emotions/df_{pieceI}.pickle", "rb") as f:
+                df = pickle.load(f)
+                for i, row in df.iterrows():
+                    currState = [0 for _ in range(len(emotions))]
+                    for j, emotion in enumerate(emotions):
+                        currState[j] = int(df.iloc[i][emotion] > threshold)
+                    hiddenStates.add(tuple(currState))
+                    observedStates.add(row["romannumeral"])
+        except OSError as e:
+            # print(e)
+            continue
+
+    return (
+        {j: i for i, j in enumerate(hiddenStates)},
+        {i: j for i, j in enumerate(hiddenStates)},
+        {j: i for i, j in enumerate(observedStates)},
+        {i: j for i, j in enumerate(observedStates)}
+    )
+
+
+def getDiscretizedAlphaTransitionFromDF(df: pd.DataFrame, hiddenEncoder, hiddenDecoder, observedEncoder, observedDecoder, threshold: float=0.02):
+    transitionMatrix = np.zeros((len(hiddenDecoder), len(hiddenDecoder)))
+    emissionMatrix = np.zeros((len(hiddenEncoder), len(observedEncoder)))
+    startCounts = np.zeros(len(hiddenEncoder))
+    for i, row in df.iterrows():
+        if i == 0:
+            state = [0 for _ in range(len(emotions))]
+            for j, emotion in enumerate(emotions):
+                state[j] = int(df[emotion][i] > threshold)
+            idx = hiddenEncoder[tuple(state)]
+            startCounts[idx] += 1
+            continue
+        currState = [0 for _ in range(len(emotions))]
+        prevState = [0 for _ in range(len(emotions))]
+        for j, emotion in enumerate(emotions):
+            currState[j] = int(df[emotion][i] > threshold)
+            prevState[j] = int(df[emotion][i - 1] > threshold)
+        r = hiddenEncoder[tuple(prevState)]
+        c = hiddenEncoder[tuple(currState)]
+        transitionMatrix[r, c] += 1
+
+        c_emission = observedEncoder[row["romannumeral"]]
+        emissionMatrix[r, c_emission] += 1
+    return transitionMatrix, emissionMatrix, startCounts
+
+
+def countsMatrixToDistributionMatrix(matrix: np.array):
+    for i, row in enumerate(matrix):
+        matrix[i, :] = row / sum(row)
+    return matrix
+
+
+def getDiscretizedAlphaMatrices(threshold: float=0.02):
+    hiddenEncoder, hiddenDecoder, observedEncoder, observedDecoder = getDiscretizedAlphaStates(threshold)
+    transitionMatrix = np.zeros((len(hiddenEncoder), len(hiddenEncoder)))
+    emissionMatrix = np.zeros((len(hiddenEncoder), len(observedEncoder)))
+    startProbs = np.zeros(len(hiddenEncoder))
+    for i in range(1, 25):
+        try:
+            with open(f"../data/organized_for_emotions/df_{i}.pickle", "rb") as f:
+                df = pickle.load(f)
+                # print(df.head())
+                transitionMatrixDf, emissionMatrixDf, startCounts = getDiscretizedAlphaTransitionFromDF(
+                    df,
+                    hiddenEncoder,
+                    hiddenDecoder,
+                    observedEncoder,
+                    observedDecoder
+                )
+                transitionMatrix += transitionMatrixDf
+                emissionMatrix += emissionMatrixDf
+                startProbs += startCounts
+        except OSError as e:
+            # print(e)
+            continue
+    np.set_printoptions(linewidth=np.inf)
+    transitionMatrix = countsMatrixToDistributionMatrix(transitionMatrix)
+    emissionMatrix = countsMatrixToDistributionMatrix(emissionMatrix)
+    startProbs /= sum(startProbs)
+    # print(transitionMatrix)
+    # print(emissionMatrix)
+    # print(startProbs)
+    return (
+        transitionMatrix,
+        emissionMatrix,
+        startProbs,
+        hiddenEncoder,
+        hiddenDecoder,
+        observedEncoder,
+        observedDecoder
+    )
+
+
 
 
 def getTransitionProbabilities(
@@ -180,8 +282,7 @@ def emotionConvolutionMLE(df: pd.DataFrame, name: str, windowSize: int=16, manag
     with open(basePath + f"/{name}_alphas.pickle", "wb") as f:
         pickle.dump(alphaDF, f)
 
-
-def main():
+def getAlphas(windowSizes: list[int]):
     with enlighten.get_manager() as manager:
         pbar = manager.counter(total=24, desc="Songs", unit="songs", leave=False)
 
@@ -189,12 +290,16 @@ def main():
             try:
                 with open(f"../data/organized_for_emotions/df_{i}.pickle", "rb") as f:
                     df = pickle.load(f)
-                    for ws in [8, 16]:
+                    for ws in windowSizes:
                         emotionConvolutionMLE(df, str(i), windowSize=ws, manager=manager)
             except Exception as e:
                 # print(e)
                 continue
             pbar.update()
+
+def main():
+    getDiscretizedAlphaMatrices()
+    # print(getDiscretizedAlphaStates())
 
 
 if __name__ == "__main__":
