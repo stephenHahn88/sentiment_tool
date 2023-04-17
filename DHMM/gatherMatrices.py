@@ -88,6 +88,8 @@ def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02):
     plt.yticks(range(len(emotions)), [ItoE[i] for i in range(len(emotions))])
     plt.show()
 
+    return matrix, numUnique, ItoV, ItoE, emotions
+
 
 def getEmotionTransitionMatrix(df: pd.DataFrame, threshold: float=0.02):
     matrix = np.zeros((len(emotions), len(emotions)))

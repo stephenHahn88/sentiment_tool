@@ -2,12 +2,24 @@ import json
 import numpy as np
 
 from data.organize_schubert_data import getAllDF, readPickleAsDF
-from DHMM.gatherMatrices import getMixtureTransitionMatrices
+from DHMM.gatherMatrices import getMixtureTransitionMatrices, getMixtureEmissionMatrices
 
 from music21.key import Key
 from music21.roman import RomanNumeral as RN
 
 EMOTIONS = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
+
+def getEmissionMatrices(load_from_pickle=False):
+
+    all_dfs = None
+    if load_from_pickle:
+        all_dfs = readPickleAsDF()
+
+    emission_matrices, numUnique, ItoV, ItoE, emotions = getMixtureEmissionMatrices(all_dfs)
+
+    np.save("emission_matrices.npy", emission_matrices)
+    with open('emission_matrices.json', 'w') as f:
+        json.dump([numUnique, ItoV, ItoE, emotions], f, indent=1)
 
 def getJSONTransitionMatrices(load_from_pickle=False, just_transition_matrix=False):
 
@@ -45,4 +57,5 @@ def getJSONTransitionMatrices(load_from_pickle=False, just_transition_matrix=Fal
     with open('notes_from_chord.json', 'w') as f:
         json.dump(chords, f, indent=1)
 
-getJSONTransitionMatrices(load_from_pickle=True)
+# getJSONTransitionMatrices(load_from_pickle=True)
+getEmissionMatrices(load_from_pickle=True)
