@@ -2,7 +2,7 @@ import pandas
 import pandas as pd
 import pickle
 import os
-from data.organize_schubert_data import getAllDF, vocabMaps
+from data.organize_schubert_data_by_harmony import getAllDF, vocabMaps
 import numpy as np
 from pprint import pprint
 import matplotlib.pyplot as plt
@@ -88,7 +88,7 @@ def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02, plot=Fal
         plt.yticks(range(len(emotions)), [ItoE[i] for i in range(len(emotions))])
         plt.show()
 
-    return matrix
+    return matrix, VtoI, ItoV, EtoI
 
 
 def getEmotionTransitionMatrix(df: pd.DataFrame, threshold: float=0.02):

@@ -1,7 +1,7 @@
 import json
 import numpy as np
 
-from data.organize_schubert_data import getAllDF, readPickleAsDF
+from data.organize_schubert_data_by_harmony import getAllDF, readPickleAsDF
 from DHMM.gatherMatrices import getMixtureTransitionMatrices
 
 from music21.key import Key

@@ -2,7 +2,7 @@ import pickle
 
 import matplotlib.pyplot as plt
 from server import getSongAnalyses
-from data.organize_schubert_data import addEmotionCounts
+from data.organize_schubert_data_by_harmony import addEmotionCounts
 import pandas as pd
 from tqdm import tqdm
 import numpy as np

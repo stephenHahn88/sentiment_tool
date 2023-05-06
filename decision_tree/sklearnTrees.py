@@ -7,7 +7,7 @@ import pickle
 from random import randint
 from pprint import pprint
 
-from data.organize_schubert_data import getAllDF, vocabMaps, mapToInt
+from data.organize_schubert_data_by_harmony import getAllDF, vocabMaps, mapToInt
 
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier

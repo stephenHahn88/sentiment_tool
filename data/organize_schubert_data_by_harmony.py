@@ -350,6 +350,7 @@ if __name__ == "__main__":
     #     except:
     #         continue
     #     df = pd.concat([df, tempdf])
+    #     break
 
     # saveAllDFs()
     saveAllIndividualDFs()

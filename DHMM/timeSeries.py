@@ -3,12 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pickle
-import pymc as pm
 import os
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.api import VAR
 from statsmodels.tools.eval_measures import rmse, aic, bic
 from statsmodels.tsa.vector_ar.vecm import coint_johansen
+from darts.models import VARIMA
+from darts import TimeSeries
 
 emotions = ["anger", "fear", "sadness", "none", "irony", "love", "joy"]
 
@@ -64,7 +65,19 @@ def cointegrationTest(df: pd.DataFrame, alpha=0.10):
         print(adjust(col), ':: ', adjust(round(trace, 2), 9), ">", adjust(cvt, 8), ' =>  ', trace > cvt)
 
 
-def myVAR(df: pd.DataFrame, criterion: str="aic"):
+def myVAR(df: pd.DataFrame, criterion: str="aic", set_lag_num=None, print_summary=False, plot=False):
+    if set_lag_num:
+        model = VAR(df)
+        model_fitted = model.fit(1)
+        if print_summary:
+            print(model_fitted.summary())
+        if plot:
+            model_fitted.plot()
+        params: pd.DataFrame = model_fitted.params
+        constant = params.iloc[0]
+        params = params.drop(["const"])
+        return params.to_numpy(), constant.to_numpy()
+
     test_len = 10
     train = df[:-test_len]
     test = df[-test_len:]
@@ -84,78 +97,99 @@ def myVAR(df: pd.DataFrame, criterion: str="aic"):
         criterions["hqic"].append(result.hqic)
     optimal_i = np.argmin(criterions[criterion]) + 1
     model_fitted = model.fit(optimal_i)
-    print(model_fitted.summary())
-    model_fitted.plot()
+    if print_summary:
+        print(model_fitted.summary())
+    if plot:
+        model_fitted.plot()
+    print(model_fitted.params)
 
+def myVARIMA(df: pd.DataFrame, ar_lag: int=1, differences: int=1, ma_lag: int=1):
+    model = VARIMA(ar_lag, differences, ma_lag)
+    ts = TimeSeries.from_dataframe(df.iloc[:-10])
+    model.fit(ts)
+    forecast = model.predict(10)
+    forecast = forecast.prepend(ts)
+    fig, axs = plt.subplots(1, 1, figsize=(14, 6))
+    forecast.plot()
+    TimeSeries.from_dataframe(df.iloc[-10:]).plot()
 
-def BVAR(df: pd.DataFrame):
-    train_data = df[emotions][:-10]
-    test_data = df[emotions][-10:]
+    plt.show()
 
-    lags = 1
-    coords = {
-        "lags": reversed(range(-lags, 0)),
-        "vars": tuple(emotions),
-        "cross_vars": tuple(emotions),
-        "time": range(len(train_data) - lags)
-    }
-
-    with pm.Model(coords=coords) as BVAR_model:
-        intercept = pm.Normal("intercept", mu=0, sigma=1, dims=("vars",))
-        lag_coefs = pm.Normal("lag_coefs", mu=0, sigma=1, dims=("lags", "vars", "cross_vars"))
-        noise = pm.HalfNormal("noise", dims=("vars",))
-
-        ar_anger = pm.math.sum([
-            pm.math.sum(lag_coefs[i, 0] * train_data.values[lags-(i+1): -(i+1)], axis=-1)
-            for i in range(lags)
-        ])
-        ar_fear = pm.math.sum([
-            pm.math.sum(lag_coefs[i, 1] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
-            for i in range(lags)
-        ])
-        ar_sadness = pm.math.sum([
-            pm.math.sum(lag_coefs[i, 2] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
-            for i in range(lags)
-        ])
-        ar_none = pm.math.sum([
-            pm.math.sum(lag_coefs[i, 3] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
-            for i in range(lags)
-        ])
-        ar_irony = pm.math.sum([
-            pm.math.sum(lag_coefs[i, 4] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
-            for i in range(lags)
-        ])
-        ar_love = pm.math.sum([
-            pm.math.sum(lag_coefs[i, 5] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
-            for i in range(lags)
-        ])
-        ar_joy = pm.math.sum([
-            pm.math.sum(lag_coefs[i, 6] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
-            for i in range(lags)
-        ])
-
-        mean = intercept + pm.math.stack([ar_anger, ar_fear, ar_sadness, ar_none, ar_irony, ar_love, ar_joy])
-
-        obs = pm.Normal("obs", mu=mean, sigma=noise, observed=train_data[lags:], dims=("time", "vars"))
-
-    os.environ["PATH"] += os.pathsep + 'C:\\Program Files\\Graphviz\\bin'
-    gv = pm.model_to_graphviz(BVAR_model)
-    gv.render("graph", format="png")
-    # with BVAR_model:
-    #     trace = pm.sample(chains=2, random_seed=88, cores=1)
-
-    # az.plot_trace(trace)
+# def BVAR(df: pd.DataFrame):
+#     train_data = df[emotions][:-10]
+#     test_data = df[emotions][-10:]
+#
+#     lags = 1
+#     coords = {
+#         "lags": reversed(range(-lags, 0)),
+#         "vars": tuple(emotions),
+#         "cross_vars": tuple(emotions),
+#         "time": range(len(train_data) - lags)
+#     }
+#
+#     with pm.Model(coords=coords) as BVAR_model:
+#         intercept = pm.Normal("intercept", mu=0, sigma=1, dims=("vars",))
+#         lag_coefs = pm.Normal("lag_coefs", mu=0, sigma=1, dims=("lags", "vars", "cross_vars"))
+#         noise = pm.HalfNormal("noise", dims=("vars",))
+#
+#         ar_anger = pm.math.sum([
+#             pm.math.sum(lag_coefs[i, 0] * train_data.values[lags-(i+1): -(i+1)], axis=-1)
+#             for i in range(lags)
+#         ])
+#         ar_fear = pm.math.sum([
+#             pm.math.sum(lag_coefs[i, 1] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
+#             for i in range(lags)
+#         ])
+#         ar_sadness = pm.math.sum([
+#             pm.math.sum(lag_coefs[i, 2] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
+#             for i in range(lags)
+#         ])
+#         ar_none = pm.math.sum([
+#             pm.math.sum(lag_coefs[i, 3] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
+#             for i in range(lags)
+#         ])
+#         ar_irony = pm.math.sum([
+#             pm.math.sum(lag_coefs[i, 4] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
+#             for i in range(lags)
+#         ])
+#         ar_love = pm.math.sum([
+#             pm.math.sum(lag_coefs[i, 5] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
+#             for i in range(lags)
+#         ])
+#         ar_joy = pm.math.sum([
+#             pm.math.sum(lag_coefs[i, 6] * train_data.values[lags - (i + 1): -(i + 1)], axis=-1)
+#             for i in range(lags)
+#         ])
+#
+#         mean = intercept + pm.math.stack([ar_anger, ar_fear, ar_sadness, ar_none, ar_irony, ar_love, ar_joy])
+#
+#         obs = pm.Normal("obs", mu=mean, sigma=noise, observed=train_data[lags:], dims=("time", "vars"))
+#
+#     os.environ["PATH"] += os.pathsep + 'C:\\Program Files\\Graphviz\\bin'
+#     gv = pm.model_to_graphviz(BVAR_model)
+#     gv.render("graph", format="png")
+#     # with BVAR_model:
+#     #     trace = pm.sample(chains=2, random_seed=88, cores=1)
+#
+#     # az.plot_trace(trace)
 
 def main():
     az.style.use("arviz-darkgrid")
 
     alphas: pd.DataFrame = loadAlphas(32, 3)
-    alphas_diff = alphas.diff().dropna()[emotions]
+    alphas: pd.DataFrame = alphas.drop(columns=["index"])
+    # phi, const = myVAR(alphas, set_lag_num=1)
+    # print(phi)
+    # print(const)
+
+    myVARIMA(alphas, 1, 1, 1)
+
+    # alphas_diff = alphas.diff().dropna()[emotions]
     # cointegrationTest(alphas_diff.dropna()[emotions])
-    myVAR(alphas_diff)
+    # myVAR(alphas_diff)
 
     # for emotion in emotions:
-        # plotSeries(alphas[emotion])
+    #     plotSeries(alphas[emotion])
         # augmentedDickeyFuller(alphas[emotion], emotion)
 
         # plotSeries(alphas_diff[emotion])
