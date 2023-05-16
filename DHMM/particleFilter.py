@@ -5,7 +5,7 @@ from numpy.linalg import norm
 from particles import state_space_models as ssms
 from particles import distributions as dists
 import particles
-from gatherMatrices import getMixtureEmissionMatrices, emotions
+from gatherMatrices import getHarmonyEmissionMatrix, emotions
 import pickle
 from pprint import pprint
 
@@ -55,7 +55,7 @@ class SentimentSSM(ssms.StateSpaceModel):
 
         # SIMPLIFIED MODEL GOING DIRECTLY FROM ALPHA TO H
         alpha_t = np.expand_dims(alpha_t, 0)
-        emissionMatrix = getMixtureEmissionMatrices(self.df)
+        emissionMatrix = getHarmonyEmissionMatrix(self.df)
 
         h_dist = np.matmul(alpha_t, emissionMatrix).squeeze()
         h_dist = h_dist / norm(h_dist, ord=1)

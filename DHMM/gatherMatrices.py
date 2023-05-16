@@ -20,6 +20,7 @@ def softmax(x):
     e_x = np.exp(x - np.max(x))
     return e_x / e_x.sum(axis=0)
 
+
 def getMixtureTransitionMatrices(df: pandas.DataFrame, threshold: float=0.02, plot: bool=False):
     """
     Produces the mixture transition matrix from the provided df
@@ -67,7 +68,7 @@ def getMixtureTransitionMatrices(df: pandas.DataFrame, threshold: float=0.02, pl
     return matrices, VtoI, ItoV
 
 
-def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02, plot=False):
+def getHarmonyEmissionMatrix(df: pd.DataFrame, threshold: float=0.02, plot=False):
     VtoI, ItoV = vocabMaps(df)
     numUnique = len(df["romannumeral"].unique())
     matrix = np.zeros((len(emotions), numUnique))
@@ -84,7 +85,7 @@ def getMixtureEmissionMatrices(df: pd.DataFrame, threshold: float=0.02, plot=Fal
 
     if plot:
         plt.imshow(matrix, cmap='hot', interpolation='nearest')
-        plt.xticks(range(numUnique), [ItoV[i] for i in range(numUnique)], rotation=45)
+        plt.xticks(range(numUnique), [ItoV[i] for i in range(numUnique)], rotation=90)
         plt.yticks(range(len(emotions)), [ItoE[i] for i in range(len(emotions))])
         plt.show()
 
@@ -245,7 +246,7 @@ def getTransitionProbabilities(
 def emotionConvolutionMLE(df: pd.DataFrame, name: str, windowSize: int=16, manager=None):
     alphas = []
     emotionsOnly: pd.DataFrame = df.loc[:, emotions].reset_index(drop=True)
-    rand = pd.DataFrame([[random()/20 for _ in range(len(emotionsOnly.columns))] for _ in range(len(emotionsOnly))])
+    rand = pd.DataFrame([[random()/50 for _ in range(len(emotionsOnly.columns))] for _ in range(len(emotionsOnly))])
     rand.columns = emotionsOnly.columns
     emotionsOnly = emotionsOnly.add(rand, fill_value=0)
     emotionsOnly = emotionsOnly.apply(lambda x: x / sum(x), axis=1)
@@ -274,9 +275,9 @@ def emotionConvolutionMLE(df: pd.DataFrame, name: str, windowSize: int=16, manag
             pbar.update()
 
     alphaDF = pd.DataFrame(alphas)
-    alphaDF.columns = ["index"] + emotions
-    pd.set_option('display.max_rows', None)
-    basePath = f"./alphas/windowSize_{windowSize}"
+    alphaDF.columns = ["index"] + [f"{emotion}_alpha" for emotion in emotions]
+    print(alphaDF)
+    basePath = f"./alphasByEmotionSample/windowSize_{windowSize}"
     if not os.path.exists(basePath):
         os.makedirs(basePath)
     with open(basePath + f"/{name}_alphas.pickle", "wb") as f:
