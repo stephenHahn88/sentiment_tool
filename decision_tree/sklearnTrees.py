@@ -7,7 +7,7 @@ import pickle
 from random import randint
 from pprint import pprint
 
-from data.organize_schubert_data_by_harmony import getAllDF, vocabMaps, mapToInt
+from data.organize_schubert_data_by_harmony import getAllDF, harmonyVocabMaps, mapToInt
 
 from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
@@ -171,7 +171,7 @@ if __name__ == "__main__":
         "romannumeral",
         "anger", "fear", "sadness", "none", "irony", "love", "joy"
     ]]
-    VtoI, ItoV = vocabMaps(df)
+    VtoI, ItoV = harmonyVocabMaps(df)
     mapToInt(df, VtoI, cols=cols)
     X = df.loc[:, df.columns != "romannumeral"]
     # print(X.head(5))

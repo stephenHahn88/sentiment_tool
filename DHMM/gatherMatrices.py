@@ -2,7 +2,7 @@ import pandas
 import pandas as pd
 import pickle
 import os
-from data.organize_schubert_data_by_harmony import getAllDF, vocabMaps
+from data.organize_schubert_data_by_harmony import getAllDF, harmonyVocabMaps
 import numpy as np
 from pprint import pprint
 import matplotlib.pyplot as plt
@@ -34,7 +34,7 @@ def getMixtureTransitionMatrices(df: pandas.DataFrame, threshold: float=0.02, pl
     )
     """
     # Get vocab/int maps for all Roman numerals in df
-    VtoI, ItoV = vocabMaps(df)
+    VtoI, ItoV = harmonyVocabMaps(df)
 
     # Set counts for each transition matrix to 0
     numUnique = len(df["romannumeral"].unique()) + 2
@@ -69,7 +69,7 @@ def getMixtureTransitionMatrices(df: pandas.DataFrame, threshold: float=0.02, pl
 
 
 def getHarmonyEmissionMatrix(df: pd.DataFrame, threshold: float=0.02, plot=False):
-    VtoI, ItoV = vocabMaps(df)
+    VtoI, ItoV = harmonyVocabMaps(df)
     numUnique = len(df["romannumeral"].unique())
     matrix = np.zeros((len(emotions), numUnique))
 

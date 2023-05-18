@@ -112,9 +112,9 @@ def combineChordLocalKey(pathPair: tuple[Path, Path]):
     return chordDF
 
 
-def addRomanNumerals(emotionDF: pd.DataFrame, songNum: int, recording: str= "HU33", annotationNum: int=1):
+def addRomanNumerals(emotionDF: pd.DataFrame, songNum: int, recording: str = "HU33", annotationNum: int = 1):
     paths = getPairedChordLocalKeyPaths(recording, annotationNum)
-    chordCSV, localKeyCSV = paths[songNum-1]
+    chordCSV, localKeyCSV = paths[songNum - 1]
     chordDF = pd.read_csv(chordCSV, sep=";")
     localKeyDF = pd.read_csv(localKeyCSV, sep=";")
     chordDF = parseKeyRootQuality(chordDF, localKeyDF)
@@ -143,8 +143,8 @@ def addRomanNumerals(emotionDF: pd.DataFrame, songNum: int, recording: str= "HU3
     return emotionDF
 
 
-def parseKeyRootQuality(chordDF: pd.DataFrame, localKeyDF: pd.DataFrame, recording: str="HU33", songNum: int=2):
-    #Extract the global key for the given recording
+def parseKeyRootQuality(chordDF: pd.DataFrame, localKeyDF: pd.DataFrame, recording: str = "HU33", songNum: int = 2):
+    # Extract the global key for the given recording
     globalKey = globalKeysDF.loc[globalKeysDF["PerformanceID"] == recording]
     if len(str(songNum)) == 1:
         songNum = f"0{songNum}"
@@ -155,26 +155,25 @@ def parseKeyRootQuality(chordDF: pd.DataFrame, localKeyDF: pd.DataFrame, recordi
     qualities = []
     localKeys = []
     for i, chordRow in chordDF.iterrows():
-        #Determine local key of current chord
+        # Determine local key of current chord
         localKey = None
         for j, keyRow in localKeyDF.iterrows():
-            if float(keyRow["start"]) <= float(chordRow["end"]) <= float(keyRow["end"]):
+            if float(keyRow["start"]) <= float(chordRow["end"]) <= float(keyRow["end"]) or float(keyRow["start"]) <= float(chordRow["start"]) <= float(keyRow["end"]):
                 localKey = keyRow["key"].split(":")[0]
         if localKey is None:
-            raise ValueError(f"Chord {chordRow['extended']} is not associated with a local key")
+            raise ValueError(f"Chord {chordRow['extended']} at index {i} is not associated with a local key")
         localKey = (pitchClasses[localKey] - globalKey) % 12
         localKeys.append(localKey)
 
-        #Determine roots of each chord with respect to local key
+        # Determine roots of each chord with respect to local key
         rootName = chordRow["majmin"].split(":")[0]
         roots.append((pitchClasses[rootName] - localKey - globalKey) % 12)
 
-        #Determine quality of each chord
+        # Determine quality of each chord
         quality = chordRow["majmin"].split(":")[1]
         if "dim" in chordRow["shorthand"]:
             quality = "dim"
         qualities.append(quality)
-
 
     chordDF.insert(2, "root", roots, True)
     chordDF.insert(2, "local_key", localKeys, True)
@@ -200,7 +199,7 @@ def saveAlphas(windowSizes: list[int]):
             pbar.update()
 
 
-def addAlpha(df: pd.DataFrame, songNum: int, windowSize: int=128):
+def addAlpha(df: pd.DataFrame, songNum: int, windowSize: int = 128):
     with open(f"{repoPath}data/alphasByEmotionSample/windowSize_{windowSize}/song{songNum}_alphas.pickle", "rb") as f:
         df_alpha = pickle.load(f)
     df = pd.concat([df, df_alpha], axis=1).drop("index", axis=1)
@@ -209,13 +208,16 @@ def addAlpha(df: pd.DataFrame, songNum: int, windowSize: int=128):
 
 def addPseudoRomanNumeral(df: pd.DataFrame):
     romans = []
+    romansForeground = []
     for i, row in df.iterrows():
         romans.append(f"{row['local_key']}:{row['root']}:{row['quality']}")
+        romansForeground.append(f"{row['root']}:{row['quality']}")
     df.insert(2, "romannumeral", romans, True)
+    df.insert(2, "romannumeral_foreground", romansForeground, True)
     return df
 
 
-def addMeasureNumbers(emotionDF: pd.DataFrame, songNum: int, recording: str="HU33"):
+def addMeasureNumbers(emotionDF: pd.DataFrame, songNum: int, recording: str = "HU33"):
     if len(str(songNum)) == 1:
         songNum = f"0{songNum}"
     measureDF = pd.read_csv(
@@ -226,11 +228,11 @@ def addMeasureNumbers(emotionDF: pd.DataFrame, songNum: int, recording: str="HU3
     for i, emotionRow in emotionDF.iterrows():
         found = False
         for j, measureRow in measureDF.iterrows():
-            if (j+1) >= len(measureDF) and float(measureRow["start"]) <= float(emotionRow["time"]):
+            if (j + 1) >= len(measureDF) and float(measureRow["start"]) <= float(emotionRow["time"]):
                 found = True
                 measures.append(floor(measureRow["measure"]))
                 break
-            if float(measureRow["start"]) <= float(emotionRow["time"]) < float(measureDF.iloc[j+1]["start"]):
+            if float(measureRow["start"]) <= float(emotionRow["time"]) < float(measureDF.iloc[j + 1]["start"]):
                 measures.append(floor(measureRow["measure"]))
                 found = True
                 break
@@ -240,22 +242,20 @@ def addMeasureNumbers(emotionDF: pd.DataFrame, songNum: int, recording: str="HU3
     return emotionDF
 
 
-def determineDynamicLevels(recording: str= "HU33", dynamicSampleEvery: float=0.1, noiseLevel: float=0.001, numDiscreteDynamics: int=4, plot: bool=False):
+def determineDynamicLevels(
+        recording: str = "HU33",
+        dynamicSampleEvery: float = 0.1,
+        noiseLevel: float = 0.001,
+        numDiscreteDynamics: int = 4,
+        plot: bool = False
+):
     loudest = []
     for songNum in range(1, 25):
-        if len(str(songNum)) == 1:
-            songNum = f"0{songNum}"
-        file = f"C:\\Users\\88ste\\OneDrive\\Documents\\GitHub\\sentiment_tool\\data\\Schubert_Winterreise_Dataset_v2-0\\01_RawData\\audio_wav\\Schubert_D911-{songNum}_{recording}.wav"
-        samples, sampsPerSec = lr.load(file)
-
-        for time in range(0, len(samples), int(sampsPerSec * dynamicSampleEvery)):
-            currLoudest = np.max(samples[time:time + sampsPerSec])
-            if currLoudest > noiseLevel:
-                loudest.append(currLoudest)
+        loudest += _retrieveLoudestSamples(recording, songNum, dynamicSampleEvery, noiseLevel)
 
     maxLoud = max(loudest)
     bins = np.arange(0, maxLoud + 0.02, maxLoud / numDiscreteDynamics)
-    print(bins)
+    # print(bins)
 
     if plot:
         fig, ax = plt.subplots()
@@ -267,19 +267,75 @@ def determineDynamicLevels(recording: str= "HU33", dynamicSampleEvery: float=0.1
     return bins
 
 
+def _retrieveLoudestSamples(
+        recording: str,
+        songNum: int,
+        dynamicSampleEvery: float = 0.1,
+        noiseLevel: float = 0.001
+):
+    loudest = []
+    if len(str(songNum)) == 1:
+        songNum = f"0{songNum}"
+    file = f"C:\\Users\\88ste\\OneDrive\\Documents\\GitHub\\sentiment_tool\\data\\Schubert_Winterreise_Dataset_v2-0\\01_RawData\\audio_wav\\Schubert_D911-{songNum}_{recording}.wav"
+    samples, sampsPerSec = lr.load(file)
+
+    for time in range(0, len(samples), floor(sampsPerSec * dynamicSampleEvery)):
+        currLoudest = np.max(samples[time: time + sampsPerSec])
+        if currLoudest > noiseLevel:
+            # print(time/sampsPerSec)
+            loudest.append(currLoudest)
+    return loudest
+
+
+def addDynamicLevels(
+        emotionDF: pd.DataFrame,
+        bins: np.array,
+        songNum: int,
+        recording: str = "HU33",
+        noiseLevel: float = 0.001,
+        dynamicSampleEvery: float = 0.1
+):
+    loudest = _retrieveLoudestSamples(recording, songNum, dynamicSampleEvery, noiseLevel=-1)
+    dynamics = np.digitize(loudest, bins)
+    # TODO: bug where number of samples doesn't match len of emotionDF
+    dynamics = dynamics.tolist() + ["N/A" for _ in range(len(emotionDF) - len(dynamics))]
+    emotionDF.insert(2, "dynamic_level", dynamics, True)
+
+    return emotionDF
+
+
+def saveDFs(numDiscreteDynamics: int=25, recording: str="HU33"):
+    bins = determineDynamicLevels(numDiscreteDynamics=numDiscreteDynamics)
+    for songNumber in tqdm(range(1, 25)):
+        try:
+            df = extractEmotionTimeSeries(songNumber=songNumber, toDistribution=True)
+            df = addRomanNumerals(df, songNum=songNumber, recording=recording)
+            df = addAlpha(df, songNum=songNumber)
+            df = addPseudoRomanNumeral(df)
+            df = addMeasureNumbers(df, songNum=songNumber, recording=recording)
+            df = addDynamicLevels(df, bins, songNum=songNumber, recording=recording)
+            with open(f"./with_dynamics_generalized_romans/song_{songNumber}.pickle", "wb") as f:
+                pickle.dump(df, f)
+        except ValueError as e:
+            print(f"Failed song {songNumber} because {e}")
+
+
 def main():
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
-
+    saveDFs()
     # songNumber = 2
     #
     # df = extractEmotionTimeSeries(songNumber=songNumber, toDistribution=True)
     # df = addRomanNumerals(df, songNum=songNumber)
     # df = addAlpha(df, songNum=songNumber)
     # df = addPseudoRomanNumeral(df)
-    # df = addMeasureNumbers(df, songNum=songNumber)
     # print(df)
-    determineDynamicLevels(numDiscreteDynamics=25, plot=True)
+    # df = addMeasureNumbers(df, songNum=songNumber)
+    #
+    # bins = determineDynamicLevels(numDiscreteDynamics=25)
+    # df = addDynamicLevels(df, bins, songNum=songNumber)
+    # print(df)
 
 
 if __name__ == "__main__":

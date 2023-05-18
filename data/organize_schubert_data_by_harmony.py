@@ -296,10 +296,14 @@ def getAllIndividualDF(recording: str="HU33", annotationNum: int=1):
     return dfs
 
 
-def vocabMaps(df: pd.DataFrame):
-    vocab = list(set(df["romannumeral"].values.tolist()))
+def harmonyVocabMaps(df: pd.DataFrame, foreground=False):
+    if foreground:
+        vocab = list(set(df["romannumeral_foreground"].values.tolist()))
+    else:
+        vocab = list(set(df["romannumeral"].values.tolist()))
     vocabToInt = {v: i for i, v in enumerate(vocab)}
     intToVocab = {i: v for v, i in vocabToInt.items()}
+
     vocabToInt["START"] = -1
     vocabToInt["PAD"] = -2
     intToVocab[-1] = "START"
