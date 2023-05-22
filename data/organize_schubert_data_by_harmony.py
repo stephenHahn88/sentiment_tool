@@ -304,10 +304,11 @@ def harmonyVocabMaps(df: pd.DataFrame, foreground=False):
     vocabToInt = {v: i for i, v in enumerate(vocab)}
     intToVocab = {i: v for v, i in vocabToInt.items()}
 
-    vocabToInt["START"] = -1
-    vocabToInt["PAD"] = -2
-    intToVocab[-1] = "START"
-    intToVocab[-2] = "PAD"
+    if not foreground:
+        vocabToInt["START"] = -1
+        vocabToInt["PAD"] = -2
+        intToVocab[-1] = "START"
+        intToVocab[-2] = "PAD"
     return vocabToInt, intToVocab
 
 def readPickleAsDF():

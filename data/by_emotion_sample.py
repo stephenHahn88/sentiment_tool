@@ -323,7 +323,7 @@ def saveDFs(numDiscreteDynamics: int=25, recording: str="HU33"):
 def main():
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
-    saveDFs()
+    saveDFs(numDiscreteDynamics=13)
     # songNumber = 2
     #
     # df = extractEmotionTimeSeries(songNumber=songNumber, toDistribution=True)
