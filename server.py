@@ -4,9 +4,6 @@ from ENV_VARIABLE.ENV_VARIABLE import password
 
 app = Flask(__name__)
 
-# client = MongoClient('localhost', 27017)
-client = MongoClient(f"mongodb+srv://bob:{password}@hahnmusic.lcqyy3z.mongodb.net/?retryWrites=true&w=majority")
-
 choiceToPath = {
   "1": "src/media/Schubert_D911-01_HU33.wav",
   "2": "src/media/Schubert_D911-02_HU33.wav",
@@ -79,4 +76,7 @@ def postAnalyses():
 
 
 if __name__ == "__main__":
+    # client = MongoClient('localhost', 27017)
+    client = MongoClient(f"mongodb+srv://bob:{password}@hahnmusic.lcqyy3z.mongodb.net/?retryWrites=true&w=majority")
+
     app.run(port=8889, debug=True)

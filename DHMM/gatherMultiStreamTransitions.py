@@ -168,8 +168,42 @@ def getMixtureTransitionMatricesForHarmony(df: pandas.DataFrame, threshold: floa
     return harmonyMatrices, dynamicsMatrices, VtoI, ItoV
 
 
-def getMixedProbs(mainMatrices, otherMatrices, previous: int, sentimentMixture: np.array, featureMixture: np.array):
-    pass
+def getMixedProbs(
+        mainMatrices: dict[str:np.array],
+        otherMatrices: dict[str:dict[str:np.array]],
+        mainCol: str,
+        mainPrevIdx: int,
+        otherPrevIndeces: dict[str:int],
+        sentimentMixture: np.array,
+        featureMixture: dict[str:float]
+):
+    """
+    Determines the probabilities of the next item of the 'mainCol'
+    feature based on the previous time step, emotion mixture, and feature weights
+    :param mainMatrices: Transition matrices for each emotion regarding the main feature
+    :param otherMatrices: Transition matrices for each other feature and each emotion.
+        Describes the influence of other features on the main feature
+    :param mainCol: The name of the main feature
+    :param mainPrevIdx: The index in the mainMatrices that corresponds with the previous main feature
+    :param otherPrevIndeces: A dict containing the corresponding index for the previous other feature
+    :param sentimentMixture: The emotional mixture at the prediction time step
+    :param featureMixture: The manual hyperparameters controlling the influence of all features on the main feature
+    :return: The probabilities of the next feature realization as a numpy array
+    """
+    final = np.zeros((len(mainMatrices["joy"])))
+    for emotion, sentiment in zip(emotions, sentimentMixture):
+        final += mainMatrices[emotion][mainPrevIdx, :] * sentiment * featureMixture[mainCol]
+    for column, allOtherMatrices in otherMatrices.items():
+        for emotion, sentiment in zip(emotions, sentimentMixture):
+            final += otherMatrices[column][emotion][otherPrevIndeces[column], :] * sentiment * featureMixture[column]
+    final = final.round(3)
+    return final/sum(final)
+
+
+def sampleHarmony(vocabMaps: dict[str:dict], column, distribution):
+    sampleIdx = np.random.choice(len(vocabMaps[column]["VtoI"]), p=distribution)
+    return vocabMaps[column]["ItoV"][sampleIdx]
+
 
 def main():
     pd.set_option('display.max_columns', None)
@@ -186,8 +220,12 @@ def main():
     # print(allDF["measure"])
 
     # getMixtureTransitionMatricesForHarmony(df, plot=True)
-    VtoI, ItoV = harmonyVocabMaps(allDF, foreground=True)
-    vocabMaps = {"romannumeral_foreground": {"VtoI": VtoI, "ItoV": ItoV}}
+    # VtoI, ItoV = harmonyVocabMaps(allDF, foreground=True)
+    # vocabMaps = {"romannumeral_foreground": {"VtoI": VtoI, "ItoV": ItoV}}
+    # with open("./vocabMaps.pickle", "wb") as f:
+    #     pickle.dump(vocabMaps, f)
+    with open("./vocabMaps.pickle", "rb") as f:
+        vocabMaps = pickle.load(f)
     mainMatrices, otherMatrices = getMixtureTransitionMatricesGeneralized(
         allDF,
         # "dynamic_level",
@@ -195,9 +233,23 @@ def main():
         "romannumeral_foreground",
         ["dynamic_level"],
         vocabMaps=vocabMaps,
-        plot=True
+        plot=False
     )
-    print(mainMatrices)
+    harmony = "0:maj"
+    print(vocabMaps["romannumeral_foreground"]["VtoI"])
+    probs = getMixedProbs(
+        mainMatrices,
+        otherMatrices,
+        "romannumeral_foreground",
+        vocabMaps["romannumeral_foreground"]["VtoI"][harmony],
+        {"dynamic_level": 6},
+        np.array([1/len(emotions) for _ in emotions]),
+        {"romannumeral_foreground": 0.9, "dynamic_level": 0.1}
+    )
+    print(probs)
+    print(probs.sum())
+    harmony = sampleHarmony(vocabMaps, "romannumeral_foreground", probs)
+    print(harmony)
 
 
 if __name__ == "__main__":
