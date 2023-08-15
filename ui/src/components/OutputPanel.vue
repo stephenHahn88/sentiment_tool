@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import {watch, reactive, computed, ref, Ref, onMounted} from "vue"
 import {round} from 'lodash'
+import 'fs'
 
 interface Props {
   currentEmotion: string
@@ -150,20 +151,37 @@ function restartAnnotate() {
 
 async function saveAnnotation() {
   if (!confirm("Please confirm that you have completed your analysis")) return
-  let options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
+  // let options = {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify({
+  //     piece: props.currentFile,
+  //     analysis: result,
+  //     comments: comments.value,
+  //     custom_id: customID.value
+  //   })
+  // }
+  // let response = await (await fetch('/api/analyses', options)).json()
+  // console.log(response)
+  let data = JSON.stringify({
       piece: props.currentFile,
       analysis: result,
       comments: comments.value,
       custom_id: customID.value
-    })
-  }
-  let response = await (await fetch('/api/analyses', options)).json()
-  console.log(response)
+  })
+  let filetype = "application/json"
+  let jsonBlob = new Blob([data], {type: filetype})
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(jsonBlob)
+  a.download = `${props.currentFile.slice(24, 31)}_${customID.value}.json`
+  a.textContent = "Download JSON"
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(a.href)
+
   submitDisabled.value = true
 }
 
