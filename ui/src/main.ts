@@ -5,6 +5,8 @@ import App from '@/App.vue'
 import AnnotationTool from '@/views/AnnotationTool.vue'
 import DataVisualization from '@/views/DataVisualization.vue'
 import ProgressionGeneration from '@/views/ProgressionGeneration.vue'
+import SentimentHarmonization from '@/views/SentimentHarmonization.vue'
+import UploadMXML from '@/views/UploadMXML.vue'
 
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue"
 
@@ -32,6 +34,11 @@ export const router = new VueRouter({
       meta: {title: "Progressions"},
       path: "/gen",
       component: ProgressionGeneration
+    },
+    {
+      meta: {title: "Harmonization"},
+      path: "/harmonize",
+      component: SentimentHarmonization
     }
   ],
 })

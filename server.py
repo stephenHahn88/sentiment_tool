@@ -77,6 +77,20 @@ def postAnalyses():
     return {"status": 200}
 
 
+@app.route("/api/harmonize", methods=["POST"])
+def harmonize():
+    
+    print("Received request")
+
+    json = request.get_json()
+    notes = json["notes"]
+
+    # Parse notes and convert to appropriate format
+    
+
+    return "hello"
+
+
 if __name__ == "__main__":
     # client = MongoClient('localhost', 27017)
     client = MongoClient(f"mongodb+srv://bob:{password}@hahnmusic.lcqyy3z.mongodb.net/?retryWrites=true&w=majority")
