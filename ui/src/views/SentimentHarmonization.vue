@@ -128,6 +128,7 @@
         drawMetronomeMarks: false,
         drawPartNames: false,
         drawMeasureNumbers: false,
+        drawUpToMeasureNumber: 8,
         pageBackgroundColor: "white"
       });
 
@@ -145,10 +146,13 @@
               }
             }
           } else {
-            for (let voice=1; voice< osmd.sheet.instruments[instrument].voices.length; voice++) {
+            for (let voice=1; voice< osmd.sheet.instruments[0].voices.length; voice++) {
               osmd.sheet.instruments[0].voices[voice].visible = false;
             }
           }
+
+          // Get the number of measures
+          numMeasures = osmd.graphic.measureList.length;
 
           osmd.render();
           musicRendered.value = true;
