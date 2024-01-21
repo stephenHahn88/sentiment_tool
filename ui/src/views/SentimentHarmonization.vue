@@ -163,6 +163,20 @@
               });
           });
 
+          // Only render the first melodic voice
+          // osmd.sheet.instruments[0].voices[0].visible = true
+          if (osmd.sheet.instruments.length > 1) {
+            for (let instrument=1; instrument<osmd.sheet.instruments.length; instrument++) {
+              for (let voice=0; voice< osmd.sheet.instruments[instrument].voices.length; voice++) {
+                osmd.sheet.instruments[instrument].voices[voice].visible = true
+              }
+            }
+          } else {
+            for (let voice=1; voice< osmd.sheet.instruments[instrument].voices.length; voice++) {
+              osmd.sheet.instruments[0].voices[voice].visible = true
+            }
+          }
+
           // Get the number of measures
           numMeasures = osmd.graphic.measureList.length;
 
