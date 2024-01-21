@@ -12,11 +12,13 @@
             </div>
         </div>
 
-        <!-- Put bar plot input controls here -->
-        <BarPlotInput id = "emotionMixtureInput"
-            :priorDist="currentEmotionMixture"
-            @emotionMixtureUpdate="handleEmotionMixtureUpdate">
-        </BarPlotInput>
+        <div v-if="musicRendered">
+          <!-- Put bar plot input controls here -->
+          <BarPlotInput id = "emotionMixtureInput"
+              :priorDist="currentEmotionMixture"
+              @emotionMixtureUpdate="handleEmotionMixtureUpdate">
+          </BarPlotInput>
+        </div>
         
         <!-- Music Sheet Display Section -->
         <div id="osmd-container"></div>
@@ -50,6 +52,7 @@
   let numMeasures = 0;
   let measurePositions = [];
   let notePositions = [];
+  let selectedNotes = [];
 
   let buttons = [];
       
@@ -62,27 +65,9 @@
     return 69 + 12 * Math.log2(frequency / 440);
   }
 
-  function placeButtons () {
-    const container = document.getElementById('osmd-container');
-    for (let i=0; i<notePositions.length; i++) {
-      let note = notePositions[i];
-      console.log(note);
-      const button = document.createElement('button');
-      button.textContent = 'Button'; // Set button text or properties
-      button.style.position = 'absolute';
-
-      // Position the button based on the note's position
-      button.style.left = `${note.absolutePosition.x}vw`;
-      button.style.top = `${note.absolutePosition.y}vh`;
-
-      container.appendChild(button);
-      buttons.push(button);
-    }
-  }
-
   function getOSMDCoordinates(osmd, container, x, y) {
     const sheetX = (x - container.offsetLeft) / 10 / osmd.Zoom;
-    const sheetY = (y - container.offsetTop) / 10 / osmd.Zoom;
+    const sheetY = (y - container.offsetTop) / 10 / osmd.Zoom - 28;
     return new PointF2D(sheetX, sheetY);
   }
 
@@ -95,19 +80,36 @@
         const y = event.pageY;
         const musicSheetPosition = getOSMDCoordinates(osmd, osmdContainer, x, y);
 
-        let maxDist = {x: 5, y: 5};
-        console.log(musicSheetPosition);
+        let closestNote = null;
+        let closestPosition = 0;
+        let closestDistance = Infinity;
 
-        if (musicSheetPosition) {
-            const nearestNote = osmd.GraphicSheet.GetNearestNote(musicSheetPosition, maxDist);
+        for (let i=0; i<notePositions.length; i++) {
+          let note = notePositions[i].noteBoundingBox;
+          const centerX = note.absolutePosition.x;
+          const centerY = note.absolutePosition.y;
+          // Calculate distance from the click to the center of the note
+          const distance = Math.sqrt(Math.pow(centerX - musicSheetPosition.x, 2) + Math.pow(centerY - musicSheetPosition.y, 2));
 
-            if (nearestNote) {
-                console.log("Nearest note:", nearestNote);
-                // Additional actions for the nearest note
-                nearestNote.sourceNote.noteheadColor = "#FF0000";
-                osmd.render();
-            }
+          if (distance < closestDistance) {
+              closestNote = notePositions[i];
+              closestPosition = i;
+              closestDistance = distance;
+          }
         }
+
+        if (closestNote) {
+            if (selectedNotes.includes(closestPosition)) {
+              // Remove from selectedNotes
+              closestNote.graphicalNote.noteheadColor = "#000000";
+              selectedNotes = selectedNotes.filter(x => x !== closestPosition);
+            } else {
+              closestNote.graphicalNote.noteheadColor = "#FF0000";
+              selectedNotes.push(closestPosition);
+            }
+            osmd.render();
+        }
+
     });
   }
 
@@ -178,14 +180,9 @@
           }
 
           // osmd.graphic.measureList[0][0].staffEntries[0].graphicalVoiceEntries[0].notes[0].sourceNote.noteheadColor = "#FF0000";
-          
-          // Place buttons under each note
-          // placeButtons();
-          // Re-render the OSMD container
-          // osmd.render();
-
           console.log(notes);
           console.log(notesParsed);
+          console.log(notePositions);
 
       });
 
@@ -209,7 +206,7 @@
     const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ "notes": notesParsed })
+        body: JSON.stringify({ "notes": notesParsed, "sentiment": currentEmotionMixture, "harmonicRhythm": selectedNotes})
     }
 
     // POST request to /api/harmonize
