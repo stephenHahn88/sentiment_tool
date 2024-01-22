@@ -201,7 +201,7 @@
                 let prevMidi = prevNote.midi;
                 let prevDuration = prevNote.quarterLength;
                 let currDuration = prevDuration + quarterLength;
-                notesParsed[totalNotes-1] = {prevMidi, currDuration};
+                notesParsed[totalNotes-1] = {"midi": prevMidi, "quarterLength": currDuration};
                 notes.push({note, quarterLength});
                 rests.push({total, quarterLength})
               }
@@ -262,24 +262,6 @@
     let harmonized = await (await fetch("/api/harmonize", requestOptions)).json();
     console.log(harmonized);
 
-  }
-
-  async function saveMelodySurveyResponse(rating) {
-    // Hide the survey popup UI
-    closed.value = true
-    // Retrieve current melody from server
-    let melody = await (await fetch("/api/composer/"+encodeURIComponent(composerId.value)+"/melody/"+encodeURIComponent(melodyId.value)+"/notes-harmonies-tempo")).json()
-    const requestOptions = {
-        method: "PUT",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "rating": rating, "notes": melody.notes, "harmonies": melody.harmonies })
-    }
-    let response = await fetch("/api/surveys", requestOptions)
-
-    response = await response.json()
-    console.log(response)
-    // Close the survey component
-    closed = true
   }
 
   </script>
