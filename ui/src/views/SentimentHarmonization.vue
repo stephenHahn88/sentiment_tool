@@ -66,6 +66,7 @@
 import { ref } from 'vue';
 import { OpenSheetMusicDisplay, PointF2D } from 'opensheetmusicdisplay';
 
+import { piano, casio, playVoices } from "@/harmonize-playback";
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 
 let currentEmotionMixture = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2];
@@ -81,6 +82,7 @@ let musicRendered = ref(false);
 let score = null;
 let notes = [];
 let notesParsed = [];
+let rests = [];
 
 let numMeasures = 0;
 let measurePositions = [];
@@ -172,73 +174,85 @@ function renderMusicSheet () {
     osmd.load(event.target.result).then(() => {
 
       // Access the internal OSMD parsed music structure
-        score = osmd.Sheet;
+      score = osmd.Sheet;
 
-        // Only render the first melodic voice
-        // osmd.sheet.instruments[0].voices[0].visible = true
-        if (osmd.sheet.instruments.length > 1) {
-          for (let instrument=1; instrument<osmd.sheet.instruments.length; instrument++) {
-            for (let voice=0; voice< osmd.sheet.instruments[instrument].voices.length; voice++) {
-              osmd.sheet.instruments[instrument].voices[voice].visible = false;
-            }
-          }
-        } else {
-          for (let voice=1; voice< osmd.sheet.instruments[0].voices.length; voice++) {
-            osmd.sheet.instruments[0].voices[voice].visible = false;
+      // Only render the first melodic voice
+      // osmd.sheet.instruments[0].voices[0].visible = true
+      if (osmd.sheet.instruments.length > 1) {
+        for (let instrument=1; instrument<osmd.sheet.instruments.length; instrument++) {
+          for (let voice=0; voice< osmd.sheet.instruments[instrument].voices.length; voice++) {
+            osmd.sheet.instruments[instrument].voices[voice].visible = false;
           }
         }
-
-        // Get the number of measures
-        numMeasures = osmd.graphic.measureList.length;
-
-        osmd.render();
-        musicRendered.value = true;
-
-        // Assuming a single melody line and single voice
-        score.Instruments.forEach(instrument => {
-          instrument.Staves.forEach(staff => {
-            let voice = staff.Voices[0];
-            voice.VoiceEntries.forEach(voiceEntry => {
-              voiceEntry.Notes.forEach(note => {
-
-                // Get note pitch
-                let notePitch = note.Pitch;
-                // Convert from Pitch to midi
-                let midi = pitchToMidi(notePitch);
-
-                // Get note duration
-                let noteDuration = note.Length;
-                // Get note quarterLength
-                let quarterLength = noteDuration.realValue * 4;
-
-                notes.push({note, midi, quarterLength});
-                notesParsed.push({midi, quarterLength});
-
-              });
-            });
-            });
-        });
-
-        // Get the number of measures
-        numMeasures = osmd.graphic.measureList.length;
-
-        // Get the position of the measures and notes
-        for (let measure=0; measure<numMeasures; measure++) {
-          // Get measure endpoint bounding box, or position of the last note
-          measurePositions.push(osmd.graphic.measureList[measure][0].staffEntries[0].boundingBox);
-          // Get note positions
-          for (let note=0; note<osmd.graphic.measureList[measure][0].staffEntries.length; note++) {
-            // Get note bounding box:  osmd.graphic.measureList[measure][0].staffEntries[note].boundingBox
-            let noteBoundingBox = osmd.graphic.measureList[measure][0].staffEntries[note].boundingBox;
-            let graphicalNote = osmd.graphic.measureList[measure][0].staffEntries[note].graphicalVoiceEntries[0].notes[0].sourceNote;
-            notePositions.push({noteBoundingBox, graphicalNote});
-          }
+      } else {
+        for (let voice=1; voice< osmd.sheet.instruments[0].voices.length; voice++) {
+          osmd.sheet.instruments[0].voices[voice].visible = false;
         }
+      }
 
-        // osmd.graphic.measureList[0][0].staffEntries[0].graphicalVoiceEntries[0].notes[0].sourceNote.noteheadColor = "#FF0000";
-        console.log(notes);
-        console.log(notesParsed);
-        console.log(notePositions);
+      // Get the number of measures
+      numMeasures = osmd.graphic.measureList.length;
+
+      osmd.render();
+      musicRendered.value = true;
+
+      // Get the number of measures
+      numMeasures = osmd.graphic.measureList.length;
+      let totalNotes = 0;
+      let total = 0;
+
+      // Get the position of the measures and notes
+      for (let measure=0; measure<numMeasures; measure++) {
+        // Get measure endpoint bounding box, or position of the last note
+        measurePositions.push(osmd.graphic.measureList[measure][0].staffEntries[0].boundingBox);
+        // Get note positions
+        for (let note=0; note<osmd.graphic.measureList[measure][0].staffEntries.length; note++) {
+          // Get note bounding box:  osmd.graphic.measureList[measure][0].staffEntries[note].boundingBox
+          let noteBoundingBox = osmd.graphic.measureList[measure][0].staffEntries[note].boundingBox;
+          let graphicalNote = osmd.graphic.measureList[measure][0].staffEntries[note].graphicalVoiceEntries[0].notes[0].sourceNote;
+
+          if (!graphicalNote.isRestFlag) {
+            // Get note pitch
+            let notePitch = graphicalNote.Pitch;
+            // Convert from Pitch to midi
+            let midi = pitchToMidi(notePitch);
+
+            // Get note duration
+            let noteDuration = graphicalNote.Length;
+            // Get note quarterLength
+            let quarterLength = noteDuration.realValue * 4;
+
+            notes.push({graphicalNote, midi, quarterLength});
+            notesParsed.push({midi, quarterLength});
+            totalNotes++;
+          } else {
+            // Rest, modify the previous note's duration
+            // Get rest duration
+            let noteDuration = graphicalNote.Length;
+            // Get note quarterLength
+            let quarterLength = noteDuration.realValue * 4;
+
+            let prevNote = notesParsed[totalNotes-1];
+            console.log(totalNotes-1, prevNote)
+            let prevMidi = prevNote.midi;
+            let prevDuration = prevNote.quarterLength;
+            let currDuration = prevDuration + quarterLength;
+            notesParsed[totalNotes-1] = {"midi": prevMidi, "quarterLength": currDuration};
+            notes.push({note, "midi": -1, quarterLength});
+            rests.push({total, quarterLength})
+          }
+
+          notePositions.push({noteBoundingBox, graphicalNote});
+          total++;
+
+        }
+      }
+
+      // osmd.graphic.measureList[0][0].staffEntries[0].graphicalVoiceEntries[0].notes[0].sourceNote.noteheadColor = "#FF0000";
+      console.log(notes);
+      console.log(notesParsed);
+      console.log(notePositions);
+      console.log(rests);
 
     });
 
@@ -283,7 +297,32 @@ async function sendNotesToServer() {
   // POST request to /api/harmonize
   let harmonized = await (await fetch("/api/harmonize", requestOptions)).json();
   console.log(harmonized);
+
   waiting.value = false;
+
+  let pitches = [];
+  let durations = [];
+
+  // Parse melody
+  pitches.push([]);
+  durations.push([]);
+  for (let i=0; i<notes.length; i++) {
+    let midi = notes.midi;
+    let duration = notes.quarterLength;
+    pitches[0].push(midi);
+    durations[0].push(duration);
+  }
+
+  pitches.push(harmonized["alto_notes"]);
+  pitches.push(harmonized["tenor_notes"]);
+  pitches.push(harmonized["bass_notes"]);
+
+  durations.push(harmonized["alto_rhythm"]);
+  durations.push(harmonized["tenor_rhythm"]);
+  durations.push(harmonized["bass_rhythm"]);
+
+  playVoices(notes, pitches, durations);
+
 }
 
 async function saveMelodySurveyResponse(rating) {
