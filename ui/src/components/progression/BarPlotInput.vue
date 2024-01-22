@@ -78,20 +78,22 @@ let chartOptions = {
                         min: 0.01,
                         includeBounds: false,
                         ticks: {
+                          stepSize: 0.25,
+                          autoSkip: false,
                             // Include a dollar sign in the ticks
-                            callback: function(value, index, ticks) {
-                                if (value <= 0.01) {
-                                    return "none"
-                                } else if (value <= 0.25) {
-                                    return "calm"
-                                } else if (value <= 0.5) {
-                                    return "moderate"
-                                } else if (value <= 0.75) {
-                                    return "intense"
-                                } else if (value < 1) {
-                                    return "extreme"
-                                }
-                            }
+                          callback: function(value, index, ticks) {
+                              if (value <= 0.01) {
+                                  return "none"
+                              } else if (value <= 0.25) {
+                                  return "mild"
+                              } else if (value <= 0.5) {
+                                  return "moderate"
+                              } else if (value <= 0.75) {
+                                  return "intense"
+                              } else if (value <= 1) {
+                                  return "extreme"
+                              }
+                          }
                         }
                     }
                 }
