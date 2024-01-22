@@ -307,8 +307,8 @@ async function sendNotesToServer() {
   pitches.push([]);
   durations.push([]);
   for (let i=0; i<notes.length; i++) {
-    let midi = notes.midi;
-    let duration = notes.quarterLength;
+    let midi = notes[i].midi;
+    let duration = notes[i].quarterLength;
     pitches[0].push(midi);
     durations[0].push(duration);
   }

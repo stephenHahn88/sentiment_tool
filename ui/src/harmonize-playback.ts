@@ -34,6 +34,7 @@ interface Note {
 function playVoice(voice: Note[], player: Tone.Sampler) {
     let curr = Tone.now();
     voice.forEach(note => {
+        console.log(note.midi);
         // Handle rests
         if (note.midi == -1) {
             curr += Tone.Time(note.duration).toSeconds();
@@ -48,17 +49,6 @@ function playVoice(voice: Note[], player: Tone.Sampler) {
 export function playVoices(melody: [], pitches: number[][], durations: number[][]) {
 
     let voices: Note[][] = [];
-    // Add melody
-    // voices.push([]);
-    // for (let i=0; i<melody.length; i++) {
-    //     if (!melody[i].midi) {
-    //         // Rest
-    //     }
-    //     let midi = melody[i].midi;
-    //     let duration = melody[i].quarterLength;
-    //     voices[0].push();
-    // }
-
     for (let i=0; i<pitches.length; i++) {
         voices.push([]);
         for (let j=0; j<pitches[i].length; j++) {
