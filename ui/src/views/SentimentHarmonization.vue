@@ -1,7 +1,7 @@
 <template>
-    
+
     <div>
-        
+
         <!-- File Upload Section -->
         <div v-if="!musicRendered">
             <div class="upload-container">
@@ -19,15 +19,15 @@
               @emotionMixtureUpdate="handleEmotionMixtureUpdate">
           </BarPlotInput>
         </div>
-        
+
         <!-- Music Sheet Display Section -->
         <div id="osmd-container"></div>
         <button id="harmonize" @click="sendNotesToServer">Send Notes to Server</button>
 
     </div>
-    
+
   </template>
-  
+
   <script setup>
 
   import { ref } from 'vue';
@@ -41,7 +41,7 @@
   function handleEmotionMixtureUpdate (mixtures) {
     currentEmotionMixture = mixtures;
   }
-  
+
   let uploadedFile = ref(null);
   let musicRendered = ref(false);
 
@@ -52,10 +52,10 @@
   let numMeasures = 0;
   let measurePositions = [];
   let notePositions = [];
-  let selectedNotes = [];
+  let selectedNotesIndeces = [];
 
   let buttons = [];
-      
+
   function handleFileUpload (event) {
     uploadedFile.value = event.target.files[0];
   }
@@ -99,13 +99,13 @@
         }
 
         if (closestNote) {
-            if (selectedNotes.includes(closestPosition)) {
+            if (selectedNotesIndeces.includes(closestPosition)) {
               // Remove from selectedNotes
               closestNote.graphicalNote.noteheadColor = "#000000";
-              selectedNotes = selectedNotes.filter(x => x !== closestPosition);
+              selectedNotesIndeces = selectedNotesIndeces.filter(x => x !== closestPosition);
             } else {
-              closestNote.graphicalNote.noteheadColor = "#FF0000";
-              selectedNotes.push(closestPosition);
+              closestNote.graphicalNote.noteheadColor = "#0000FF";
+              selectedNotesIndeces.push(closestPosition);
             }
             osmd.render();
         }
@@ -128,12 +128,14 @@
         drawMetronomeMarks: false,
         drawPartNames: false,
         drawMeasureNumbers: false,
+        drawComposer: false,
+        drawSubtitle: false,
         drawUpToMeasureNumber: 8,
         pageBackgroundColor: "white"
       });
 
       osmd.load(event.target.result).then(() => {
-          
+
         // Access the internal OSMD parsed music structure
           score = osmd.Sheet;
 
@@ -156,7 +158,7 @@
 
           osmd.render();
           musicRendered.value = true;
-          
+
           // Assuming a single melody line and single voice
           score.Instruments.forEach(instrument => {
             instrument.Staves.forEach(staff => {
@@ -214,7 +216,21 @@
     reader.readAsText(uploadedFile.value);
 
   }
-  
+
+  function harmonicRhythm(notes, selectedIndeces) {
+    let harmonicRhythm = []
+    let currQL = 0
+    for (let i=0; i < notes.length; i++) {
+      if (selectedIndeces.includes(i) && i !== 0) {
+        harmonicRhythm.push(currQL)
+        currQL = 0
+      }
+      currQL += notes[i]['quarterLength']
+    }
+    harmonicRhythm.push(currQL)
+    return harmonicRhythm
+  }
+
   async function sendNotesToServer() {
 
     console.log("Sent to server");
@@ -225,13 +241,14 @@
     const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ "notes": notesParsed, "sentiment": currentEmotionMixture, "harmonicRhythm": selectedNotes})
+        body: JSON.stringify({ "notes": notesParsed, "sentiment": currentEmotionMixture, "harmonicRhythm": harmonicRhythm(notesParsed, selectedNotesIndeces)})
     }
+    console.log(requestOptions)
 
     // POST request to /api/harmonize
-    let harmonized = await fetch("/api/harmonize", requestOptions);
+    let harmonized = await (await fetch("/api/harmonize", requestOptions)).json();
     console.log(harmonized);
-    
+
   }
 
   async function saveMelodySurveyResponse(rating) {
@@ -253,7 +270,7 @@
   }
 
   </script>
-  
+
   <style>
 
   #harmonize {
@@ -302,4 +319,3 @@
     } */
 
   </style>
-  
