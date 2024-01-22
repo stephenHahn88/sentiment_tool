@@ -47,6 +47,7 @@
 
   let score = null;
   let notes = [];
+  let rests = [];
   let notesParsed = [];
 
   let numMeasures = 0;
@@ -159,33 +160,10 @@
           osmd.render();
           musicRendered.value = true;
 
-          // Assuming a single melody line and single voice
-          score.Instruments.forEach(instrument => {
-            instrument.Staves.forEach(staff => {
-              let voice = staff.Voices[0];
-              voice.VoiceEntries.forEach(voiceEntry => {
-                voiceEntry.Notes.forEach(note => {
-
-                  // Get note pitch
-                  let notePitch = note.Pitch;
-                  // Convert from Pitch to midi
-                  let midi = pitchToMidi(notePitch);
-
-                  // Get note duration
-                  let noteDuration = note.Length;
-                  // Get note quarterLength
-                  let quarterLength = noteDuration.realValue * 4;
-
-                  notes.push({note, midi, quarterLength});
-                  notesParsed.push({midi, quarterLength});
-
-                });
-              });
-              });
-          });
-
           // Get the number of measures
           numMeasures = osmd.graphic.measureList.length;
+          let totalNotes = 0;
+          let total = 0;
 
           // Get the position of the measures and notes
           for (let measure=0; measure<numMeasures; measure++) {
@@ -196,7 +174,41 @@
               // Get note bounding box:  osmd.graphic.measureList[measure][0].staffEntries[note].boundingBox
               let noteBoundingBox = osmd.graphic.measureList[measure][0].staffEntries[note].boundingBox;
               let graphicalNote = osmd.graphic.measureList[measure][0].staffEntries[note].graphicalVoiceEntries[0].notes[0].sourceNote;
+
+              if (!graphicalNote.isRestFlag) {
+                // Get note pitch
+                let notePitch = graphicalNote.Pitch;
+                // Convert from Pitch to midi
+                let midi = pitchToMidi(notePitch);
+
+                // Get note duration
+                let noteDuration = graphicalNote.Length;
+                // Get note quarterLength
+                let quarterLength = noteDuration.realValue * 4;
+
+                notes.push({graphicalNote, midi, quarterLength});
+                notesParsed.push({midi, quarterLength});
+                totalNotes++;
+              } else {
+                // Rest, modify the previous note's duration
+                // Get rest duration
+                let noteDuration = graphicalNote.Length;
+                // Get note quarterLength
+                let quarterLength = noteDuration.realValue * 4;
+
+                let prevNote = notesParsed[totalNotes-1];
+                console.log(totalNotes-1, prevNote)
+                let prevMidi = prevNote.midi;
+                let prevDuration = prevNote.quarterLength;
+                let currDuration = prevDuration + quarterLength;
+                notesParsed[totalNotes-1] = {prevMidi, currDuration};
+                notes.push({note, quarterLength});
+                rests.push({total, quarterLength})
+              }
+
               notePositions.push({noteBoundingBox, graphicalNote});
+              total++;
+
             }
           }
 
@@ -204,6 +216,7 @@
           console.log(notes);
           console.log(notesParsed);
           console.log(notePositions);
+          console.log(rests);
 
       });
 
