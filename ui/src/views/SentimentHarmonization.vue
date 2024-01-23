@@ -1,17 +1,28 @@
 <template>
     <b-container class="mt-5">
       <!-- File Upload Section -->
+      <b-container v-if="!musicRendered" class="mb-5">
+        <h1 class="mb-5">Provide a melody to harmonize</h1>
+        <b-container>
+          <p>The melody must be:</p>
+          <ul>
+            <li>A .musicxml file</li>
+            <li>In a soprano's register in Treble clef</li>
+            <li>Up to 8 measures long</li>
+            <li>In the key of C</li>
+          </ul>
+        </b-container>
+      </b-container>
       <b-container
           v-if="!musicRendered"
           class="container d-flex align-items-center justify-content-center"
-
       >
         <b-row>
           <b-col>
-          <b-form-file
-              v-model="uploadedFile"
-              accept=".xml, .musicxml"
-          ></b-form-file>
+            <b-form-file
+                v-model="uploadedFile"
+                accept=".xml, .musicxml"
+            ></b-form-file>
 <!--              @change="handleFileUpload"-->
           </b-col>
           <b-col>
@@ -26,10 +37,14 @@
           </b-col>
         </b-row>
       </b-container>
+      <b-container v-if="musicRendered">
+        <h1>Provide your desired sentiment mixture</h1>
+        <p>Click or drag the bars to change their values</p>
+      </b-container>
       <b-container
           v-if="musicRendered"
           style="width: 60%"
-          class="container d-flex align-items-center justify-content-center"
+          class="container align-items-center justify-content-center"
       >
         <!-- Put bar plot input controls here -->
         <BarPlotInput
@@ -37,6 +52,10 @@
             @emotionMixtureUpdate="handleEmotionMixtureUpdate"
         >
         </BarPlotInput>
+      </b-container>
+      <b-container v-if="musicRendered">
+        <h1>Provide your preferred harmonic rhythm</h1>
+        <p>Click on notes where you want harmonies to change</p>
       </b-container>
       <b-row class="my-5">
         <!-- Music Sheet Display Section -->
@@ -321,8 +340,7 @@ async function sendNotesToServer() {
   durations.push(harmonized["tenor_rhythm"]);
   durations.push(harmonized["bass_rhythm"]);
 
-  playVoices(notes, pitches, durations);
-
+  playVoices(notes, pitches, durations, harmonized["tempo"]);
 }
 
 async function saveMelodySurveyResponse(rating) {
@@ -353,11 +371,8 @@ async function saveMelodySurveyResponse(rating) {
   overflow-x: auto;
 }
 
-/*.centered {*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*}*/
+p {
+  font-size: 24px;
+}
 
 </style>
