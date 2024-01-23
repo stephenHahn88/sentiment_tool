@@ -15,6 +15,9 @@ const emit = defineEmits(["emotionMixtureUpdate"])
 
 let barInput
 let inputData = props.priorDist
+let textColor = "#888888"
+let sentimentColors = ['rgb(194,58,34, 0.7)', 'rgb(125, 84, 174, 0.7)', 'rgb(62, 101, 191, 0.7)', 'rgb(0, 0, 0, 0.7)', 'rgb(187, 187, 187, 0.7)', 'rgb(255, 160, 197, 0.7)', 'rgb(249, 212, 118, 0.7)']
+let sentimentBorderColors = ['#c23a22', '#7d54ae', '#3e65bf', '#000000', '#bbbbbb', '#ffa0c5', '#ecaa77']
 let chartOptions = {
             type: "bar",
             data: {
@@ -22,8 +25,8 @@ let chartOptions = {
                 datasets: [ {
                     data: inputData,
                     borderWidth: 3,
-                    borderColor: ['#c23a22', '#7d54ae', '#3e65bf', '#000000', '#bbbbbb', '#ffa0c5', '#f9d476'],
-                    backgroundColor: ['rgb(194,58,34, 0.7)', 'rgb(125, 84, 174, 0.7)', 'rgb(62, 101, 191, 0.7)', 'rgb(0, 0, 0, 0.7)', 'rgb(187, 187, 187, 0.7)', 'rgb(255, 160, 197, 0.7)', 'rgb(249, 212, 118, 0.7)']
+                    borderColor: sentimentBorderColors,
+                    backgroundColor: sentimentColors
                 } ]
             },
             options: {
@@ -73,11 +76,31 @@ let chartOptions = {
                     },
                 },
                 scales: {
+                    x: {
+                      ticks: {
+                        font: {
+                          size: 18
+                        },
+                        color: sentimentBorderColors
+                      },
+                      title: {
+                        display: true,
+                        text: 'Sentiments',
+                        font: {
+                          size: 24
+                        },
+                        padding: 20,
+                        color: textColor
+                      }
+                    },
                     y: {
                         max: 1.0,
                         min: 0.01,
                         includeBounds: false,
                         ticks: {
+                          font: {
+                            size: 18
+                          },
                           stepSize: 0.25,
                           autoSkip: false,
                             // Include a dollar sign in the ticks
@@ -93,7 +116,17 @@ let chartOptions = {
                               } else if (value <= 1) {
                                   return "extreme"
                               }
-                          }
+                          },
+                          color: textColor
+                        },
+                        title: {
+                          display: true,
+                          text: 'Intensity',
+                          font: {
+                            size: 24
+                          },
+                          padding: 20,
+                          color: textColor
                         }
                     }
                 }
