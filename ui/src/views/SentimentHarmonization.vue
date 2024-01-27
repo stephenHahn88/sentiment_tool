@@ -28,7 +28,7 @@
           <b-col>
             <b-button
                 pill
-                @click="renderMusicSheet"
+                @click="renderMusicSheet(-1)"
                 :disabled="!uploadedFile"
                 variant="info"
             >
@@ -36,6 +36,16 @@
             </b-button>
           </b-col>
         </b-row>
+      </b-container>
+      <b-container v-if="!musicRendered" class="mt-3 mb-5">
+        <h1 class="mb-5">Or select from one of our melodies</h1>
+        <b-container>
+          <b-button-group>
+            <b-button @click="renderMusicSheet(1)">Melody 1</b-button>
+            <b-button @click="renderMusicSheet(2)">Melody 2</b-button>
+            <b-button @click="renderMusicSheet(3)">Melody 3</b-button>
+          </b-button-group>
+        </b-container>
       </b-container>
       <b-container v-if="musicRendered">
         <h1>Provide your desired sentiment mixture</h1>
@@ -63,6 +73,21 @@
             id="osmd-container"
         ></b-container>
       </b-row>
+      <!-- <b-row class="mt-5" v-if="musicRendered">
+       <h5 class="mt-3"> Choose your instrument </h5>
+          <b-row class="mb-4">
+              <b-col
+                  class=""
+                  v-for="(val, key, i) in emojis">
+                <b-button
+                    style="width: 100%"
+                    variant="btn"
+                    @click="setInstrument(key);"
+                > <span style="font-size:30px;" v-html="val"></span>
+                </b-button>
+              </b-col>
+          </b-row>
+      </b-row> -->
       <b-overlay :show="waiting" rounded="lg" class="py-3">
         <b-row class="container d-flex align-items-center justify-content-center">
           <b-button
@@ -93,6 +118,12 @@ const emotionLabels = ["anger", "fear", "sadness", "none", "irony", "love", "joy
 
 function handleEmotionMixtureUpdate (mixtures) {
   currentEmotionMixture = mixtures;
+}
+
+let emojis = {
+  piano: '&#127929;',
+  casio: '&#127899;',
+  game: '&#127928;'
 }
 
 let uploadedFile = ref(null);
@@ -169,8 +200,29 @@ function setupClickHandler(osmd) {
   });
 }
 
-function renderMusicSheet () {
-  if (!uploadedFile.value) return;
+async function renderMusicSheet (preset) {
+  if (!uploadedFile.value && preset == -1) return;
+  if (!uploadedFile.value) {
+    const requestOptions = {
+      method: "GET"
+    }
+
+    // POST request to /api/harmonize
+    await fetch(`/api/load_preset?value=${preset}`, requestOptions)
+    .then(response => {
+      console.log(response);
+      return response.blob();
+    })
+    .then(blob => {
+      console.log(blob);
+      const reader = new FileReader();
+      let file = new File([blob], "Example.xml", {type: blob.type});
+      uploadedFile.value = file;
+    }).catch(error => {
+          console.error('Error:', error);
+    });
+
+  }
 
   const reader = new FileReader();
   reader.onload = (event) => {
