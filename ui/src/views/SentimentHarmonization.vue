@@ -67,27 +67,37 @@
         <h1>Provide your preferred harmonic rhythm</h1>
         <p>Click on notes where you want harmonies to change</p>
       </b-container>
+      <b-container v-if="musicParsed">
+        <b-row>
+          <b-row class="mb-2 mx-1 pb-3 px-3 letter-group" style="width:100%">
+            <b-button variant="warning" @click="backspace()" class="m-2">
+              &#8592
+            </b-button>
+            <div id="boo" style="overflow: auto;"></div>
+            <div class="mt-3">
+              <b-button
+                  v-for="rhythm in possibleRhythms"
+                  v-on:click="placeNotes(rhythm)"
+                  class="mb-3 ml-3 pl-5"
+                  variant="primary"
+              >
+                <img
+                    class="p-0 m-0"
+                    v-for="r in rhythm.split(' ')"
+                    :src="`.//static/floatingNotes/${rhythmToSVGName[r]}.svg`" :alt="rhythm"
+                    style="width: 25px; filter: invert(100%)"
+                >
+              </b-button>
+            </div>
+          </b-row>
+        </b-row>
+      </b-container>
       <b-row class="my-5">
         <!-- Music Sheet Display Section -->
         <b-container
             id="osmd-container"
         ></b-container>
       </b-row>
-      <!-- <b-row class="mt-5" v-if="musicRendered">
-       <h5 class="mt-3"> Choose your instrument </h5>
-          <b-row class="mb-4">
-              <b-col
-                  class=""
-                  v-for="(val, key, i) in emojis">
-                <b-button
-                    style="width: 100%"
-                    variant="btn"
-                    @click="setInstrument(key);"
-                > <span style="font-size:30px;" v-html="val"></span>
-                </b-button>
-              </b-col>
-          </b-row>
-      </b-row> -->
       <b-overlay :show="waiting" rounded="lg" class="py-3">
         <b-row class="container d-flex align-items-center justify-content-center">
           <b-button
@@ -107,14 +117,39 @@
 
 <script setup>
 
-import { ref } from 'vue';
+import Vue from 'vue'
+import { ref, watch } from 'vue';
 import { OpenSheetMusicDisplay, PointF2D } from 'opensheetmusicdisplay';
+import Vex from 'vexflow'
 
 import { piano, casio, playVoices } from "@/harmonize-playback";
 import BarPlotInput from "@/components/progression/BarPlotInput.vue";
 
+const { Renderer, Stave, Formatter, StaveNote, Dot } = Vex.Flow;
+
 let currentEmotionMixture = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2];
 const emotionLabels = ["anger", "fear", "sadness", "none", "irony", "love", "joy"];
+
+let possibleRhythms = ['1', '1/2 1/2', '1/2. 1/4', '1/2 1/4 1/4', '1/4 1/4 1/4 1/4'] //['𝅝', '𝅗𝅥 𝅗𝅥', '𝅗𝅥. ♩', '𝅗𝅥 ♩ ♩', '♩ ♩ ♩ ♩']
+
+let rhythmToSVGName = {
+  '1/8': 'eighth',
+  '1/4': 'quarter',
+  '1/4.': 'dquarter',
+  '1/2': 'half',
+  '1/2.': 'dhalf',
+  '1': 'whole',
+  '1.': 'dwhole'
+}
+
+let rhythmToQL = {
+  '1/8': 0.25,
+  '1/4': 1,
+  '1/4.': 1.5,
+  '1/2': 2,
+  '1/2.': 3,
+  '1': 4
+}
 
 function handleEmotionMixtureUpdate (mixtures) {
   currentEmotionMixture = mixtures;
@@ -128,16 +163,39 @@ let emojis = {
 
 let uploadedFile = ref(null);
 let musicRendered = ref(false);
+let musicParsed = ref(false);
 
 let score = null;
 let notes = [];
 let notesParsed = [];
 let rests = [];
+let meter = ref("4/4");
 
 let numMeasures = 0;
 let measurePositions = [];
 let notePositions = [];
 let selectedNotesIndeces = [];
+
+let div = ref(null);
+let renderers;
+let contexts;
+let measures = []
+
+watch(musicParsed, (val) => {
+  if (val) {
+    Vue.nextTick(() => {
+      div.value = document.getElementById("boo");
+      console.log(div.value)
+      drawStaves();
+    });
+  }
+})
+
+let defaultWidth;
+let totalMeasures;
+let currMeasures = 0
+let noteGroups = []
+let storedMeasures = []
 
 let buttons = [];
 
@@ -263,6 +321,7 @@ async function renderMusicSheet (preset) {
 
       // Get the number of measures
       numMeasures = osmd.graphic.measureList.length;
+      musicParsed.value = true;
 
       osmd.render();
       musicRendered.value = true;
@@ -320,10 +379,10 @@ async function renderMusicSheet (preset) {
       }
 
       // osmd.graphic.measureList[0][0].staffEntries[0].graphicalVoiceEntries[0].notes[0].sourceNote.noteheadColor = "#FF0000";
-      console.log(notes);
+      // console.log(notes);
       console.log(notesParsed);
-      console.log(notePositions);
-      console.log(rests);
+      //console.log(notePositions);
+      //console.log(rests);
 
     });
 
@@ -358,10 +417,29 @@ async function sendNotesToServer() {
   // Read parsed notes from OSMD container
   // Note that we pass back the note pitches/rhythm of the melody line (as well as note durations)
   // We need to read in the user input breakpoints to determine harmonic rhythm
+  let hRhythm = [];
+  if (storedMeasures.length == numMeasures) {
+    for (let i=0; i<storedMeasures.length; i++) {
+      let measure = storedMeasures[i];
+      console.log(measure)
+      const fractions = measure.split(" ");
+      console.log(fractions)
+      fractions.forEach(fraction => {
+        hRhythm.push(rhythmToQL[fraction]);
+      });
+    }
+    hRhythm.pop();
+  } else {
+    let hRhythm = harmonicRhythm(notesParsed, selectedNotesIndeces);
+  }
+  hRhythm = harmonicRhythm(notesParsed, selectedNotesIndeces);
+  
+  console.log(hRhythm);
+
   const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ "notes": notesParsed, "sentiment": currentEmotionMixture, "harmonicRhythm": harmonicRhythm(notesParsed, selectedNotesIndeces)})
+      body: JSON.stringify({ "notes": notesParsed, "sentiment": currentEmotionMixture, "harmonicRhythm": hRhythm})
   }
   console.log(requestOptions)
 
@@ -395,23 +473,126 @@ async function sendNotesToServer() {
   playVoices(notes, pitches, durations, harmonized["tempo"]);
 }
 
-async function saveMelodySurveyResponse(rating) {
-    // Hide the survey popup UI
-    closed.value = true
-    // Retrieve current melody from server
-    let melody = await (await fetch("/api/composer/"+encodeURIComponent(composerId.value)+"/melody/"+encodeURIComponent(melodyId.value)+"/notes-harmonies-tempo")).json()
-    const requestOptions = {
-        method: "PUT",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "rating": rating, "notes": melody.notes, "harmonies": melody.harmonies })
-    }
-    let response = await fetch("/api/surveys", requestOptions)
+function drawStaves() {
+    defaultWidth = 440
+    let rendererSize = defaultWidth * 6
+    let xPart = defaultWidth / 4
+    let height = 0
 
-    response = await response.json()
-    console.log(response)
-    // Close the survey component
-    closed = true
+    totalMeasures = numMeasures
+
+    renderers = new Renderer(div.value, Renderer.Backends.SVG)
+
+    renderers.resize(rendererSize, 150)
+    contexts = renderers.getContext()
+    contexts.scale(1.4, 1.4)
+    contexts.setFont('Arial', 18)
+
+    // Create number of measures based on uploaded file
+    let measures_l = []
+    for (let i = 0; i < totalMeasures; i++) {
+      if (i===0) {
+        measures_l[i] = new Stave(xPart * i, height, xPart + 50)
+        measures_l[i].addClef('percussion').addTimeSignature(meter.value)
+      } else {
+        measures_l[i] = new Stave(50 + xPart * i, height, xPart)
+        measures_l[i].measure = i + 1
+      }
+      measures_l[i].setContext(contexts).draw()
+    }
+    measures = measures_l
+}
+
+// Removes last measure of rhythms
+function backspace() {
+  if (currMeasures === 0) return
+  contexts.svg.removeChild(noteGroups.pop())
+  storedMeasures.pop()
+  console.log(storedMeasures)
+  currMeasures--;
+}
+
+// Places rhythms in the context for the given letter
+function placeNotes(rhythms) {
+  if (storedMeasures.length === numMeasures){
+    return
   }
+  let notes = _parseRhythms(rhythms)
+
+  noteGroups.push(contexts.openGroup())
+  Formatter.FormatAndDraw(contexts, measures[currMeasures], notes)
+  currMeasures++
+  storedMeasures.push(rhythms)
+  contexts.closeGroup()
+}
+
+function checkValidInput() {
+  for (let letter in storedMeasures) {
+    if (hypermeter.value[letter] <= 0 || hypermeter.value[letter] === "# measures") continue
+    if (storedMeasures[letter].length !== hypermeter.value[letter]) return {status: "invalid"}
+  }
+  return {status: "valid"}
+}
+
+function _parseRhythms(rhythms) {
+    let glyphs = rhythms.split(" ")
+    let finalRhythms = []
+    glyphs.forEach((glyph) => {
+        switch (glyph) {
+            case '1/8':
+              finalRhythms.push(new StaveNote({ keys: ["b/4"], duration: '8'}));
+              break;
+            case '1/8.':
+              finalRhythms.push(_dotted(new StaveNote({ keys: ["b/4"], duration: '8'})));
+              break;
+            case '1/4':
+              finalRhythms.push(new StaveNote({ keys: ["b/4"], duration: '4'}));
+              break;
+            case '1/4.':
+              finalRhythms.push(_dotted(new StaveNote({ keys: ["b/4"], duration: '4'})));
+              break;
+            case '1/2':
+              finalRhythms.push(new StaveNote({ keys: ["b/4"], duration: '2'}));
+              break;
+            case '1/2.':
+              finalRhythms.push(_dotted(new StaveNote({ keys: ["b/4"], duration: '2'})));
+              break;
+            case '1':
+              finalRhythms.push(new StaveNote({ keys: ["b/4"], duration: '1'}));
+              break;
+            case '1.':
+              finalRhythms.push(_dotted(new StaveNote({ keys: ["b/4"], duration: '1'})));
+              break;
+            case '2':
+              finalRhythms.push(new StaveNote({ keys: ["b/4"], duration: '1/2'}));
+              break;
+            case '2.':
+              finalRhythms.push(_dotted(new StaveNote({ keys: ["b/4"], duration: '1/2'})));
+              break;
+            case '4':
+              finalRhythms.push(new StaveNote({ keys: ["b/4"], duration: '1/4'}));
+              break;
+            case '4.':
+              finalRhythms.push(_dotted(new StaveNote({ keys: ["b/4"], duration: '1/4'})));
+              break;
+        }
+    })
+    return finalRhythms
+}
+
+// Attaches a rhythmic dot to a StaveNote
+function _dotted(staveNote, noteIndex = -1) {
+    if (noteIndex < 0) {
+        Dot.buildAndAttach([staveNote], {
+            all: true,
+        });
+    } else {
+        Dot.buildAndAttach([staveNote], {
+            index: noteIndex,
+        });
+    }
+    return staveNote;
+}
 
 </script>
 
