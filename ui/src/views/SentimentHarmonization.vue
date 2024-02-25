@@ -432,7 +432,6 @@ async function sendNotesToServer() {
   } else {
     let hRhythm = harmonicRhythm(notesParsed, selectedNotesIndeces);
   }
-  hRhythm = harmonicRhythm(notesParsed, selectedNotesIndeces);
   
   console.log(hRhythm);
 
