@@ -38,14 +38,14 @@
         </b-row>
       </b-container>
       <b-container v-if="!musicRendered" class="mt-3 mb-5">
-        <h1 class="mb-5">Or select from one of our melodies</h1>
-        <b-container>
-          <b-button-group>
-            <b-button @click="renderMusicSheet(1)">Melody 1</b-button>
-            <b-button @click="renderMusicSheet(2)">Melody 2</b-button>
-            <b-button @click="renderMusicSheet(3)">Melody 3</b-button>
-          </b-button-group>
-        </b-container>
+        <h1 class="mb-5">Or select a preset melody:</h1>
+        <b-row>
+          <b-col>
+            <b-button @click="renderMusicSheet(1)" class="m-1">Melody 1</b-button>
+            <b-button @click="renderMusicSheet(2)" class="m-1">Melody 2</b-button>
+            <b-button @click="renderMusicSheet(3)" class="m-1">Melody 3</b-button>
+          </b-col>
+        </b-row>
       </b-container>
       <b-container v-if="musicRendered">
         <h1>Provide your desired sentiment mixture</h1>
@@ -65,7 +65,7 @@
       </b-container>
       <b-container v-if="musicRendered">
         <h1>Provide your preferred harmonic rhythm</h1>
-        <p>Click on notes where you want harmonies to change</p>
+        <p>Using the note buttons below, fill the measures with the rhythm that defines where you want harmonies to change</p>
       </b-container>
       <b-container v-if="musicParsed">
         <b-row>
@@ -130,7 +130,7 @@ const { Renderer, Stave, Formatter, StaveNote, Dot } = Vex.Flow;
 let currentEmotionMixture = [1, 0.8, 0.6, 0.4, 0.2, 0.2, 0.2];
 const emotionLabels = ["anger", "fear", "sadness", "none", "irony", "love", "joy"];
 
-let possibleRhythms = ['1', '1/2 1/2', '1/2. 1/4', '1/2 1/4 1/4', '1/4 1/4 1/4 1/4'] //['𝅝', '𝅗𝅥 𝅗𝅥', '𝅗𝅥. ♩', '𝅗𝅥 ♩ ♩', '♩ ♩ ♩ ♩']
+let possibleRhythms = ['1', '1/2 1/2']//, '1/2 1/4 1/4', '1/4 1/4 1/4 1/4'] //['𝅝', '𝅗𝅥 𝅗𝅥', '𝅗𝅥. ♩', '𝅗𝅥 ♩ ♩', '♩ ♩ ♩ ♩']
 
 let rhythmToSVGName = {
   '1/8': 'eighth',
@@ -410,7 +410,6 @@ function harmonicRhythm(notes, selectedIndeces) {
 }
 
 async function sendNotesToServer() {
-
   console.log("Sent to server");
   waiting.value = true
 
@@ -418,7 +417,7 @@ async function sendNotesToServer() {
   // Note that we pass back the note pitches/rhythm of the melody line (as well as note durations)
   // We need to read in the user input breakpoints to determine harmonic rhythm
   let hRhythm = [];
-  if (storedMeasures.length == numMeasures) {
+  if (storedMeasures.length === numMeasures) {
     for (let i=0; i<storedMeasures.length; i++) {
       let measure = storedMeasures[i];
       console.log(measure)
@@ -428,7 +427,7 @@ async function sendNotesToServer() {
         hRhythm.push(rhythmToQL[fraction]);
       });
     }
-    hRhythm.pop();
+    // hRhythm.pop();
   } else {
     let hRhythm = harmonicRhythm(notesParsed, selectedNotesIndeces);
   }
